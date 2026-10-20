@@ -1,0 +1,1235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FME 1000 Study Guide</title>
+  <meta name="description" content="Session-by-session FME 1000 midterm study guide with flashcards, the Knittr cross-reference, and a final self-test.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700;800&display=swap">
+  <style>
+    /* Layout: sticky session rail on the left, one reading column on the right; flashcards close the page.
+       Same system as the practice lab: sage-tinted paper, one green, Newsreader + Public Sans, sentence-case labels. */
+    :root {
+      color-scheme: light;
+      --ink: #16251f;
+      --ink-soft: #3d4f46;
+      --muted: #65736d;
+      --bg1: #f2f5f0;
+      --bg2: #f2f5f0;
+      --glow: transparent;
+      --card: #fcfdfb;
+      --surface: #ffffff;
+      --glass: rgba(255, 255, 255, .62);
+      --green: #0b6b4f;
+      --green-hover: #064b39;
+      --green-ink: #064b39;
+      --green-dark: #064b39;
+      --on-green: #ffffff;
+      --lime: #c8dc72;
+      --gold-bg: #f2ead7;
+      --gold-ink: #795719;
+      --ob-bg: #e9e6f3;
+      --ob-ink: #4a3f7a;
+      --tint: #eef3eb;
+      --track: #e9ebe3;
+      --line: #dcded5;
+      --shadow: none;
+      --serif: Newsreader, "Iowan Old Style", Georgia, serif;
+      --sans: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
+        --bg1: #0e1613; --bg2: #0e1613; --glow: transparent;
+        --card: #14201b; --surface: #19271f; --glass: rgba(255, 255, 255, .04);
+        --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
+        --gold-bg: #3a3120; --gold-ink: #e9c57a; --ob-bg: #2a2640; --ob-ink: #c7bdf2;
+        --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
+        --shadow: none;
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
+      --bg1: #0e1613; --bg2: #0e1613; --glow: transparent;
+      --card: #14201b; --surface: #19271f; --glass: rgba(255, 255, 255, .04);
+      --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
+      --gold-bg: #3a3120; --gold-ink: #e9c57a; --ob-bg: #2a2640; --ob-ink: #c7bdf2;
+      --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
+      --shadow: none;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 12% 0%, var(--glow), transparent 26rem), linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%) fixed;
+      background-color: var(--bg1);
+      color: var(--ink);
+      font: 16px/1.65 var(--sans);
+    }
+    a { color: var(--green); }
+    :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 6px; }
+    button, input, select { font: inherit; color: inherit; }
+
+    /* Top bar */
+    body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--card); }
+    .topbar {
+      position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      max-width: 1180px; margin: 0 auto; padding-block: 10px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
+    .mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--green); color: var(--on-green); font-weight: 900; font-size: 13px; letter-spacing: -.04em; }
+    .brand strong { display: block; font-size: 14px; line-height: 1.2; }
+    .brand .sub { display: block; color: var(--muted); font-size: 12px; }
+    .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 13px; border-radius: 999px; color: var(--ink-soft); font-size: 14px; font-weight: 700; text-decoration: none; }
+    .nav a:hover { background: var(--tint); color: var(--green-ink); }
+    .nav a[aria-current="page"] { background: var(--green); color: var(--on-green); }
+
+    /* Page grid */
+    .layout {
+      display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px;
+      max-width: 1180px; margin: 0 auto; padding-block: 36px 80px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+    .rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 76px); align-self: start; max-height: calc(100vh - 100px); overflow-y: auto; padding-right: 4px; }
+    .rail h2 { margin: 0 0 6px; padding-left: 8px; color: var(--muted); font-size: 13px; font-weight: 600; }
+    .meter { margin-bottom: 20px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--glass); }
+    .meter-top { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
+    .meter-top b { font-variant-numeric: tabular-nums; color: var(--green-ink); }
+    .bar { height: 6px; margin-top: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+    .bar div { height: 100%; width: 0; background: var(--green); border-radius: inherit; transition: width .3s ease; }
+    .toc { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 2px; }
+    .toc a { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: baseline; padding: 6px 8px; border-radius: 9px; color: var(--ink-soft); font-size: 13.5px; line-height: 1.35; text-decoration: none; }
+    .toc a:hover { background: var(--tint); }
+    .toc a.active { background: var(--tint); color: var(--green-ink); font-weight: 700; }
+    .toc-num { font: 600 13px var(--serif); color: var(--muted); font-variant-numeric: tabular-nums; }
+    .toc a.done .toc-num { color: var(--green); }
+    .toc a.done .toc-num::after { content: " ✓"; font-size: 11px; }
+    .toc a[hidden] { display: none; }
+    .toc-extra a { display: block; grid-template-columns: none; }
+
+    /* Hero */
+    .intro h1 { margin: 0; font: 500 clamp(38px, 5.5vw, 60px)/1.04 var(--serif); letter-spacing: -.02em; text-wrap: balance; }
+    .eyebrow { margin: 0 0 10px; color: var(--muted); font-size: 15px; font-weight: 600; }
+    .intro p { max-width: 64ch; color: var(--ink-soft); font-size: 17px; }
+    .content .exam-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+    .exam-facts li { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--glass); font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+
+    /* Controls */
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 28px 0 8px; }
+    .chip { min-height: 40px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--on-green); }
+    .search { flex: 1 1 200px; min-width: 0; min-height: 40px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+    .search:focus { outline: none; border-color: var(--green); }
+    .empty { display: none; padding: 20px; color: var(--muted); }
+    .empty.show { display: block; }
+
+    /* Content */
+    .part { margin-top: 48px; }
+    .part > h2 { margin: 0 0 14px; font: 500 clamp(28px, 3.6vw, 38px)/1.1 var(--serif); letter-spacing: -.02em; text-wrap: balance; }
+    .content p, .content li { max-width: 68ch; }
+    .content h4 { margin: 28px 0 6px; color: var(--green-ink); font: 600 19px/1.3 var(--serif); }
+    .content ul, .content ol { padding-left: 1.3em; }
+    .content li { margin: 4px 0; }
+    .content li::marker { color: var(--green); }
+    .content strong { color: var(--ink); }
+    .content p, .content li, .content td { color: var(--ink-soft); }
+
+    .session {
+      margin-top: 22px; padding: clamp(20px, 3.5vw, 34px);
+      border: 1px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: var(--shadow);
+    }
+    .session-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: start; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+    .session-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; grid-column: 1 / -1; }
+    .num { font: 600 15px var(--serif); color: var(--muted); }
+    .area { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .area-ent { background: var(--tint); color: var(--green-ink); }
+    .area-ob { background: var(--ob-bg); color: var(--ob-ink); }
+    .area-joint { background: var(--gold-bg); color: var(--gold-ink); }
+    .session h3 { margin: 0; font: 500 clamp(24px, 3vw, 30px)/1.18 var(--serif); letter-spacing: -.015em; text-wrap: balance; }
+    .studied { display: flex; align-items: center; gap: 7px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; white-space: nowrap; }
+    .studied input { width: 16px; height: 16px; accent-color: var(--green); margin: 0; }
+    .studied:has(input:checked) { border-color: var(--green); color: var(--green-ink); background: var(--tint); }
+    .session[hidden], .part[hidden] { display: none; }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.45; }
+    th, td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: var(--tint); color: var(--green-ink); font-size: 13px; font-weight: 700; }
+    tr:last-child td { border-bottom: 0; }
+
+    blockquote.template {
+      position: relative; margin: 16px 0; padding: 16px 18px 16px 20px;
+      border: 1px dashed var(--green); border-radius: 14px; background: var(--tint);
+    }
+    blockquote.template p { margin: 0; padding-right: 64px; color: var(--ink); font-family: var(--serif); font-size: 16.5px; }
+    blockquote.template strong { color: var(--green-ink); }
+    .copy { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-size: 12px; font-weight: 700; cursor: pointer; }
+
+    .check { margin-top: 22px; padding: 16px 18px; border-radius: 14px; background: var(--gold-bg); }
+    .check-label { margin: 0 0 4px; color: var(--gold-ink); font: 600 18px var(--serif); }
+    .check ul { margin: 0; }
+    .check li { color: var(--ink); }
+
+    /* Flashcards */
+    .deck-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0 18px; }
+    .deck-controls select { flex: 0 1 320px; min-width: 0; max-width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .btn { min-height: 42px; padding: 0 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-weight: 700; cursor: pointer; }
+    .btn:hover { border-color: var(--green); color: var(--green-ink); }
+    .btn.primary { background: var(--green); border-color: var(--green); color: var(--on-green); }
+    .btn.primary:hover { background: var(--green-hover); color: var(--on-green); }
+    .deck-count { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .flash {
+      display: grid; place-items: center; width: 100%; min-height: 240px; padding: 34px 28px;
+      border: 1px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: var(--shadow);
+      text-align: center; cursor: pointer;
+    }
+    .flash .side-label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 13px; font-weight: 600; }
+    .flash .term { font: 500 clamp(24px, 3.4vw, 34px)/1.2 var(--serif); text-wrap: balance; }
+    .flash .def { max-width: 60ch; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }
+    .flash.flipped { background: var(--tint); border-color: var(--green); }
+    .deck-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .deck-nav .group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hint { color: var(--muted); font-size: 13px; }
+
+    .toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 10px 14px; border-radius: 10px; background: var(--green-dark); color: #ffffff; font-size: 14px; opacity: 0; transform: translateY(6px); pointer-events: none; transition: .2s ease; }
+    .toast.show { opacity: 1; transform: none; }
+
+    footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 24px; }
+      .rail { position: static; max-height: none; overflow: visible; margin-bottom: 8px; }
+      .rail details { border: 1px solid var(--line); border-radius: 14px; background: var(--glass); padding: 10px 14px; }
+      .toc { margin-top: 10px; }
+    }
+    @media (min-width: 901px) {
+      .rail summary { display: none; }
+    }
+    .rail summary { cursor: pointer; font-weight: 800; font-size: 14px; }
+    @media (max-width: 560px) {
+      .nav { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; }
+      .nav a { white-space: nowrap; }
+      .session-head { grid-template-columns: 1fr; }
+      .studied { justify-self: start; }
+      blockquote.template p { padding-right: 0; padding-top: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html"><span class="mark">FME</span><span><strong>FME 1000</strong><span class="sub">Midterm study kit</span></span></a>
+      <nav class="nav" aria-label="Site">
+        <a href="./index.html">Practice</a>
+        <a href="./guide.html" aria-current="page">Study guide</a>
+        <a href="./guide.html#flashcards">Flashcards</a>
+        <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">PDF</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="rail" aria-label="Sessions">
+      <div class="meter">
+        <div class="meter-top"><span>Sessions studied</span><b id="studied-count">0 / 13</b></div>
+        <div class="bar"><div id="studied-bar"></div></div>
+      </div>
+      <details id="toc-details" open>
+        <summary>Jump to a session</summary>
+        <h2>Sessions</h2>
+        <ol class="toc" id="toc"><li><a href="#session-1" data-toc="1" data-area="joint"><span class="toc-num">1</span><span class="toc-name">Kickoff and Entrepreneurial Thought and Action</span></a></li><li><a href="#session-2" data-toc="2" data-area="ob"><span class="toc-num">2</span><span class="toc-name">Introduction to Culture and Norms</span></a></li><li><a href="#session-3" data-toc="3" data-area="ent"><span class="toc-num">3</span><span class="toc-name">Problem Solving and Idea Generation</span></a></li><li><a href="#session-4" data-toc="4" data-area="ob"><span class="toc-num">4</span><span class="toc-name">Emotional Intelligence</span></a></li><li><a href="#session-5" data-toc="5" data-area="ent"><span class="toc-num">5</span><span class="toc-name">Empathy and Design Thinking</span></a></li><li><a href="#session-6" data-toc="6" data-area="ob"><span class="toc-num">6</span><span class="toc-name">Positive Teaming and Psychological Safety</span></a></li><li><a href="#session-7" data-toc="7" data-area="ent"><span class="toc-num">7</span><span class="toc-name">Value Proposition and Target Market</span></a></li><li><a href="#session-8" data-toc="8" data-area="ent"><span class="toc-num">8</span><span class="toc-name">Prototyping</span></a></li><li><a href="#session-9" data-toc="9" data-area="joint"><span class="toc-num">9</span><span class="toc-name">Rocket Pitch Presentations</span></a></li><li><a href="#session-10" data-toc="10" data-area="ob"><span class="toc-num">10</span><span class="toc-name">Diversity of Thought and Practice — DiSC</span></a></li><li><a href="#session-11" data-toc="11" data-area="ent"><span class="toc-num">11</span><span class="toc-name">Opportunity Evaluation</span></a></li><li><a href="#session-12" data-toc="12" data-area="ent"><span class="toc-num">12</span><span class="toc-name">Market Research</span></a></li><li><a href="#session-13" data-toc="13" data-area="ob"><span class="toc-num">13</span><span class="toc-name">Inclusion and Identity</span></a></li></ol>
+        <h2>Review</h2>
+        <ul class="toc toc-extra"><li><a href="#how-to-use-this-guide">How to use this guide</a></li><li><a href="#topic-tree-what-connects-to-what">Topic tree: what connects to what</a></li><li><a href="#knittr-cross-reference-by-subject">Knittr cross-reference by subject</a></li><li><a href="#one-page-rapid-recall">One-page rapid recall</a></li><li><a href="#final-self-test-by-subject">Final self-test by subject</a></li><li><a href="#source-basis">Source basis</a></li><li><a href="#flashcards">Flashcards</a></li></ul>
+      </details>
+    </aside>
+
+    <main class="content" id="top">
+      <section class="intro">
+        <p class="eyebrow">Fall 2026, sections 6 and 9</p>
+        <h1>FME 1000 Midterm Study Guide</h1>
+        <p>Organized around the 13 sessions on the midterm subject list. Use each session as a separate study unit, then practice connecting subjects in the Knittr and OB cases.</p>
+        <ul class="exam-facts">
+          <li>90 minutes</li>
+          <li>Short essays</li>
+          <li>~Half Knittr case (Entrepreneurship)</li>
+          <li>~Half OB mini-cases</li>
+          <li>13 sessions</li>
+        </ul>
+      </section>
+
+      <div class="controls" role="group" aria-label="Filter sessions">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-filter="ent" aria-pressed="false">Entrepreneurship</button>
+        <button class="chip" type="button" data-filter="ob" aria-pressed="false">Org Behavior</button>
+        <button class="chip" type="button" data-filter="joint" aria-pressed="false">Joint</button>
+        <button class="chip" type="button" data-filter="todo" aria-pressed="false">Not studied yet</button>
+        <input class="search" id="search" type="search" placeholder="Search the guide, e.g. persona, DiSC, viability" aria-label="Search the guide">
+      </div>
+      <p class="empty" id="empty">No sessions match. Clear the search or pick another filter.</p>
+
+      <section class="part" id="how-to-use-this-guide"><h2>How to use this guide</h2><p>The exam lasts 90 minutes and uses short essays. About half covers entrepreneurship through the Knittr case. The other half applies organizational behavior and team-leadership concepts to new mini-cases.</p>
+<p>Definitions are the starting point. A strong answer also identifies evidence in the case, explains why the evidence matters, and recommends a specific response.</p>
+<h4>Use C-E-A-R for most answers:</h4>
+<ol>
+<li><strong>Concept:</strong> Name and briefly define the most useful course concept.</li>
+<li><strong>Evidence:</strong> Point to a specific fact, action, or quotation from the case.</li>
+<li><strong>Analysis:</strong> Explain why that evidence reveals the problem or opportunity.</li>
+<li><strong>Response and result:</strong> Recommend an observable action and explain what it should improve.</li>
+</ol>
+<blockquote class="template">
+<p>This situation shows <strong>[concept]</strong>, which means <strong>[brief definition]</strong>. We can see it when <strong>[case evidence]</strong>. This matters because <strong>[analysis]</strong>. The team should <strong>[specific response]</strong>, which would <strong>[expected result]</strong>.</p>
+</blockquote>
+<h4>Fast exam workflow</h4>
+<ul>
+<li>Circle the action words: explain, compare, recommend, diagnose, or apply.</li>
+<li>Mark two or three facts before choosing a concept.</li>
+<li>Use the smallest number of concepts that fully answers the question.</li>
+<li>Spend more space applying the concept than defining it.</li>
+<li>End with an action someone could actually take.</li>
+<li>Number your response if the prompt asks for several items.</li>
+</ul>
+<h4>Subject map</h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Session</th>
+<th>Subject</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Joint</td>
+<td>1</td>
+<td>Kickoff and Entrepreneurial Thought and Action</td>
+</tr>
+<tr>
+<td>Entrepreneurship</td>
+<td>3</td>
+<td>Problem Solving and Idea Generation</td>
+</tr>
+<tr>
+<td>Entrepreneurship</td>
+<td>5</td>
+<td>Empathy and Design Thinking</td>
+</tr>
+<tr>
+<td>Entrepreneurship</td>
+<td>7</td>
+<td>Value Proposition and Target Market</td>
+</tr>
+<tr>
+<td>Entrepreneurship</td>
+<td>8</td>
+<td>Prototyping</td>
+</tr>
+<tr>
+<td>Joint</td>
+<td>9</td>
+<td>Rocket Pitch Presentations</td>
+</tr>
+<tr>
+<td>Organizational Behavior</td>
+<td>2</td>
+<td>Culture and Norms</td>
+</tr>
+<tr>
+<td>Organizational Behavior</td>
+<td>4</td>
+<td>Emotional Intelligence</td>
+</tr>
+<tr>
+<td>Organizational Behavior</td>
+<td>6</td>
+<td>Positive Teaming and Psychological Safety</td>
+</tr>
+<tr>
+<td>Organizational Behavior</td>
+<td>10</td>
+<td>Diversity of Thought and Practice: DiSC</td>
+</tr>
+<tr>
+<td>Entrepreneurship</td>
+<td>11</td>
+<td>Opportunity Evaluation</td>
+</tr>
+<tr>
+<td>Entrepreneurship</td>
+<td>12</td>
+<td>Market Research</td>
+</tr>
+<tr>
+<td>Organizational Behavior</td>
+<td>13</td>
+<td>Inclusion and Identity</td>
+</tr>
+</tbody>
+</table></div></section>
+<section class="part" id="topic-tree-what-connects-to-what"><h2>Topic tree: what connects to what</h2><p>For each branch, know the definition, recognize it in a case, and recommend a specific action.</p>
+<h3>Joint foundation</h3>
+<ul>
+<li><strong>Session 1: Entrepreneurial Thought and Action</strong></li>
+<li><strong>Prediction logic:</strong> Plan around expected return when the future is reasonably knowable.</li>
+<li><strong>Creation logic:</strong> Under uncertainty, start with available means, limit affordable loss, act, learn, and adjust.</li>
+<li><strong>Connection:</strong> This logic powers research, prototypes, and opportunity tests.</li>
+<li><strong>Session 9: Rocket Pitch</strong></li>
+<li><strong>Core chain:</strong> Customer → problem → solution → benefit → difference → reason to believe → next step.</li>
+<li><strong>Delivery:</strong> Divide ideas clearly, rehearse handoffs, and use feedback to revise the argument.</li>
+</ul>
+<h3>Entrepreneurship</h3>
+<ul>
+<li><strong>Session 3: Problem Solving and Idea Generation</strong></li>
+<li>Idea versus opportunity; customer problem and workaround.</li>
+<li>“How might we?” framing; generate many ideas and defer judgment before evaluating.</li>
+<li>Use AI to expand options; use people and evidence to judge them.</li>
+<li><strong>Session 5: Empathy and Design Thinking</strong></li>
+<li>Empathy and observation; neutral interviews about specific past behavior.</li>
+<li>Needs, frustrations, actions, workarounds, and contradictions.</li>
+<li>Empathize → define → ideate → prototype → test → iterate.</li>
+<li><strong>Session 7: Value Proposition and Target Market</strong></li>
+<li>Customer, consumer, payer, and decision-maker.</li>
+<li>Segmentation, first target market, and evidence-based persona.</li>
+<li>Resonate, differentiate, substantiate; create, deliver, and capture value.</li>
+<li><strong>Session 8: Prototyping</strong></li>
+<li>Riskiest assumption; smallest credible learning test.</li>
+<li>Observable customer behavior, feedback, iteration, and MVP.</li>
+<li><strong>Session 11: Opportunity Evaluation</strong></li>
+<li>Desirability: do customers care enough to act?</li>
+<li>Feasibility: can the team and partners deliver reliably?</li>
+<li>Viability: can price, demand, costs, and margins sustain the model?</li>
+<li>Alternatives, resources, risks, and financial, social, and environmental impact.</li>
+<li><strong>Session 12: Market Research</strong></li>
+<li>Primary versus secondary; qualitative versus quantitative.</li>
+<li>Methods, sampling, unbiased questions, and disconfirming evidence.</li>
+<li>Product, price, place, promotion, and revenue drivers.</li>
+</ul>
+<h3>Organizational Behavior</h3>
+<ul>
+<li><strong>Session 2: Culture and Norms</strong></li>
+<li>Shared values, assumptions, and repeated behavior.</li>
+<li>Formal rules versus informal norms; visible artifacts versus invisible beliefs.</li>
+<li>Team charters and consistent reinforcement.</li>
+<li><strong>Session 4: Emotional Intelligence</strong></li>
+<li>Self-awareness → self-management → social awareness → relationship management.</li>
+<li>Respond instead of react; trust = authenticity + logic + empathy.</li>
+<li><strong>Session 6: Positive Teaming and Psychological Safety</strong></li>
+<li>Performance + learning and adaptability + member well-being and growth.</li>
+<li>Safety for questions, dissent, uncertainty, and error reporting without lower standards.</li>
+<li>Constructive conflict, productive failure, process gains and losses.</li>
+<li>Team design, launch or relaunch, and process management.</li>
+<li><strong>Session 10: Diversity of Thought and Practice — DiSC</strong></li>
+<li><strong>D:</strong> results and speed. <strong>I:</strong> energy and persuasion.</li>
+<li><strong>S:</strong> patience and support. <strong>C:</strong> evidence and quality.</li>
+<li>Flex communication and avoid stereotypes.</li>
+<li><strong>Session 13: Inclusion and Identity</strong></li>
+<li>Personal and social identity; visible and invisible differences.</li>
+<li>Diversity asks who is present; inclusion asks who has influence; belonging asks who feels accepted.</li>
+<li>Bias, assumptions, faultlines, airtime, meaningful roles, and transparent decisions.</li>
+</ul>
+<h3>The course-wide chain</h3>
+<blockquote class="template">
+<p>Understand people → define a meaningful problem → generate options → choose a target and value proposition → prototype the riskiest assumption → collect evidence → evaluate the opportunity → pitch it clearly → build a team where different people can contribute and learn.</p>
+</blockquote></section>
+<section class="part part-sessions" id="joint-sessions" data-area="joint"><h2>Joint sessions</h2><article class="session" id="session-1" data-area="joint" data-session="1"><header class="session-head"><div class="session-meta"><span class="num">Session 1</span><span class="area area-joint">Joint</span></div><h3>Kickoff and Entrepreneurial Thought and Action</h3><label class="studied"><input type="checkbox" id="studied-1" data-studied="1"> Studied</label></header><h4>Core idea</h4>
+<p>Entrepreneurial Thought and Action, or ET&amp;A, helps entrepreneurs choose how to act when the future is uncertain. It combines prediction logic with creation or effectual logic, often called CreAction in the course.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Prediction or causal logic</th>
+<th>Creation or effectual logic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Best when the future is more knowable</td>
+<td>Best when the future is uncertain</td>
+</tr>
+<tr>
+<td>Plan before acting</td>
+<td>Act in small steps and learn</td>
+</tr>
+<tr>
+<td>Focus on expected return</td>
+<td>Limit acceptable loss</td>
+</tr>
+<tr>
+<td>Secure the required resources first</td>
+<td>Begin with what is already at hand</td>
+</tr>
+<tr>
+<td>Follow a chosen path</td>
+<td>Adjust the path as evidence changes</td>
+</tr>
+<tr>
+<td>Avoid failure</td>
+<td>Use intelligent failure as information</td>
+</tr>
+<tr>
+<td>Compete for existing value</td>
+<td>Collaborate to create new possibilities</td>
+</tr>
+</tbody>
+</table></div>
+<h4>CreAction sequence</h4>
+<ol>
+<li>Start with who you are, what you know, and whom you know.</li>
+<li>Take a small action that you can afford to lose.</li>
+<li>Observe the good, bad, and unexpected results.</li>
+<li>Bring in people or resources that can help.</li>
+<li>Adjust the next action based on what you learned.</li>
+</ol>
+<h4>Knittr application</h4>
+<p>Kayden uses prediction logic when he discusses investors, a complete website, inventory, and a warehouse before proving a customer problem. Under uncertainty, a better step would be to manually make a project recommendation and compatible shopping list for several actual knitters. That experiment uses resources at hand, limits loss, and produces information.</p>
+<h4>Common mistake</h4>
+<p>CreAction does not mean acting randomly or refusing to plan. It means matching the size of the commitment to the quality of the evidence.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>When is prediction useful?</li>
+<li>What makes a step affordable?</li>
+<li>What could Knittr test this week without building software or buying inventory?</li>
+</ul></aside></article><article class="session" id="session-9" data-area="joint" data-session="9"><header class="session-head"><div class="session-meta"><span class="num">Session 9</span><span class="area area-joint">Joint</span></div><h3>Rocket Pitch Presentations</h3><label class="studied"><input type="checkbox" id="studied-9" data-studied="9"> Studied</label></header><h4>Core idea</h4>
+<p>A Rocket Pitch communicates the customer problem, target market, proposed solution, and value proposition clearly and quickly. The goal is to make the logic easy to follow, not to list every feature.</p>
+<h4>A useful pitch order</h4>
+<ol>
+<li>Name the specific customer.</li>
+<li>Show the problem with a concrete fact, behavior, or short story.</li>
+<li>Present the proposed solution.</li>
+<li>Explain the benefit and why it is meaningfully different.</li>
+<li>Give a reason to believe the team can deliver the promise.</li>
+<li>End with the next action, test, or request.</li>
+</ol>
+<h4>Three value-proposition tests</h4>
+<ul>
+<li><strong>Overt benefit:</strong> Why should the customer care?</li>
+<li><strong>Dramatic difference:</strong> Why choose this over current alternatives?</li>
+<li><strong>Real reason to believe:</strong> Why should the audience trust the promise?</li>
+</ul>
+<h4>Team presentation practice</h4>
+<ul>
+<li>Divide responsibility by idea, not by arbitrary sentence counts.</li>
+<li>Make handoffs clear so the pitch sounds like one argument.</li>
+<li>Rehearse for time and remove details that do not support the main claim.</li>
+<li>Use feedback to revise the logic, not only the delivery.</li>
+</ul>
+<h4>Knittr application</h4>
+<p>Kayden should not lead with AI or a long feature list. He should identify a researched customer, show the difficulty that person experiences when choosing a project and compatible supplies, and explain one focused benefit. AI belongs in the pitch only if customer evidence shows that it improves the benefit.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Can you explain Knittr's customer, problem, solution, and benefit in four sentences?</li>
+<li>Which claim in the pitch still needs evidence?</li>
+</ul></aside></article></section>
+<section class="part part-sessions" id="entrepreneurship-study-guides" data-area="ent"><h2>Entrepreneurship study guides</h2><article class="session" id="session-3" data-area="ent" data-session="3"><header class="session-head"><div class="session-meta"><span class="num">Session 3</span><span class="area area-ent">Entrepreneurship</span></div><h3>Problem Solving and Idea Generation</h3><label class="studied"><input type="checkbox" id="studied-3" data-studied="3"> Studied</label></header><h4>Idea versus opportunity</h4>
+<p>An idea is an early insight about a problem, an unsatisfying solution, or a possible use of technology. An opportunity connects a defined customer and meaningful unmet need with a solution that can be delivered and sustained.</p>
+<p>A promising opportunity is:</p>
+<ul>
+<li><strong>Attractive:</strong> customers care enough to act.</li>
+<li><strong>Durable:</strong> the need and advantage can last.</li>
+<li><strong>Timely:</strong> conditions make this a sensible moment.</li>
+<li><strong>Value-creating:</strong> the offer produces a benefit the customer values.</li>
+</ul>
+<p>Knittr is currently an idea. Spending in the crafting category does not prove that a specific segment has the pain Kayden assumes or will switch to his offer.</p>
+<h4>Problem identification</h4>
+<p>Start with what the customer is trying to accomplish, where the current process breaks down, and what workaround already exists. Do not begin with the founder's preferred product.</p>
+<blockquote class="template">
+<p>As a <strong>[specific person in a context]</strong>, I need a way to <strong>[make progress or solve a pain]</strong> without <strong>[important obstacle or tradeoff]</strong>.</p>
+</blockquote>
+<p>A possible Knittr statement, which still requires research, is: “As a newer knitter with limited free time, I need a reliable way to choose a project that matches my ability and buy compatible supplies without comparing scattered patterns, yarn requirements, and stores.”</p>
+<h4>Brainstorming rules</h4>
+<ul>
+<li>Go for quantity.</li>
+<li>Stay focused on the topic.</li>
+<li>Be visual.</li>
+<li>Build on and combine other ideas.</li>
+<li>Have one conversation at a time.</li>
+<li>Defer judgment.</li>
+<li>Encourage wild ideas.</li>
+</ul>
+<h4>Strong brainstorming process</h4>
+<ol>
+<li>Write a customer-centered “How might we?” question.</li>
+<li>Use a short creative warm-up.</li>
+<li>Give everyone silent individual ideation time.</li>
+<li>Share and cluster ideas without judging them.</li>
+<li>Combine ideas and seek variety.</li>
+<li>Only after generating many options, evaluate customer value, desirability, feasibility, viability, and possible tests.</li>
+</ol>
+<h4>Using AI for idea generation</h4>
+<p>AI can generate variations, combine interests, explore perspectives, and push beyond the first obvious answer. It cannot establish that an idea is true, desirable, or practical. Humans should supply context, verify facts, and use customers and experiments to judge the ideas.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>What exact evidence would turn Knittr from an idea toward an opportunity?</li>
+<li>Why should evaluation happen after idea generation?</li>
+<li>What should AI do, and what judgment must people retain?</li>
+</ul></aside></article><article class="session" id="session-5" data-area="ent" data-session="5"><header class="session-head"><div class="session-meta"><span class="num">Session 5</span><span class="area area-ent">Entrepreneurship</span></div><h3>Empathy and Design Thinking</h3><label class="studied"><input type="checkbox" id="studied-5" data-studied="5"> Studied</label></header><h4>Human-centered design</h4>
+<p>Design thinking is an iterative, team-based process for creating value from the customer's perspective.</p>
+<ol>
+<li><strong>Empathize:</strong> Observe and interview people in the context of their lives.</li>
+<li><strong>Define:</strong> Turn the evidence into a customer-centered problem statement.</li>
+<li><strong>Ideate:</strong> Generate many possible responses.</li>
+<li><strong>Prototype:</strong> Make a promising idea testable at low cost.</li>
+<li><strong>Test and iterate:</strong> Watch users, learn, and revise.</li>
+</ol>
+<p>The central shift is from “What product do I want to build?” to “What problem is the customer already experiencing?”</p>
+<h4>Observation and empathy</h4>
+<p>Observation shows what people actually do, including workarounds and details they may forget to mention. Empathy means understanding another person's circumstances, feelings, behaviors, and needs well enough to see the problem from that person's perspective. It is different from sympathy and from immediately trying to fix the situation.</p>
+<p>For Knittr, Kayden could observe how people choose a project, compare yarn, seek help, abandon work, and react when supplies are unavailable.</p>
+<h4>Discovery interviews</h4>
+<ul>
+<li>Interview people outside close friends and family.</li>
+<li>Begin broad, then ask for details.</li>
+<li>Use open “how,” “why,” and “tell me about the last time” questions.</li>
+<li>Ask for real stories and past behavior rather than future predictions.</li>
+<li>Listen more than you speak.</li>
+<li>Probe neutrally and remain willing to be wrong.</li>
+<li>Record specific behavior, frustration, workarounds, and short quotations.</li>
+</ul>
+<p>Weak: “Would you use an AI crafting app?”</p>
+<p>Strong: “Tell me about the last time you chose a new crafting project. What did you do from the first idea to buying the supplies?”</p>
+<h4>Knittr application</h4>
+<p>Kayden lacks empathy evidence because he does not knit and has not studied the experience of actual crafters. His family interview leads participants toward his solution. He should investigate the problem before pitching Knittr.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>How is empathy different from sympathy?</li>
+<li>Why is a story about last week stronger than a prediction about next year?</li>
+<li>Can you write three neutral follow-up questions?</li>
+</ul></aside></article><article class="session" id="session-7" data-area="ent" data-session="7"><header class="session-head"><div class="session-meta"><span class="num">Session 7</span><span class="area area-ent">Entrepreneurship</span></div><h3>Value Proposition and Target Market</h3><label class="studied"><input type="checkbox" id="studied-7" data-studied="7"> Studied</label></header><h4>Customer and consumer</h4>
+<p>The customer is willing and able to pay. The consumer or user experiences the product. They may be the same person, but a venture must identify who decides, who pays, and who uses.</p>
+<h4>Segmentation and target market</h4>
+<p>Market segmentation divides a broad market into groups with shared needs, traits, interests, or behaviors. Segments may use demographics, geography, psychographics, behavior, or need. The target market is the specific group the venture chooses to serve first.</p>
+<p>“Women who craft” is too broad. A more useful starting segment might be beginner and intermediate knitters who complete several projects per year, find patterns online, and struggle to match those patterns with suitable yarn. Research must still test whether that group is attractive.</p>
+<h4>Customer personas</h4>
+<p>A persona is a fictional representation of an ideal customer grounded in patterns from interviews, observation, polls, demographics, and behavior. It should explain relevant pains, goals, constraints, workarounds, buying criteria, and channels.</p>
+<p>Kayden's “Beatrice” is weak because her cats and K-dramas come from assumptions. A memorable detail belongs in a persona only when it helps predict a real decision.</p>
+<h4>Value proposition</h4>
+<p>A value proposition explains why a specific customer chooses one offer over alternatives. It should:</p>
+<ul>
+<li><strong>Resonate:</strong> address an important need or pain.</li>
+<li><strong>Differentiate:</strong> offer a meaningful advantage.</li>
+<li><strong>Substantiate:</strong> give a reason to believe the promise.</li>
+</ul>
+<blockquote class="template">
+<p>For <strong>[target audience]</strong>, who need <strong>[pain solved or desire fulfilled]</strong>, <strong>[product]</strong> is a <strong>[category]</strong> that <strong>[compelling benefit]</strong>, because <strong>[reason to believe]</strong>.</p>
+</blockquote>
+<p>Features describe what the product has. Benefits explain what the customer gains. Add “which means that…” after a feature until the statement reaches a result the customer values.</p>
+<h4>Business model introduction</h4>
+<p>A business model explains how the venture creates value, delivers it, and captures part of it as revenue. The nine Business Model Canvas blocks are customer segments, value proposition, channels, customer relationships, revenue streams, key resources, key activities, key partners, and cost structure.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Who pays for Knittr, who decides, and who uses it?</li>
+<li>Why is Beatrice not yet a valid persona?</li>
+<li>Can you turn one Knittr feature into a customer benefit?</li>
+</ul></aside></article><article class="session" id="session-8" data-area="ent" data-session="8"><header class="session-head"><div class="session-meta"><span class="num">Session 8</span><span class="area area-ent">Entrepreneurship</span></div><h3>Prototyping</h3><label class="studied"><input type="checkbox" id="studied-8" data-studied="8"> Studied</label></header><h4>Core idea</h4>
+<p>A prototype is an early representation of an idea built to answer a question. Its value comes from what the team learns, not from how finished it looks.</p>
+<h4>A useful early prototype is:</h4>
+<ul>
+<li>Focused on an important assumption.</li>
+<li>Fast and inexpensive enough to change.</li>
+<li>Concrete enough for a customer to react or behave.</li>
+<li>Tested with members of the target segment.</li>
+<li>Revised based on evidence.</li>
+</ul>
+<h4>Prototype sequence</h4>
+<ol>
+<li>Name the riskiest assumption.</li>
+<li>Decide what observable result would support or weaken it.</li>
+<li>Build the smallest test that can produce that result.</li>
+<li>Watch what customers do and ask neutral follow-up questions.</li>
+<li>Record the evidence and change the next version.</li>
+</ol>
+<h4>Minimum viable product</h4>
+<p>An MVP is the smallest usable version that can test whether the venture creates value for customers. “Minimum” does not mean careless. The version must still be credible enough to test the intended assumption.</p>
+<h4>Knittr prototypes</h4>
+<ul>
+<li>A paper or clickable project-selection flow.</li>
+<li>A manually created project recommendation and supply list.</li>
+<li>A concierge test in which Kayden performs the future service himself.</li>
+<li>A landing page that tests which benefit earns sign-ups.</li>
+<li>A small preorder or price test before purchasing inventory.</li>
+</ul>
+<p>Building the full platform would test too many assumptions at once and make change expensive.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>What assumption does each prototype test?</li>
+<li>What customer behavior would count as evidence?</li>
+<li>How is a prototype different from a finished product?</li>
+</ul></aside></article><article class="session" id="session-11" data-area="ent" data-session="11"><header class="session-head"><div class="session-meta"><span class="num">Session 11</span><span class="area area-ent">Entrepreneurship</span></div><h3>Opportunity Evaluation</h3><label class="studied"><input type="checkbox" id="studied-11" data-studied="11"> Studied</label></header><h4>Desirability, feasibility, and viability</h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Lens</th>
+<th>Core question</th>
+<th>Useful evidence</th>
+<th>Knittr's current gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desirability</td>
+<td>Do real people want or need this?</td>
+<td>Stories, repeated pain, workarounds, prototype use, willingness to switch or pay</td>
+<td>No valid customer evidence</td>
+</tr>
+<tr>
+<td>Feasibility</td>
+<td>Can this team create and deliver it?</td>
+<td>Skills, technology, suppliers, partners, time, quality, and operations</td>
+<td>No craft expertise, coding ability, or delivery system</td>
+</tr>
+<tr>
+<td>Viability</td>
+<td>Can the model sustain itself?</td>
+<td>Price, costs, margins, frequency, acquisition, demand, and competition</td>
+<td>No tested economics or revenue model</td>
+</tr>
+</tbody>
+</table></div>
+<p>An opportunity must reach the intersection of all three. A desired service that loses money is not viable. A profitable-sounding product that the team cannot deliver is not feasible. A deliverable product that customers do not value is not desirable.</p>
+<h4>Demand, competition, and alternatives</h4>
+<p>Estimate demand with evidence from a defined segment, not the size of a broad category. Compare direct competitors with indirect alternatives and the customer's current workaround. For Knittr, alternatives include yarn stores, pattern sites, blogs, social media, Ravelry, Etsy, advice from friends, and doing nothing.</p>
+<h4>Resources, capabilities, and risk</h4>
+<p>Assess what the team knows, whom it knows, and what it controls. Name capability gaps rather than hiding them. Test the assumptions whose failure would most threaten the venture before making expensive commitments.</p>
+<h4>Financial, social, and environmental effects</h4>
+<p>Opportunity evaluation should include customer-acquisition costs, order economics, inventory risk, returns, supplier practices, packaging, labor, accessibility, privacy, and honest impact claims. A good business creates economic value while considering its effects on people and the planet.</p>
+<h4>Knittr application</h4>
+<p>Kayden should test desirability with real crafters, feasibility through manual delivery and knowledgeable partners, and viability through price and cost experiments. Positive comments alone do not satisfy all three lenses.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Which evidence belongs under each lens?</li>
+<li>Why could growth make an unviable offer worse?</li>
+<li>What is Knittr's most dangerous untested assumption?</li>
+</ul></aside></article><article class="session" id="session-12" data-area="ent" data-session="12"><header class="session-head"><div class="session-meta"><span class="num">Session 12</span><span class="area area-ent">Entrepreneurship</span></div><h3>Market Research</h3><label class="studied"><input type="checkbox" id="studied-12" data-studied="12"> Studied</label></header><h4>Research types</h4>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>Primary: collected for this decision</th>
+<th>Secondary: collected previously by others</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qualitative: explores how and why</td>
+<td>Interviews, focus groups, observation</td>
+<td>Industry narratives, company materials, archived accounts</td>
+</tr>
+<tr>
+<td>Quantitative: measures how many, how often, or how much</td>
+<td>Surveys, experiments, transactions</td>
+<td>Published surveys, financial reports, market reports</td>
+</tr>
+</tbody>
+</table></div>
+<p>Begin with qualitative research when the team does not understand the problem well enough to form useful hypotheses. Use quantitative research later to test frequency, compare segments, or estimate demand.</p>
+<h4>Sampling</h4>
+<p>A useful sample includes people who represent the decision the team is studying. Convenience samples are easy to reach but often biased. A small qualitative sample can reveal themes; it cannot prove the size of a market.</p>
+<h4>Unbiased questions</h4>
+<ul>
+<li>Ask one clear question at a time.</li>
+<li>Avoid wording that signals the preferred response.</li>
+<li>Ask about real behavior before opinions about a new idea.</li>
+<li>Use open questions for exploration and carefully designed closed questions for measurement.</li>
+<li>Include options that allow disagreement or uncertainty.</li>
+</ul>
+<h4>Focus groups</h4>
+<p>A focus group is a moderated discussion among potential customers that uses participant interaction to develop insight.</p>
+<ul>
+<li>Recruit about five to eight people from the target segment.</li>
+<li>Use a neutral moderator and an additional note-taker when possible.</li>
+<li>Prepare six to eight short, open questions.</li>
+<li>Move from easy and general questions toward the concept.</li>
+<li>Encourage participants to respond to one another.</li>
+<li>Prevent domination and invite quieter members without leading them.</li>
+<li>End with a question that asks what the team missed.</li>
+</ul>
+<p>Kayden's family discussion is weak because he uses a convenience sample, pitches first, discourages criticism, and treats praise as confirmation.</p>
+<h4>Analyzing feedback</h4>
+<p>Look for repeated behavior, explanations, strong emotions, workarounds, contradictions, and disconfirming evidence. Separate what participants said from the team's interpretation. Turn themes into hypotheses for a later test.</p>
+<h4>The 4Ps and revenue drivers</h4>
+<ul>
+<li><strong>Product:</strong> the offer, benefit, and differentiation.</li>
+<li><strong>Price:</strong> what the customer pays and why.</li>
+<li><strong>Place:</strong> where and through which channel the offer is sold.</li>
+<li><strong>Promotion:</strong> how the target customer becomes aware of it.</li>
+</ul>
+<p>Revenue depends on the number and quality of customers, purchase frequency, the selling process or channel, and price.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>When should you use qualitative rather than quantitative research?</li>
+<li>What is wrong with “Don't you agree our app makes crafting easier?”</li>
+<li>Why can eight enthusiastic focus-group participants not prove market size?</li>
+</ul></aside></article></section>
+<section class="part part-sessions" id="organizational-behavior-study-guides" data-area="ob"><h2>Organizational Behavior study guides</h2><article class="session" id="session-2" data-area="ob" data-session="2"><header class="session-head"><div class="session-meta"><span class="num">Session 2</span><span class="area area-ob">Organizational Behavior</span></div><h3>Introduction to Culture and Norms</h3><label class="studied"><input type="checkbox" id="studied-2" data-studied="2"> Studied</label></header><h4>Core idea</h4>
+<p>Organizational culture is the shared system of values, beliefs, assumptions, and norms that tells people how work is really done. Culture appears through repeated behavior, stories, rituals, language, rewards, status, and the actions leaders tolerate.</p>
+<h4>Formal rules versus informal norms</h4>
+<p>A rule is explicit and usually written. A norm is an informal expectation that develops through repeated interaction and reinforcement. When the two conflict, people often follow the behavior that the group actually rewards.</p>
+<p>If a charter says meetings start at 6:00 but the team always waits for influential late members, the real norm is 6:15.</p>
+<h4>Visible and invisible culture</h4>
+<p>Visible culture includes schedules, dress, language, rituals, workspace, and stated policies. Invisible culture includes assumptions about status, conflict, effort, trust, risk, and who is allowed to influence decisions.</p>
+<h4>Positive and negative team norms</h4>
+<p>Useful norms make it easier to coordinate, speak honestly, meet standards, and learn. Harmful norms can normalize lateness, silence, domination, hidden work, or avoiding accountability.</p>
+<h4>Team charters</h4>
+<p>A useful charter turns aspirations into behavior. It should clarify purpose, roles, decision methods, meeting expectations, communication, conflict, accountability, and how the team will revise its own process.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>What behavior is the group actually rewarding?</li>
+<li>Which norm would you infer even if nothing were written?</li>
+<li>What action would change that norm over time?</li>
+</ul></aside></article><article class="session" id="session-4" data-area="ob" data-session="4"><header class="session-head"><div class="session-meta"><span class="num">Session 4</span><span class="area area-ob">Organizational Behavior</span></div><h3>Emotional Intelligence</h3><label class="studied"><input type="checkbox" id="studied-4" data-studied="4"> Studied</label></header><h4>Four abilities</h4>
+<ul>
+<li><strong>Self-awareness:</strong> recognize your emotions, patterns, strengths, and limits.</li>
+<li><strong>Self-management:</strong> regulate impulses and choose a useful response.</li>
+<li><strong>Social awareness:</strong> notice other people's emotions, perspectives, and needs.</li>
+<li><strong>Relationship management:</strong> use that understanding to communicate, influence, resolve conflict, and maintain working relationships.</li>
+</ul>
+<p>Responding rather than reacting means creating a pause between an emotional trigger and an action. The emotion may be valid, but the first impulse may damage the team or misread the facts.</p>
+<h4>Leadership application</h4>
+<p>A leader who sees an incomplete draft, assumes laziness, and posts an angry accusation shows weak self-awareness and self-management. If the role and deadline were unclear, the case also contains a process problem. The leader should check the facts, repair the public harm, and clarify the owner, deliverable, standard, and deadline.</p>
+<h4>Trust model</h4>
+<blockquote class="template">
+<p>Trust = Authenticity + Logic + Empathy</p>
+</blockquote>
+<ul>
+<li><strong>Authenticity:</strong> I believe you are genuine and consistent.</li>
+<li><strong>Logic:</strong> I believe your reasoning and competence.</li>
+<li><strong>Empathy:</strong> I believe you understand and care about my experience or interests.</li>
+</ul>
+<p>A sincere and caring leader who recommends major spending without evidence may have authenticity and empathy but still lose trust through weak logic.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Which EI ability is missing in the case?</li>
+<li>What was the trigger, reaction, and consequence?</li>
+<li>Which part of authenticity, logic, and empathy is weakest?</li>
+</ul></aside></article><article class="session" id="session-6" data-area="ob" data-session="6"><header class="session-head"><div class="session-meta"><span class="num">Session 6</span><span class="area area-ob">Organizational Behavior</span></div><h3>Positive Teaming and Psychological Safety</h3><label class="studied"><input type="checkbox" id="studied-6" data-studied="6"> Studied</label></header><h4>Three outcomes of team effectiveness</h4>
+<ol>
+<li><strong>Performance:</strong> The output meets the needs of customers or stakeholders.</li>
+<li><strong>Learning and adaptability:</strong> Members and the team become more capable.</li>
+<li><strong>Member well-being and growth:</strong> The work remains sustainable and worthwhile.</li>
+</ol>
+<p>A team can earn a high grade and still be ineffective if two people do all the work, nobody learns, and members refuse to work together again.</p>
+<h4>Conditions that support effective teams</h4>
+<ul>
+<li>The right mix and number of people.</li>
+<li>Trust, mutual respect, psychological safety, and constructive conflict.</li>
+<li>Clear roles, decisions, deadlines, facilitation, and next steps.</li>
+<li>Alignment with the larger system, including authority, resources, and stakeholder feedback.</li>
+</ul>
+<h4>Psychological safety</h4>
+<p>Psychological safety is a shared belief that the team is safe for interpersonal risk-taking. Members can ask questions, admit uncertainty, raise concerns, disagree, suggest unusual ideas, and discuss errors without expecting humiliation or exclusion.</p>
+<p>It does not mean constant agreement, low standards, or freedom from accountability. A team can debate strongly while protecting each person's ability to speak.</p>
+<h4>Actions that build safety</h4>
+<ul>
+<li>Leaders acknowledge their own fallibility.</li>
+<li>Ask directly for dissent and concerns.</li>
+<li>Respond to bad news with curiosity before evaluation.</li>
+<li>Give members roughly equal opportunities to contribute.</li>
+<li>Thank people for revealing errors.</li>
+<li>Separate criticism of an idea or behavior from an attack on the person.</li>
+<li>Follow up so speaking up produces visible value.</li>
+</ul>
+<h4>Failure versus mistake</h4>
+<p>A failure is an unwanted result from testing something genuinely uncertain. When the test is thoughtful, the result can create useful information. A mistake ignores known information, violates an established process, or repeats a known error.</p>
+<h4>Constructive conflict</h4>
+<p>Task conflict debates evidence, assumptions, and choices. Relationship or status conflict attacks people. Useful responses restate the shared goal, ask for evidence, distribute airtime, name emotional escalation, and agree on a decision process.</p>
+<h4>Process gains and losses</h4>
+<p>Teams gain from combined knowledge, motivation, error checking, role modeling, and a shared map of expertise. They lose value through social loafing, poor coordination, dominant speakers, fear, hidden information, overload, and premature consensus.</p>
+<h4>Team leadership levers</h4>
+<ol>
+<li><strong>Design:</strong> Clarify the purpose, membership, roles, timing, authority, and resources.</li>
+<li><strong>Launch:</strong> Build shared understanding of goals, capabilities, strategy, leadership, and norms.</li>
+<li><strong>Process management:</strong> Monitor progress and intervene when the team needs to adjust.</li>
+</ol>
+<p>A team may need a relaunch when membership, purpose, or working assumptions change substantially.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Is the case a performance, learning, or well-being problem?</li>
+<li>Does speaking up carry a social penalty?</li>
+<li>Is the unwanted result a productive failure or a preventable mistake?</li>
+<li>Would the best intervention change team design, launch, or ongoing process?</li>
+</ul></aside></article><article class="session" id="session-10" data-area="ob" data-session="10"><header class="session-head"><div class="session-meta"><span class="num">Session 10</span><span class="area area-ob">Organizational Behavior</span></div><h3>Diversity of Thought and Practice — DiSC</h3><label class="studied"><input type="checkbox" id="studied-10" data-studied="10"> Studied</label></header><h4>Core idea</h4>
+<p>DiSC is a shared language for behavioral and communication preferences. It is not a measure of intelligence, worth, competence, or fixed ability. Everyone can use all four styles, and people should not be reduced to a label.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Style</th>
+<th>Common strengths</th>
+<th>Possible challenge</th>
+<th>Helpful communication</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D — Dominance/Driver</td>
+<td>Direct, fast, decisive, results-focused</td>
+<td>May be impatient or overlook input</td>
+<td>Lead with the result, options, and next action</td>
+</tr>
+<tr>
+<td>I — Influencing/Expressive</td>
+<td>Energetic, persuasive, social, idea-generating</td>
+<td>May skip details or commit too quickly</td>
+<td>Invite ideas, then confirm deadlines and details in writing</td>
+</tr>
+<tr>
+<td>S — Steady/Supporter</td>
+<td>Calm, patient, dependable, cooperative</td>
+<td>May avoid conflict or need time with change</td>
+<td>Explain changes, be supportive, and allow time to respond</td>
+</tr>
+<tr>
+<td>C — Conscientious/Analytical</td>
+<td>Accurate, logical, careful, quality-focused</td>
+<td>May overanalyze or become stuck in detail</td>
+<td>Bring evidence, structure, expectations, and thinking time</td>
+</tr>
+</tbody>
+</table></div>
+<h4>Flexing styles</h4>
+<p>The goal is to adapt communication to help the team work. A D can pause and invite input. An I can document commitments. An S can raise disagreement earlier. A C can identify the minimum evidence needed for a timely decision.</p>
+<p>When a D wants speed and a C wants more data, the team can set a decision deadline and agree on the minimum evidence needed for a reversible test. This respects both preferences without declaring one style correct.</p>
+<h4>Diversity of thought</h4>
+<p>Different expertise, networks, backgrounds, opinions, personalities, and experiences can increase creativity and reduce groupthink. Those differences create value only when the team has norms that allow information to surface and influence the work.</p>
+<h4>Avoiding stereotypes</h4>
+<p>Use a profile as a prompt for conversation, not as permission to predict everything about a teammate. The individual remains the best judge of whether the description fits.</p><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Can you adapt the same message for D, I, S, and C preferences?</li>
+<li>Are you describing behavior or judging the person?</li>
+<li>How could two styles combine their strengths?</li>
+</ul></aside></article><article class="session" id="session-13" data-area="ob" data-session="13"><header class="session-head"><div class="session-meta"><span class="num">Session 13</span><span class="area area-ob">Organizational Behavior</span></div><h3>Inclusion and Identity</h3><label class="studied"><input type="checkbox" id="studied-13" data-studied="13"> Studied</label></header><h4>Personal and social identity</h4>
+<p>Personal identity includes characteristics and experiences that shape how a person understands themselves. Social identity connects a person with groups and categories that may influence belonging, status, opportunity, and how others respond to them.</p>
+<p>Some differences are visible; others are invisible or context-dependent. A team should not assume that it knows which identities matter to another person or how that person experiences them.</p>
+<h4>Identity mapping</h4>
+<p>An identity map helps people reflect on the identities they notice often, those others notice, and those that shape access or expectations. Its purpose is awareness and discussion, not forcing disclosure or turning a person into a category.</p>
+<h4>Diversity, inclusion, and belonging</h4>
+<ul>
+<li><strong>Diversity:</strong> Who is present and what differences exist?</li>
+<li><strong>Inclusion:</strong> Whose voice, information, and perspective can influence the work?</li>
+<li><strong>Belonging:</strong> Do members feel accepted as legitimate parts of the group?</li>
+</ul>
+<p>A team may be diverse without being inclusive. Asking a new member for ideas and then repeatedly ignoring them gives the appearance of participation without real influence.</p>
+<h4>Bias and assumptions</h4>
+<p>Bias can affect whose ideas receive credit, who gets interrupted, which behavior is considered professional, and who receives high-visibility work. Teams should examine patterns in decisions and outcomes rather than relying only on good intentions.</p>
+<h4>Faultlines and subgroups</h4>
+<p>Faultlines divide a team into stable subgroups, such as veteran and new members. Information may remain inside each group, weakening shared ownership and collective intelligence. Cross-subgroup tasks, shared goals, transparent decisions, and a wider team identity can reduce the division.</p>
+<h4>Inclusive leadership and decisions</h4>
+<ul>
+<li>Distribute airtime and prevent repeated interruption.</li>
+<li>Ask for views before senior members anchor the discussion.</li>
+<li>Use clear decision criteria.</li>
+<li>Explain how input affected the final choice.</li>
+<li>Rotate meaningful responsibilities and visibility.</li>
+<li>Make it safe to question assumptions.</li>
+<li>Avoid requiring people to disclose identities or represent an entire group.</li>
+</ul><aside class="check"><p class="check-label">Check yourself</p><ul>
+<li>Is the team diverse, inclusive, and supportive of belonging? These are separate questions.</li>
+<li>Whose information is missing from the decision?</li>
+<li>What observable change would give a less powerful member real influence?</li>
+</ul></aside></article></section>
+<section class="part" id="knittr-cross-reference-by-subject"><h2>Knittr cross-reference by subject</h2><div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Subject</th>
+<th>Evidence from Knittr</th>
+<th>Best response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ET&amp;A</td>
+<td>Kayden wants investors, a full site, and a warehouse before testing</td>
+<td>Run a small manual service with an acceptable loss</td>
+</tr>
+<tr>
+<td>Idea versus opportunity</td>
+<td>Category spending becomes proof of a business</td>
+<td>Validate a defined customer and unmet need</td>
+</tr>
+<tr>
+<td>Empathy and design thinking</td>
+<td>Kayden does not knit or observe crafters</td>
+<td>Observe and interview actual target customers</td>
+</tr>
+<tr>
+<td>Target market and persona</td>
+<td>“Women who craft” is broad; Beatrice comes from TikTok</td>
+<td>Choose a narrow segment and build the persona from patterns in evidence</td>
+</tr>
+<tr>
+<td>Value proposition</td>
+<td>The pitch emphasizes AI, products, and a robot friend</td>
+<td>State one customer, pain, benefit, difference, and reason to believe</td>
+</tr>
+<tr>
+<td>Prototyping</td>
+<td>Kayden considers building the complete platform</td>
+<td>Test a paper flow or manual recommendation first</td>
+</tr>
+<tr>
+<td>Opportunity evaluation</td>
+<td>Skills, suppliers, price, costs, demand, and margins are untested</td>
+<td>Test desirability, feasibility, and viability separately</td>
+</tr>
+<tr>
+<td>Market research</td>
+<td>Family participants, leading questions, rejected criticism</td>
+<td>Recruit target participants and use neutral, behavior-based questions</td>
+</tr>
+<tr>
+<td>Rocket Pitch</td>
+<td>Features appear before a validated customer problem</td>
+<td>Lead with the customer and evidence of the problem</td>
+</tr>
+</tbody>
+</table></div></section>
+<section class="part" id="one-page-rapid-recall"><h2>One-page rapid recall</h2><h4>Joint</h4>
+<ul>
+<li>ET&amp;A matches the logic to uncertainty.</li>
+<li>Prediction plans when the path is knowable; CreAction learns through affordable steps.</li>
+<li>Rocket Pitch: customer, problem, solution, benefit, difference, proof, next step.</li>
+</ul>
+<h4>Entrepreneurship</h4>
+<ul>
+<li>Idea is a possibility; opportunity connects a real need with a workable way to create and capture value.</li>
+<li>Design thinking: empathize, define, ideate, prototype, test, and iterate.</li>
+<li>Discovery questions use real past behavior and avoid leading the participant.</li>
+<li>Customer pays; consumer uses; the target segment is chosen and specific.</li>
+<li>A persona comes from repeated evidence, not decorative assumptions.</li>
+<li>Value proposition: resonate, differentiate, and substantiate.</li>
+<li>Prototype the riskiest assumption with the least expensive credible test.</li>
+<li>Opportunity = desirability + feasibility + viability.</li>
+<li>Qualitative research explores how and why; quantitative research measures frequency or amount.</li>
+<li>A focus group uses participant interaction and produces exploratory, not conclusive, evidence.</li>
+</ul>
+<h4>Organizational Behavior</h4>
+<ul>
+<li>Culture is shown by repeated behavior; norms can overpower formal rules.</li>
+<li>EI = self-awareness + self-management + social awareness + relationship management.</li>
+<li>Trust = authenticity + logic + empathy.</li>
+<li>Team effectiveness = performance + learning/adaptability + member well-being/growth.</li>
+<li>Psychological safety allows interpersonal risk while maintaining accountability.</li>
+<li>Failure explores uncertainty; a mistake ignores known information.</li>
+<li>Task conflict can improve decisions; personal conflict damages the team.</li>
+<li>DiSC describes preferences and helps people flex communication.</li>
+<li>Diversity asks who is present; inclusion asks who has influence; belonging asks who feels accepted.</li>
+<li>Faultlines trap information inside subgroups; shared work and transparent decisions reconnect the team.</li>
+</ul></section>
+<section class="part" id="final-self-test-by-subject"><h2>Final self-test by subject</h2><ol>
+<li><strong>Session 1:</strong> What is the smallest affordable step Knittr could take this week?</li>
+<li><strong>Session 2:</strong> What norm can you infer when behavior conflicts with the written rule?</li>
+<li><strong>Session 3:</strong> What evidence separates an opportunity from an exciting idea?</li>
+<li><strong>Session 4:</strong> Which EI ability is missing when a leader reacts before checking the facts?</li>
+<li><strong>Session 5:</strong> Write three neutral questions about the last time a customer experienced the problem.</li>
+<li><strong>Session 6:</strong> How is psychological safety different from being agreeable or lowering standards?</li>
+<li><strong>Session 7:</strong> Who is the customer, consumer, and first target segment?</li>
+<li><strong>Session 8:</strong> Which risky assumption does the prototype test, and what behavior will count as evidence?</li>
+<li><strong>Session 9:</strong> Can you explain the customer, problem, solution, benefit, and proof in under one minute?</li>
+<li><strong>Session 10:</strong> How would you adapt one message for D, I, S, and C preferences?</li>
+<li><strong>Session 11:</strong> What separate evidence supports desirability, feasibility, and viability?</li>
+<li><strong>Session 12:</strong> Why can a small focus group reveal a theme but not prove market size?</li>
+<li><strong>Session 13:</strong> What would turn symbolic participation into real inclusion?</li>
+<li>Can you write one complete C-E-A-R paragraph in under five minutes?</li>
+</ol></section>
+<section class="part" id="source-basis"><h2>Source basis</h2><p>This guide reorganizes the existing FME 1000 master study guide around the 13 subjects supplied for the Fall 2026 midterm. The underlying material comes from the course study guide, class slides, assigned readings, activities, the Knittr case, and Sean's discovery-interview work.</p>
+<p>This is a study aid. When using any part outside personal studying, follow the course's rules on permitted and disclosed AI use.</p></section>
+
+      <section class="part" id="flashcards">
+        <h2>Flashcards</h2>
+        <p>61 key terms from all 13 sessions. Click the card or press Space to flip. Use the arrow keys to move, and mark the cards you already know so they drop out of the deck.</p>
+        <div class="deck-controls">
+          <label for="deck-session" class="hint">Session</label>
+          <select id="deck-session"><option value="all">All sessions</option></select>
+          <button class="btn" type="button" id="deck-shuffle">Shuffle</button>
+          <button class="btn" type="button" id="deck-reset">Reset known cards</button>
+          <span class="deck-count" id="deck-count"></span>
+        </div>
+        <button class="flash" type="button" id="flash" aria-live="polite"></button>
+        <div class="deck-nav">
+          <div class="group">
+            <button class="btn" type="button" id="deck-prev">← Previous</button>
+            <button class="btn" type="button" id="deck-next">Next →</button>
+          </div>
+          <button class="btn primary" type="button" id="deck-known">I know this one</button>
+        </div>
+      </section>
+
+      <footer>
+        Generated from <code>FME1000_Midterm_Master_Study_Guide.md</code>. Your progress is saved only in this browser.
+        <a href="./index.html">Go to the practice tests</a>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const CARDS = [{"s": 1, "t": "Entrepreneurial Thought and Action (ET&A)", "d": "A way to choose how to act under uncertainty by combining prediction logic with creation (effectual) logic, called CreAction in the course."}, {"s": 1, "t": "Prediction (causal) logic", "d": "Best when the future is knowable: plan first, focus on expected return, secure resources first, follow a chosen path, avoid failure."}, {"s": 1, "t": "Creation (effectual) logic", "d": "Best under uncertainty: act in small steps, limit acceptable loss, start with means at hand, adjust as evidence changes, use intelligent failure as information."}, {"s": 1, "t": "CreAction sequence", "d": "1) Start with who you are, what you know, whom you know. 2) Take a small affordable action. 3) Observe results. 4) Bring in people or resources. 5) Adjust."}, {"s": 1, "t": "Acceptable loss", "d": "Size each step by what you can afford to lose, not by expected return."}, {"s": 2, "t": "Organizational culture", "d": "The shared values, beliefs, assumptions, and norms that show how work is really done, visible in repeated behavior, stories, rituals, rewards, and what leaders tolerate."}, {"s": 2, "t": "Rule vs. norm", "d": "A rule is explicit and usually written. A norm is an informal expectation formed by repeated, reinforced behavior. When they conflict, people follow what the group rewards."}, {"s": 2, "t": "Visible vs. invisible culture", "d": "Visible: schedules, dress, language, rituals, workspace, policies. Invisible: assumptions about status, conflict, effort, trust, risk, and who can influence decisions."}, {"s": 2, "t": "Team charter", "d": "Turns aspirations into behavior: purpose, roles, decision methods, meetings, communication, conflict, accountability, and how the team revises its process."}, {"s": 3, "t": "Idea vs. opportunity", "d": "An idea is an early insight. An opportunity connects a defined customer and meaningful unmet need with a solution that can be delivered and sustained."}, {"s": 3, "t": "Opportunity test", "d": "Attractive (customers act), durable (need and advantage last), timely (good moment), value-creating (benefit the customer values)."}, {"s": 3, "t": "Problem statement template", "d": "As a [specific person in a context], I need a way to [make progress] without [important obstacle or tradeoff]."}, {"s": 3, "t": "Brainstorming rules", "d": "Go for quantity, stay on topic, be visual, build on ideas, one conversation at a time, defer judgment, encourage wild ideas."}, {"s": 3, "t": "AI in idea generation", "d": "Useful for variations, combinations, and perspectives. It cannot establish truth, desirability, or practicality; people verify and test with customers."}, {"s": 4, "t": "Emotional intelligence (4 abilities)", "d": "Self-awareness, self-management, social awareness, relationship management."}, {"s": 4, "t": "Responding vs. reacting", "d": "Creating a pause between an emotional trigger and an action so you can check facts and choose a useful response."}, {"s": 4, "t": "Trust model", "d": "Trust = Authenticity (genuine, consistent) + Logic (sound reasoning, competence) + Empathy (understands and cares)."}, {"s": 5, "t": "Design thinking", "d": "Iterative, human-centered process: empathize, define, ideate, prototype, test and iterate."}, {"s": 5, "t": "Empathy (vs. sympathy)", "d": "Understanding another person's circumstances, feelings, and needs well enough to see the problem from their view. Not pity, and not rushing to fix it."}, {"s": 5, "t": "Discovery interview", "d": "Talk to people outside friends and family, start broad, ask open questions about real past behavior (“tell me about the last time…”), listen more, probe neutrally."}, {"s": 6, "t": "Team effectiveness (3 outcomes)", "d": "Performance, learning and adaptability, member well-being and growth."}, {"s": 6, "t": "Psychological safety", "d": "A shared belief that the team is safe for interpersonal risk-taking. It does not mean constant agreement, low standards, or no accountability."}, {"s": 6, "t": "Failure vs. mistake", "d": "Failure: an unwanted result from a thoughtful test of genuine uncertainty, which produces information. Mistake: ignores known information, breaks process, or repeats a known error."}, {"s": 6, "t": "Task vs. relationship conflict", "d": "Task conflict debates evidence, assumptions, and choices. Relationship or status conflict attacks people."}, {"s": 6, "t": "Process gains and losses", "d": "Gains: combined knowledge, motivation, error checking. Losses: social loafing, poor coordination, dominant speakers, fear, hidden information, premature consensus."}, {"s": 6, "t": "Team leadership levers", "d": "Design (purpose, membership, roles, resources), launch (shared goals and norms), process management (monitor and intervene). Relaunch when things change."}, {"s": 7, "t": "Customer vs. consumer", "d": "The customer is willing and able to pay; the consumer or user experiences the product. Identify who decides, who pays, who uses."}, {"s": 7, "t": "Segmentation and target market", "d": "Segmentation divides a market by demographics, geography, psychographics, behavior, or need. The target market is the segment you serve first."}, {"s": 7, "t": "Persona", "d": "A fictional ideal customer grounded in research patterns: pains, goals, constraints, workarounds, buying criteria, channels. Details must predict real decisions."}, {"s": 7, "t": "Value proposition", "d": "Why a specific customer chooses this over alternatives. It must resonate, differentiate, and substantiate."}, {"s": 7, "t": "Value proposition template", "d": "For [target], who need [pain or desire], [product] is a [category] that [benefit], because [reason to believe]."}, {"s": 7, "t": "Feature vs. benefit", "d": "A feature is what the product has; a benefit is what the customer gains. Add “which means that…” until you reach a valued result."}, {"s": 7, "t": "Business Model Canvas (9 blocks)", "d": "Customer segments, value proposition, channels, customer relationships, revenue streams, key resources, key activities, key partners, cost structure."}, {"s": 8, "t": "Prototype", "d": "An early representation built to answer a question. Its value is what you learn, not how finished it looks."}, {"s": 8, "t": "Prototype sequence", "d": "Name the riskiest assumption, decide the observable result, build the smallest test, watch customers, record evidence and revise."}, {"s": 8, "t": "Minimum viable product (MVP)", "d": "The smallest usable version that can test whether the venture creates value. Minimum does not mean careless."}, {"s": 8, "t": "Concierge test", "d": "The founder performs the future service by hand to learn whether customers value it before building software."}, {"s": 9, "t": "Rocket Pitch order", "d": "Customer, problem (with evidence), solution, benefit and difference, reason to believe, next action or request."}, {"s": 9, "t": "Value proposition tests (pitch)", "d": "Overt benefit (why care?), dramatic difference (why this?), real reason to believe (why trust it?)."}, {"s": 10, "t": "DiSC", "d": "A shared language for behavioral and communication preferences: D Dominance, I Influencing, S Steady, C Conscientious. Not a measure of ability or worth."}, {"s": 10, "t": "D — Dominance / Driver", "d": "Direct, fast, results-focused. May be impatient. Lead with the result, options, and next action."}, {"s": 10, "t": "I — Influencing / Expressive", "d": "Energetic, persuasive, idea-generating. May skip details. Invite ideas, then confirm details in writing."}, {"s": 10, "t": "S — Steady / Supporter", "d": "Calm, dependable, cooperative. May avoid conflict. Explain changes and allow time to respond."}, {"s": 10, "t": "C — Conscientious / Analytical", "d": "Accurate, logical, quality-focused. May overanalyze. Bring evidence, structure, and thinking time."}, {"s": 10, "t": "Flexing", "d": "Adapting your communication to help the team work, e.g. D vs. C conflict: set a decision deadline and agree on the minimum evidence for a reversible test."}, {"s": 11, "t": "Desirability", "d": "Do real people want or need this? Evidence: stories, repeated pain, workarounds, prototype use, willingness to switch or pay."}, {"s": 11, "t": "Feasibility", "d": "Can this team create and deliver it? Evidence: skills, technology, suppliers, partners, time, quality, operations."}, {"s": 11, "t": "Viability", "d": "Can the model sustain itself? Evidence: price, costs, margins, frequency, acquisition cost, demand, competition."}, {"s": 11, "t": "Alternatives and competition", "d": "Compare direct competitors, indirect alternatives, and the customer's current workaround, including doing nothing."}, {"s": 12, "t": "Primary vs. secondary research", "d": "Primary is collected for this decision; secondary was collected previously by others."}, {"s": 12, "t": "Qualitative vs. quantitative", "d": "Qualitative explores how and why (interviews, focus groups). Quantitative measures how many, how often, how much (surveys, experiments)."}, {"s": 12, "t": "Focus group", "d": "A moderated discussion of 5–8 target customers that uses interaction to develop insight. Exploratory, not proof of market size."}, {"s": 12, "t": "Leading question", "d": "Wording that signals the preferred answer, e.g. “Don't you agree our app makes crafting easier?”"}, {"s": 12, "t": "Convenience sample", "d": "People who are easy to reach, like family. Often biased and may not represent the target customer."}, {"s": 12, "t": "4Ps", "d": "Product, price, place (channel), promotion."}, {"s": 12, "t": "Revenue drivers", "d": "Number and quality of customers, purchase frequency, selling process or channel, and price."}, {"s": 13, "t": "Personal vs. social identity", "d": "Personal: characteristics and experiences that shape self-understanding. Social: group memberships that may affect belonging, status, and opportunity."}, {"s": 13, "t": "Diversity / inclusion / belonging", "d": "Diversity: who is present? Inclusion: whose voice influences the work? Belonging: who feels accepted as a legitimate member?"}, {"s": 13, "t": "Faultlines", "d": "Stable divisions into subgroups (e.g. veterans vs. newcomers) that trap information. Reduce with shared goals, cross-subgroup tasks, transparent decisions."}, {"s": 13, "t": "Inclusive leadership", "d": "Distribute airtime, ask for views before seniors anchor, use clear criteria, explain how input shaped the decision, rotate visibility, never force disclosure."}, {"s": 0, "t": "C-E-A-R", "d": "Concept (name and define), Evidence (specific case fact), Analysis (why it matters), Response and result (observable action and what it improves)."}];
+    const $ = (id) => document.getElementById(id);
+    const store = {
+      get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
+      set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} }
+    };
+
+    function toast(message) {
+      $('toast').textContent = message;
+      $('toast').classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => $('toast').classList.remove('show'), 1600);
+    }
+
+    // Studied tracking
+    const sessions = [...document.querySelectorAll('.session')];
+    let studied = new Set(store.get('fme-studied', []));
+    function renderStudied() {
+      document.querySelectorAll('[data-studied]').forEach(box => { box.checked = studied.has(box.dataset.studied); });
+      document.querySelectorAll('[data-toc]').forEach(link => link.classList.toggle('done', studied.has(link.dataset.toc)));
+      $('studied-count').textContent = `${studied.size} / ${sessions.length}`;
+      $('studied-bar').style.width = `${studied.size / sessions.length * 100}%`;
+    }
+    document.addEventListener('change', (event) => {
+      const box = event.target.closest('[data-studied]');
+      if (!box) return;
+      box.checked ? studied.add(box.dataset.studied) : studied.delete(box.dataset.studied);
+      store.set('fme-studied', [...studied]);
+      renderStudied();
+      if (box.checked) toast(`Session ${box.dataset.studied} marked studied`);
+      if (filter === 'todo') applyFilter();
+    });
+
+    // Filter and search
+    let filter = 'all';
+    function applyFilter() {
+      const query = $('search').value.trim().toLowerCase();
+      let shown = 0;
+      sessions.forEach(section => {
+        const areaOk = filter === 'all' || section.dataset.area === filter || (filter === 'todo' && !studied.has(section.dataset.session));
+        const textOk = !query || section.textContent.toLowerCase().includes(query);
+        section.hidden = !(areaOk && textOk);
+        if (!section.hidden) shown++;
+        const link = document.querySelector(`[data-toc="${section.dataset.session}"]`);
+        if (link) link.parentElement.hidden = section.hidden;
+      });
+      document.querySelectorAll('.part-sessions').forEach(part => {
+        part.hidden = !part.querySelector('.session:not([hidden])');
+      });
+      const narrowed = filter !== 'all' || query;
+      document.querySelectorAll('.part:not(.part-sessions)').forEach(part => {
+        part.hidden = narrowed && part.id !== 'flashcards' && !(query && part.textContent.toLowerCase().includes(query));
+      });
+      $('empty').classList.toggle('show', shown === 0);
+    }
+    document.querySelectorAll('[data-filter]').forEach(chip => chip.addEventListener('click', () => {
+      filter = chip.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+      applyFilter();
+    }));
+    $('search').addEventListener('input', applyFilter);
+
+    // Active section in the rail
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          document.querySelectorAll('[data-toc]').forEach(link => link.classList.toggle('active', link.dataset.toc === entry.target.dataset.session));
+        });
+      }, { rootMargin: '-30% 0px -60% 0px' });
+      sessions.forEach(section => observer.observe(section));
+    }
+
+    // Copy buttons on answer templates
+    document.querySelectorAll('blockquote.template').forEach(quote => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy';
+      button.textContent = 'Copy';
+      button.addEventListener('click', async () => {
+        const text = quote.querySelector('p').textContent;
+        try { await navigator.clipboard.writeText(text); toast('Template copied'); }
+        catch {
+          const range = document.createRange();
+          range.selectNodeContents(quote.querySelector('p'));
+          getSelection().removeAllRanges();
+          getSelection().addRange(range);
+          toast('Text selected. Press Ctrl+C or ⌘C to copy');
+        }
+      });
+      quote.appendChild(button);
+    });
+
+    // Collapse the session list by default on small screens
+    if (matchMedia('(max-width: 900px)').matches) $('toc-details').open = false;
+    document.querySelectorAll('.toc a').forEach(link => link.addEventListener('click', () => {
+      if (matchMedia('(max-width: 900px)').matches) $('toc-details').open = false;
+    }));
+
+    // Flashcards
+    const sessionNames = Object.fromEntries([...document.querySelectorAll('[data-toc]')].map(link => [link.dataset.toc, link.querySelector('.toc-name').textContent]));
+    const sessionIds = [...new Set(CARDS.map(card => card.s))].sort((a, b) => a - b);
+    sessionIds.forEach(id => {
+      const option = document.createElement('option');
+      option.value = id;
+      option.textContent = id === 0 ? 'Exam method (C-E-A-R)' : `Session ${id}: ${sessionNames[id] || ''}`;
+      $('deck-session').appendChild(option);
+    });
+    let known = new Set(store.get('fme-known-cards', []));
+    let deck = [];
+    let position = 0;
+    let flipped = false;
+
+    function buildDeck(shuffle) {
+      const pick = $('deck-session').value;
+      deck = CARDS.map((card, index) => ({ ...card, index }))
+        .filter(card => (pick === 'all' || String(card.s) === pick) && !known.has(card.index));
+      if (shuffle) {
+        for (let i = deck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+      }
+      position = 0;
+      flipped = false;
+      renderCard();
+    }
+
+    function renderCard() {
+      const flash = $('flash');
+      const total = CARDS.filter(card => $('deck-session').value === 'all' || String(card.s) === $('deck-session').value).length;
+      $('deck-count').textContent = deck.length ? `Card ${position + 1} of ${deck.length}, ${total - deck.length} known` : `${total} of ${total} known`;
+      if (!deck.length) {
+        flash.className = 'flash';
+        flash.innerHTML = '<span><span class="side-label">Deck complete</span><span class="term">You marked every card in this set as known.</span></span>';
+        return;
+      }
+      const card = deck[position];
+      const label = card.s === 0 ? 'Exam method' : `Session ${card.s}`;
+      flash.className = flipped ? 'flash flipped' : 'flash';
+      flash.innerHTML = flipped
+        ? `<span><span class="side-label">${label}: definition</span><span class="def"></span></span>`
+        : `<span><span class="side-label">${label}: term</span><span class="term"></span></span>`;
+      flash.querySelector(flipped ? '.def' : '.term').textContent = flipped ? card.d : card.t;
+    }
+
+    function move(step) {
+      if (!deck.length) return;
+      position = (position + step + deck.length) % deck.length;
+      flipped = false;
+      renderCard();
+    }
+
+    $('flash').addEventListener('click', () => { if (deck.length) { flipped = !flipped; renderCard(); } });
+    $('deck-next').addEventListener('click', () => move(1));
+    $('deck-prev').addEventListener('click', () => move(-1));
+    $('deck-shuffle').addEventListener('click', () => { buildDeck(true); toast('Deck shuffled'); });
+    $('deck-session').addEventListener('change', () => buildDeck(false));
+    $('deck-reset').addEventListener('click', () => { known = new Set(); store.set('fme-known-cards', []); buildDeck(false); toast('Known cards reset'); });
+    $('deck-known').addEventListener('click', () => {
+      if (!deck.length) return;
+      known.add(deck[position].index);
+      store.set('fme-known-cards', [...known]);
+      deck.splice(position, 1);
+      if (position >= deck.length) position = 0;
+      flipped = false;
+      renderCard();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.target.closest('input, select, textarea')) return;
+      const deckInView = $('flashcards').getBoundingClientRect().top < innerHeight * .6;
+      if (!deckInView) return;
+      if (event.key === 'ArrowRight') move(1);
+      else if (event.key === 'ArrowLeft') move(-1);
+      else if (event.key === ' ' && document.activeElement !== $('flash') && deck.length) { event.preventDefault(); flipped = !flipped; renderCard(); }
+    });
+
+    renderStudied();
+    buildDeck(false);
+  </script>
+</body>
+</html>
