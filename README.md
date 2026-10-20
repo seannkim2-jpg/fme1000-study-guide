@@ -6,6 +6,7 @@ A standalone study site for the FME 1000 midterm. It covers all 13 sessions on t
 
 - `index.html` — practice lab: 60 shuffled concept questions (4–6 per session), a written C-E-A-R case coach with 14 cases and model answers, and a timed 90-minute mock exam
 - `guide.html` — the full study guide by session, with filters, search, "studied" tracking, copyable answer templates, the Knittr cross-reference, rapid recall, the final self-test, and 61 flashcards
+- `site.css` — shared colors, top bar, buttons, and motion for both pages
 - `FME1000_Midterm_Master_Study_Guide.pdf` — printable guide
 - `FME1000_Midterm_Master_Study_Guide.md` — editable guide source
 
@@ -29,6 +30,14 @@ python3 -m http.server 8000
 ```
 
 Then open `http://127.0.0.1:8000`.
+
+## Checking every component
+
+`tools/check_site.mjs` clicks through both pages in headless Chrome (outline links, filters, search, studied tracking, flashcards, the full concept check, the case coach, and the mock exam) at desktop and phone widths, and saves screenshots. It needs Node 22+ and Google Chrome, and no npm packages:
+
+```bash
+node tools/check_site.mjs --shots /tmp/fme-shots
+```
 
 ## Deploying
 

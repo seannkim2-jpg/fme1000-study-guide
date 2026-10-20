@@ -70,43 +70,49 @@ def main():
     preamble, *parts = split(lines, "## ")
     intro = [l for l in preamble[1] if not l.startswith(("# ", "Fall 2026"))]
 
-    sections, toc_sessions, toc_parts = [], [], []
+    # The rail mirrors page order: loose parts before the first area are "Start here", after it "Review".
+    sections, rail, loose, session_count = [], [], [], 0
+
+    def flush_loose(label):
+        if loose:
+            rail.append(f'<div class="toc-group"><p class="toc-label">{label}</p><ul class="toc">{"".join(loose)}</ul></div>')
+            loose.clear()
+
     for heading, body in parts:
         clean = re.sub(r"^\d+\.\s*", "", heading)
         area = AREAS.get(clean)
         sid = slug(clean)
         if area:
+            flush_loose("Start here")
             lead, *sessions = split(body, "### ")
-            items = []
+            items, links = [], []
             for title, sbody in sessions:
-                block, meta = render_session(title, sbody, area)
+                block, (number, name, _) = render_session(title, sbody, area)
                 items.append(block)
-                toc_sessions.append(meta)
+                links.append(f'<li><a href="#session-{number}" data-toc="{number}"><span class="toc-num">{number}</span><span class="toc-name">{html.escape(name)}</span></a></li>')
+            session_count += len(links)
+            rail.append(
+                f'<div class="toc-group" data-area="{area}"><a class="toc-label" href="#{sid}"><span class="dot"></span>{AREA_LABELS[area]}<span class="toc-count">{len(links)}</span></a><ul class="toc">{"".join(links)}</ul></div>'
+            )
             sections.append(
                 f'<section class="part part-sessions" id="{sid}" data-area="{area}"><h2>{html.escape(clean)}</h2>{render(chr(10).join(lead[1]))}{"".join(items)}</section>'
             )
         else:
-            toc_parts.append((sid, clean))
+            loose.append(f'<li><a href="#{sid}">{html.escape(clean)}</a></li>')
             sections.append(f'<section class="part" id="{sid}"><h2>{html.escape(clean)}</h2>{render(chr(10).join(body))}</section>')
-
-    toc_sessions.sort()
-    toc = "".join(
-        f'<li><a href="#session-{n}" data-toc="{n}" data-area="{a}"><span class="toc-num">{n}</span><span class="toc-name">{html.escape(name)}</span></a></li>'
-        for n, name, a in toc_sessions
-    )
-    extras = "".join(f'<li><a href="#{sid}">{html.escape(name)}</a></li>' for sid, name in toc_parts)
+    loose.append('<li><a href="#flashcards">Flashcards</a></li>')
+    flush_loose("Review")
     cards = [{"s": s, "t": t, "d": d} for s, t, d in CARDS]
 
     page = TEMPLATE.read_text()
     page = page.replace("{{INTRO}}", render("\n".join(intro)))
     page = page.replace("{{SECTIONS}}", "\n".join(sections))
-    page = page.replace("{{TOC_SESSIONS}}", toc)
-    page = page.replace("{{TOC_EXTRAS}}", extras)
-    page = page.replace("{{SESSION_COUNT}}", str(len(toc_sessions)))
+    page = page.replace("{{TOC}}", "".join(rail))
+    page = page.replace("{{SESSION_COUNT}}", str(session_count))
     page = page.replace("{{CARD_COUNT}}", str(len(cards)))
     page = page.replace("{{CARDS_JSON}}", json.dumps(cards, ensure_ascii=False))
     OUTPUT.write_text(page)
-    print(f"Wrote {OUTPUT.name}: {len(toc_sessions)} sessions, {len(cards)} flashcards")
+    print(f"Wrote {OUTPUT.name}: {session_count} sessions, {len(cards)} flashcards")
 
 
 if __name__ == "__main__":
