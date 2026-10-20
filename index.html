@@ -5,20 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>FME 1000 Midterm Lab</title>
   <meta name="description" content="FME 1000 midterm practice: concept checks, written C-E-A-R case coaching, and a timed 90-minute mock exam.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700;800&display=swap">
   <style>
+    /* Design plan: the exam is handwritten short essays, so the answer box is a bluebook page
+       (ruled blue lines, red margin). Everything else stays quiet: sage-tinted paper, one green,
+       Newsreader for headings, Public Sans for reading and UI, sentence-case labels. */
     :root {
       color-scheme: light;
+      --serif: Newsreader, "Iowan Old Style", Georgia, serif;
+      --sans: "Public Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      --rule: #c9d7ea;
+      --margin: #d9675d;
       --ink: #16251f;
       --ink-soft: #3d4f46;
       --muted: #65736d;
-      --bg1: #f8f4e9;
-      --bg2: #edf4ed;
-      --glow: rgba(200, 220, 114, .42);
-      --card: #fffdf8;
-      --panel: var(--panel);
-      --panel-border: var(--panel-border);
+      --bg1: #f2f5f0;
+      --bg2: #f2f5f0;
+      --glow: transparent;
+      --card: #fcfdfb;
+      --panel: rgba(252, 253, 251, .96);
+      --panel-border: rgba(255, 255, 255, .9);
       --surface: #ffffff;
-      --surface-alt: var(--surface-alt);
+      --surface-alt: #f7f9f5;
       --glass: rgba(255, 255, 255, .6);
       --green: #0b6b4f;
       --green-hover: #064b39;
@@ -28,25 +38,26 @@
       --lime: #c8dc72;
       --on-lime: #064b39;
       --gold: #e3ae4b;
-      --gold-bg: var(--gold-bg);
-      --gold-ink: var(--gold-ink);
+      --gold-bg: #f2ead7;
+      --gold-ink: #795719;
       --red: #bd4b3f;
-      --right-bg: var(--right-bg);
-      --wrong-bg: var(--wrong-bg);
-      --tint: var(--tint);
+      --right-bg: #e6f3e9;
+      --wrong-bg: #faeae7;
+      --tint: #eef3eb;
       --track: #e9ebe3;
       --line: #dcded5;
-      --shadow: 0 24px 70px rgba(25, 54, 43, .13);
+      --shadow: 0 1px 2px rgba(20, 40, 30, .05), 0 12px 32px rgba(20, 40, 30, .07);
     }
     @media (prefers-color-scheme: dark) {
       :root:not([data-theme="light"]) {
       color-scheme: dark;
       --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
-      --bg1: #0c1512; --bg2: #0f1c17; --glow: rgba(120, 160, 60, .12);
+      --bg1: #0e1613; --bg2: #0e1613; --glow: transparent;
       --card: #14201b; --panel: rgba(20, 32, 27, .96); --panel-border: rgba(255, 255, 255, .06);
       --surface: #19271f; --surface-alt: #16231d; --glass: rgba(255, 255, 255, .04);
       --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
       --gold-bg: #3a3120; --gold-ink: #e9c57a; --red: #e07a6d;
+      --rule: #26364a; --margin: #8a3a34;
       --right-bg: #17362a; --wrong-bg: #3a1f1b; --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
       --shadow: 0 24px 70px rgba(0, 0, 0, .35);
       }
@@ -54,11 +65,12 @@
     :root[data-theme="dark"] {
       color-scheme: dark;
       --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
-      --bg1: #0c1512; --bg2: #0f1c17; --glow: rgba(120, 160, 60, .12);
+      --bg1: #0e1613; --bg2: #0e1613; --glow: transparent;
       --card: #14201b; --panel: rgba(20, 32, 27, .96); --panel-border: rgba(255, 255, 255, .06);
       --surface: #19271f; --surface-alt: #16231d; --glass: rgba(255, 255, 255, .04);
       --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
       --gold-bg: #3a3120; --gold-ink: #e9c57a; --red: #e07a6d;
+      --rule: #26364a; --margin: #8a3a34;
       --right-bg: #17362a; --wrong-bg: #3a1f1b; --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
       --shadow: 0 24px 70px rgba(0, 0, 0, .35);
     }
@@ -73,7 +85,7 @@
         linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
       background-color: var(--bg1);
       color: var(--ink);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--sans);
     }
 
     button, input { font: inherit; }
@@ -105,13 +117,12 @@
       color: var(--on-green);
       font-weight: 900;
       letter-spacing: -.05em;
-      box-shadow: 0 10px 25px rgba(11, 107, 79, .2);
     }
-    .brand strong { display: block; font-size: 15px; letter-spacing: .04em; }
+    .brand strong { display: block; font-size: 15px; }
     .brand span { color: var(--muted); font-size: 13px; }
 
     .site-nav { display: flex; flex-wrap: wrap; gap: 4px; }
-    .site-nav a { padding: 8px 12px; border-radius: 999px; color: var(--ink-soft); font-size: 14px; font-weight: 700; text-decoration: none; }
+    .site-nav a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 13px; border-radius: 999px; color: var(--ink-soft); font-size: 14px; font-weight: 700; text-decoration: none; }
     .site-nav a:hover { background: var(--tint); color: var(--green-ink); }
     .site-nav a[aria-current="page"] { background: var(--green); color: var(--on-green); }
     .link-button { display: inline-flex; align-items: center; text-decoration: none; }
@@ -148,17 +159,17 @@
       color: var(--green);
       font-size: 13px;
       font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
+      letter-spacing: 0;
     }
     h1 {
       max-width: 650px;
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
+      font-family: var(--serif);
       font-size: clamp(42px, 7vw, 76px);
       font-weight: 500;
-      line-height: .98;
-      letter-spacing: -.045em;
+      line-height: 1.02;
+      letter-spacing: -.02em;
+      text-wrap: balance;
     }
     .lede {
       max-width: 590px;
@@ -175,7 +186,7 @@
       border-radius: 12px;
       font-weight: 800;
     }
-    .primary { border: 0; background: var(--green); color: var(--on-green); box-shadow: 0 10px 24px rgba(11,107,79,.2); }
+    .primary { border: 0; background: var(--green); color: var(--on-green); }
     .primary:hover { background: var(--green-hover); transform: translateY(-1px); }
     .primary:disabled { cursor: not-allowed; opacity: .42; transform: none; }
     .secondary { border: 1px solid var(--line); background: transparent; color: var(--ink); }
@@ -189,7 +200,7 @@
       background: var(--green-dark);
       color: white;
     }
-    .hero-side h2 { margin: 0 0 20px; font: 500 28px/1.2 Georgia, serif; }
+    .hero-side h2 { margin: 0 0 20px; font: 500 28px/1.2 var(--serif); }
     .topic-list { display: grid; gap: 10px; }
     .topic {
       display: flex;
@@ -203,6 +214,14 @@
       font-size: 14px;
     }
     .topic b { color: var(--lime); }
+    .cear h3 { margin: 28px 0 12px; color: var(--lime); font: 500 20px/1.2 var(--serif); }
+    .cear ol { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; counter-reset: cear; }
+    .cear li { display: grid; grid-template-columns: 26px 1fr; gap: 2px 10px; color: rgba(255,255,255,.72); font-size: 13.5px; line-height: 1.45; counter-increment: cear; }
+    .cear li::before { content: counter(cear); grid-row: span 2; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 8px; background: rgba(255,255,255,.1); color: var(--lime); font: 600 14px var(--serif); }
+    .cear li b { color: #ffffff; font-size: 14px; }
+    .text-link { display: inline-block; margin-top: 18px; color: var(--green-ink); font-size: 14px; font-weight: 750; text-decoration: none; border-bottom: 1px solid currentColor; }
+    .text-link:hover { color: var(--green); }
+    .guide-link { display: inline-block; margin-top: 8px; color: var(--green-ink); font-size: 13px; font-weight: 800; }
     .side-note { margin: 30px 0 0; color: rgba(255,255,255,.68); font-size: 13px; line-height: 1.5; }
 
     .quiz { display: none; }
@@ -218,7 +237,7 @@
     .question-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
     .tag { padding: 6px 10px; border-radius: 999px; background: var(--tint); color: var(--green-ink); font-size: 12px; font-weight: 800; }
     .tag.session { background: var(--gold-bg); color: var(--gold-ink); }
-    .question { max-width: 790px; margin: 0 0 30px; font: 500 clamp(25px, 3.5vw, 38px)/1.22 Georgia, serif; }
+    .question { max-width: 790px; margin: 0 0 30px; font: 500 clamp(25px, 3.5vw, 38px)/1.22 var(--serif); }
     .choices { display: grid; gap: 12px; }
     .choice {
       display: grid;
@@ -269,17 +288,17 @@
     }
     .score-ring::after { content: ""; position: absolute; inset: 11px; border-radius: 50%; background: var(--card); }
     .score-ring div { z-index: 1; text-align: center; }
-    .score-ring strong { display: block; font: 600 36px Georgia, serif; }
+    .score-ring strong { display: block; font: 600 36px var(--serif); }
     .score-ring span { color: var(--muted); font-size: 12px; font-weight: 700; }
-    .results h2 { margin: 0; font: 500 clamp(36px, 5vw, 58px)/1 Georgia, serif; }
+    .results h2 { margin: 0; font: 500 clamp(36px, 5vw, 58px)/1 var(--serif); }
     .results > p { max-width: 650px; color: var(--muted); font-size: 17px; line-height: 1.6; }
     .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
     .stat { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-    .stat span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .stat span { display: block; color: var(--muted); font-size: 13px; font-weight: 600; }
     .stat strong { display: block; margin-top: 5px; font-size: 25px; }
     .review { display: grid; gap: 12px; margin: 28px 0; }
     .review-item { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
-    .review-item small { color: var(--red); font-weight: 800; }
+    .review-item small { color: var(--red); font-size: 13px; font-weight: 700; }
     .review-item h3 { margin: 7px 0 9px; font-size: 16px; }
     .review-item p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 
@@ -294,7 +313,7 @@
     }
     dialog::backdrop { background: rgba(10, 28, 22, .55); backdrop-filter: blur(5px); }
     .modal-body { padding: 34px; }
-    .modal-body h2 { margin: 0 0 10px; font: 500 34px Georgia, serif; }
+    .modal-body h2 { margin: 0 0 10px; font: 500 34px var(--serif); }
     .modal-body p { color: var(--muted); line-height: 1.55; }
     .settings { display: grid; gap: 12px; margin: 24px 0; }
     .setting {
@@ -320,10 +339,9 @@
       border: 1px solid rgba(11, 107, 79, .13);
       border-radius: 22px;
       background: var(--panel);
-      box-shadow: 0 14px 42px rgba(25, 54, 43, .08);
     }
-    .mode-number { color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
-    .mode-card h2 { margin: 16px 0 10px; font: 500 27px/1.12 Georgia, serif; }
+    .mode-number { color: var(--green-ink); font-size: 13px; font-weight: 700; }
+    .mode-card h2 { margin: 16px 0 10px; font: 500 27px/1.12 var(--serif); }
     .mode-card p { margin: 0 0 24px; color: var(--muted); font-size: 14px; line-height: 1.55; }
     .mode-card .primary, .mode-card .secondary { width: 100%; margin-top: auto; }
     .mode-card.featured { background: var(--green-dark); color: white; }
@@ -357,12 +375,12 @@
       padding: 22px 28px;
       border-bottom: 1px solid var(--line);
     }
-    .page-title { margin: 2px 0 0; font: 500 25px Georgia, serif; }
-    .page-kicker { margin: 0; color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .page-title { margin: 2px 0 0; font: 500 25px var(--serif); }
+    .page-kicker { margin: 0; color: var(--muted); font-size: 13px; font-weight: 600; }
     .workspace { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); min-height: 620px; }
     .case-pane, .answer-pane { padding: clamp(26px, 4vw, 46px); }
     .case-pane { border-right: 1px solid var(--line); background: var(--surface-alt); }
-    .case-title { margin: 18px 0 14px; font: 500 clamp(25px, 3vw, 34px)/1.22 Georgia, serif; }
+    .case-title { margin: 18px 0 14px; font: 500 clamp(25px, 3vw, 34px)/1.22 var(--serif); }
     .case-copy { color: var(--ink-soft); line-height: 1.72; }
     .tip-box { margin-top: 26px; padding: 17px; border-radius: 14px; background: var(--tint); color: var(--ink-soft); font-size: 13px; line-height: 1.55; }
     .tip-box strong { color: var(--green-ink); }
@@ -377,17 +395,29 @@
       outline: none;
       background: var(--surface);
       color: var(--ink);
-      font: 15px/1.65 Inter, ui-sans-serif, system-ui, sans-serif;
+      font: 16px/32px var(--sans);
     }
-    textarea:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(11,107,79,.09); }
+    textarea {
+      padding: 0 18px 0 56px;
+      background-color: var(--surface);
+      background-image:
+        linear-gradient(90deg, transparent 40px, var(--margin) 40px, var(--margin) 41px, transparent 41px),
+        repeating-linear-gradient(180deg, transparent 0 31px, var(--rule) 31px 32px);
+      background-position: 0 0, 0 12px;
+      background-attachment: local;
+      padding-top: 12px;
+      border-radius: 6px;
+    }
+    textarea::placeholder { color: var(--muted); opacity: .8; }
+    textarea:focus, textarea:focus-visible { outline: none; border-color: var(--green); box-shadow: 0 0 0 3px color-mix(in srgb, var(--green) 22%, transparent); }
     .answer-meta { display: flex; justify-content: space-between; gap: 14px; margin-top: 8px; color: var(--muted); font-size: 12px; }
     .answer-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
     .coach { display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
     .coach.show { display: block; }
-    .coach h3 { margin: 0 0 14px; font: 500 24px Georgia, serif; }
+    .coach h3 { margin: 0 0 14px; font: 500 24px var(--serif); }
     .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 18px; }
     .check-item { padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); font-size: 13px; line-height: 1.4; }
-    .check-item b { color: var(--green); }
+    .check-item b { margin-right: 6px; color: var(--green-ink); font: 600 16px var(--serif); }
     .model-answer { padding: 18px; border-radius: 14px; background: var(--tint); color: var(--ink-soft); line-height: 1.68; }
     .model-answer strong { color: var(--green-ink); }
     .self-rate { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
@@ -397,20 +427,20 @@
 
     .mock-body { padding: clamp(26px, 5vw, 54px); }
     .mock-intro { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 28px; }
-    .mock-intro h2 { margin: 0 0 10px; font: 500 clamp(28px, 4vw, 42px) Georgia, serif; }
+    .mock-intro h2 { margin: 0 0 10px; font: 500 clamp(28px, 4vw, 42px) var(--serif); }
     .mock-intro p { max-width: 700px; margin: 0; color: var(--muted); line-height: 1.6; }
     .timer { min-width: 122px; padding: 13px 16px; border-radius: 13px; background: var(--green-dark); color: white; text-align: center; }
-    .timer span { display: block; color: var(--lime); font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
-    .timer strong { display: block; margin-top: 3px; font: 500 25px Georgia, serif; }
+    .timer span { display: block; color: var(--lime); font-size: 12px; font-weight: 600; }
+    .timer strong { display: block; margin-top: 3px; font: 500 26px var(--serif); font-variant-numeric: tabular-nums; }
     .mock-list { display: grid; gap: 18px; }
     .mock-card { padding: 24px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); }
-    .mock-card h3 { margin: 13px 0 16px; font: 500 22px/1.35 Georgia, serif; }
+    .mock-card h3 { margin: 13px 0 16px; font: 500 22px/1.35 var(--serif); }
     .mock-card textarea { min-height: 220px; }
     .mock-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 24px; }
     .save-status { color: var(--muted); font-size: 13px; }
     .mock-review { display: none; margin-top: 30px; padding-top: 28px; border-top: 1px solid var(--line); }
     .mock-review.show { display: block; }
-    .mock-review h2 { font: 500 32px Georgia, serif; }
+    .mock-review h2 { font: 500 32px var(--serif); }
     .review-answer { margin-top: 14px; padding: 20px; border-left: 4px solid var(--green); border-radius: 5px 13px 13px 5px; background: var(--tint); line-height: 1.65; }
     .review-answer h3 { margin: 0 0 8px; font-size: 15px; }
     .review-answer p { margin: 0; color: var(--ink-soft); }
@@ -443,6 +473,8 @@
       .mock-intro, .mock-footer { flex-direction: column; }
       .timer { align-self: stretch; }
       .stats-strip a { width: 100%; margin-left: 0; }
+      .site-nav { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; }
+      .site-nav a { white-space: nowrap; }
     }
   </style>
 </head>
@@ -457,21 +489,20 @@
         <a href="./index.html" aria-current="page">Practice</a>
         <a href="./guide.html">Study guide</a>
         <a href="./guide.html#flashcards">Flashcards</a>
-        <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">PDF ↗</a>
+        <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">PDF</a>
       </nav>
     </header>
 
     <div class="home-screen" id="home-screen">
     <section class="panel hero" id="welcome">
       <div class="hero-copy">
-        <p class="eyebrow">FME 1000 midterm lab</p>
         <h1>Practice how the test asks you to think.</h1>
         <p class="lede">Learn the concepts, apply them to a case, and turn your reasoning into a clear C-E-A-R answer. Everything runs locally and saves only in this browser.</p>
         <div class="actions">
           <button class="primary" id="written-start">Practice a written case</button>
           <button class="secondary" id="quick-start">Quick concept check</button>
-          <a class="secondary link-button" href="./guide.html">Read the study guide</a>
         </div>
+        <a class="text-link" href="./guide.html">New to a topic? Read the study guide first.</a>
       </div>
       <aside class="hero-side">
         <div>
@@ -482,25 +513,34 @@
             <div class="topic"><span>Joint material</span><b>2 sessions</b></div>
           </div>
         </div>
+        <div class="cear">
+          <h3>Every answer: C-E-A-R</h3>
+          <ol>
+            <li><b>Concept</b> Name and define the course idea.</li>
+            <li><b>Evidence</b> Point to a fact from the case.</li>
+            <li><b>Analysis</b> Explain why that fact matters.</li>
+            <li><b>Response</b> Recommend an action and its result.</li>
+          </ol>
+        </div>
         <p class="side-note">60 concept questions, 14 written cases, and 61 flashcards cover every session. The real midterm uses short essays. Written practice is the main mode; multiple choice is here for fast recall.</p>
       </aside>
     </section>
 
     <section class="mode-grid" aria-label="Practice modes">
       <article class="mode-card">
-        <span class="mode-number">01 · Recall</span>
+        <span class="mode-number">Step 1: recall</span>
         <h2>Concept check</h2>
         <p>Answer shuffled questions across all 13 sessions. Get immediate explanations and a topic breakdown.</p>
         <button class="secondary" id="open-test">Choose concept topics</button>
       </article>
       <article class="mode-card featured">
-        <span class="mode-number">02 · Application</span>
+        <span class="mode-number">Step 2: apply</span>
         <h2>Written case coach</h2>
         <p>Write one C-E-A-R response, compare it with a model answer, and score the four parts yourself.</p>
         <button class="primary" id="written-card-start">Open case coach</button>
       </article>
       <article class="mode-card">
-        <span class="mode-number">03 · Simulation</span>
+        <span class="mode-number">Step 3: simulate</span>
         <h2>90-minute mock</h2>
         <p>Complete two entrepreneurship and two OB cases with a live timer and delayed model answers.</p>
         <button class="secondary" id="mock-start">Start mock exam</button>
@@ -511,7 +551,7 @@
       <span><strong id="stat-questions">0</strong> concept questions answered</span>
       <span><strong id="stat-accuracy">—</strong> accuracy</span>
       <span><strong id="stat-cases">0</strong> written cases completed</span>
-      <a href="./guide.html">Open the session-by-session study guide →</a>
+      <a href="./guide.html">Open the study guide</a>
     </div>
     </div>
 
@@ -823,6 +863,10 @@
       $('test-modal').showModal();
     }
 
+    function areaName(category) {
+      return category === 'ENT' ? 'Entrepreneurship' : category === 'OB' ? 'Organizational Behavior' : 'Joint';
+    }
+
     function shuffleChoices(item) {
       const order = shuffle(item.choices.map((_, index) => index));
       return { ...item, choices: order.map(index => item.choices[index]), answer: order.indexOf(item.answer) };
@@ -888,7 +932,7 @@
           if (i === item.answer) button.classList.add('correct');
           if (i === state.selected && !correct) button.classList.add('wrong');
         });
-        $('explanation').innerHTML = `<strong>${correct ? 'Correct.' : 'Not quite.'}</strong> ${item.why}`;
+        $('explanation').innerHTML = `<strong>${correct ? 'Correct.' : 'Not quite.'}</strong> ${item.why}<br><a class="guide-link" href="./guide.html#session-${item.session}" target="_blank" rel="noopener">Review session ${item.session} in the study guide</a>`;
         $('explanation').classList.add('show');
         $('next-question').textContent = state.index === state.items.length - 1 ? 'See results' : 'Next question';
         $('score-label').textContent = `${state.answers.filter(answer => answer.correct).length} correct`;
@@ -924,7 +968,7 @@
 
       const missed = state.answers.filter(answer => !answer.correct);
       $('review-section').style.display = missed.length ? 'block' : 'none';
-      $('review').innerHTML = missed.map(answer => `<article class="review-item"><small>SESSION ${answer.item.session} · ${answer.item.category}</small><h3>${answer.item.q}</h3><p><b>Correct answer:</b> ${answer.item.choices[answer.item.answer]}<br>${answer.item.why}</p></article>`).join('');
+      $('review').innerHTML = missed.map(answer => `<article class="review-item"><small>Session ${answer.item.session}, ${areaName(answer.item.category)}</small><h3>${answer.item.q}</h3><p><b>Correct answer:</b> ${answer.item.choices[answer.item.answer]}<br>${answer.item.why}<br><a class="guide-link" href="./guide.html#session-${answer.item.session}">Review session ${answer.item.session}</a></p></article>`).join('');
     }
 
     function goHome() {
@@ -958,7 +1002,7 @@
       $('written-prompt').textContent = item.prompt;
       $('written-answer').value = localStorage.getItem(`fme-draft-${item.title}`) || '';
       $('written-words').textContent = `${wordCount($('written-answer').value)} words`;
-      $('written-checklist').innerHTML = item.checks.map((check, index) => `<div class="check-item"><b>${'CEAR'[index]}</b> · ${check}</div>`).join('');
+      $('written-checklist').innerHTML = item.checks.map((check, index) => `<div class="check-item"><b>${'CEAR'[index]}</b> ${check}</div>`).join('');
       $('written-model').innerHTML = `<strong>Model answer</strong><br>${item.model}`;
       $('written-coach').classList.remove('show');
       [...document.querySelectorAll('.rate-button')].forEach(button => button.classList.remove('active'));
