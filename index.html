@@ -293,6 +293,29 @@
     .stats-strip strong { color: var(--ink); font-size: 16px; }
     .stats-strip a { margin-left: auto; color: var(--green); font-weight: 800; text-decoration: none; }
     .stats-strip a:hover { text-decoration: underline; }
+    .topic-tree { padding: clamp(28px, 5vw, 48px); }
+    .tree-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; }
+    .tree-head h2 { margin: 5px 0 0; font: 500 clamp(30px, 4vw, 44px)/1.08 Georgia, serif; }
+    .tree-head p:last-child { max-width: 480px; margin: 0; color: var(--muted); line-height: 1.55; }
+    .tree-root {
+      padding: 14px;
+      border: 1px solid rgba(11, 107, 79, .15);
+      border-radius: 18px;
+      background: #f3f6ed;
+    }
+    .tree-root > summary { color: var(--green-dark); font-size: 16px; font-weight: 900; }
+    .tree-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+    .tree-branch { padding: 16px; border-radius: 14px; background: white; border: 1px solid var(--line); }
+    .tree-branch > summary { font-weight: 900; }
+    .tree-branch.joint > summary { color: #795719; }
+    .tree-branch.ent > summary { color: var(--green); }
+    .tree-branch.ob > summary { color: #315d85; }
+    details summary { cursor: pointer; }
+    .tree-session { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6e8df; }
+    .tree-session summary { font-size: 13px; font-weight: 850; line-height: 1.4; }
+    .tree-session ul { margin: 10px 0 2px; padding-left: 19px; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+    .tree-session li + li { margin-top: 5px; }
+    .course-chain { margin: 18px 0 0; padding: 16px 18px; border-left: 4px solid var(--green); border-radius: 5px 13px 13px 5px; background: #eef3eb; color: #34463e; font-size: 13px; line-height: 1.65; }
 
     .practice-page { display: none; }
     .practice-page.active { display: block; }
@@ -390,6 +413,8 @@
       .mock-intro, .mock-footer { flex-direction: column; }
       .timer { align-self: stretch; }
       .stats-strip a { width: 100%; margin-left: 0; }
+      .tree-head { align-items: flex-start; flex-direction: column; }
+      .tree-branches { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -454,6 +479,41 @@
       <span><strong id="stat-cases">0</strong> written cases completed</span>
       <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">Open the updated master study guide ↗</a>
     </div>
+
+    <section class="panel topic-tree" aria-labelledby="tree-title">
+      <div class="tree-head">
+        <div><p class="eyebrow">Course map</p><h2 id="tree-title">Topics → components to know</h2></div>
+        <p>Open a branch, then a session. For every component, be able to define it, find evidence of it in a case, and recommend a specific response.</p>
+      </div>
+      <details class="tree-root" open>
+        <summary>FME 1000 midterm · 13 sessions</summary>
+        <div class="tree-branches">
+          <details class="tree-branch joint" open>
+            <summary>Joint foundation · 2</summary>
+            <details class="tree-session"><summary>S1 · Entrepreneurial Thought and Action</summary><ul><li>Prediction logic for a knowable future</li><li>Creation logic under uncertainty</li><li>Means at hand and affordable loss</li><li>Act → learn → adjust</li></ul></details>
+            <details class="tree-session"><summary>S9 · Rocket Pitch</summary><ul><li>Customer → problem → solution</li><li>Benefit, difference, and reason to believe</li><li>Concise delivery and clear team handoffs</li><li>Apply feedback to the argument</li></ul></details>
+          </details>
+          <details class="tree-branch ent" open>
+            <summary>Entrepreneurship · 6</summary>
+            <details class="tree-session"><summary>S3 · Problem Solving and Idea Generation</summary><ul><li>Idea versus opportunity</li><li>Customer problem and current workaround</li><li>“How might we?” framing</li><li>Diverge before converging</li><li>Brainstorming rules and human judgment of AI output</li></ul></details>
+            <details class="tree-session"><summary>S5 · Empathy and Design Thinking</summary><ul><li>Empathy and observation</li><li>Neutral discovery interviews about past behavior</li><li>Needs, frustrations, actions, and workarounds</li><li>Empathize → define → ideate → prototype → test</li></ul></details>
+            <details class="tree-session"><summary>S7 · Value Proposition and Target Market</summary><ul><li>Customer, consumer, payer, and decision-maker</li><li>Segments, first target market, and evidence-based persona</li><li>Resonate, differentiate, and substantiate</li><li>Create, deliver, and capture value</li></ul></details>
+            <details class="tree-session"><summary>S8 · Prototyping</summary><ul><li>Riskiest assumption</li><li>Smallest credible learning test</li><li>Observable customer behavior</li><li>Feedback, iteration, and MVP</li></ul></details>
+            <details class="tree-session"><summary>S11 · Opportunity Evaluation</summary><ul><li>Desirability: do customers care and act?</li><li>Feasibility: can the team deliver?</li><li>Viability: can the model sustain itself?</li><li>Alternatives, resources, risks, and impact</li></ul></details>
+            <details class="tree-session"><summary>S12 · Market Research</summary><ul><li>Primary versus secondary research</li><li>Qualitative versus quantitative evidence</li><li>Methods, sampling, and unbiased questions</li><li>Patterns, interpretation, and disconfirming evidence</li><li>Product, price, place, promotion, and revenue</li></ul></details>
+          </details>
+          <details class="tree-branch ob" open>
+            <summary>Organizational Behavior · 5</summary>
+            <details class="tree-session"><summary>S2 · Culture and Norms</summary><ul><li>Shared values, assumptions, and behavior</li><li>Formal rules versus informal norms</li><li>Visible artifacts versus invisible beliefs</li><li>Team charters and consistent reinforcement</li></ul></details>
+            <details class="tree-session"><summary>S4 · Emotional Intelligence</summary><ul><li>Self-awareness and self-management</li><li>Social awareness and relationship management</li><li>Triggers: respond instead of react</li><li>Trust: authenticity + logic + empathy</li></ul></details>
+            <details class="tree-session"><summary>S6 · Positive Teaming and Psychological Safety</summary><ul><li>Performance, learning, and well-being</li><li>Safety for questions, dissent, and mistakes</li><li>Constructive conflict and productive failure</li><li>Process gains and losses</li><li>Team design, launch, and process management</li></ul></details>
+            <details class="tree-session"><summary>S10 · Diversity of Thought and DiSC</summary><ul><li>D: results and speed</li><li>I: energy and persuasion</li><li>S: patience and support</li><li>C: evidence and quality</li><li>Flex communication; do not stereotype</li></ul></details>
+            <details class="tree-session"><summary>S13 · Inclusion and Identity</summary><ul><li>Personal and social identity</li><li>Visible and invisible differences</li><li>Diversity, inclusion, and belonging</li><li>Bias, assumptions, and faultlines</li><li>Inclusive airtime, roles, and decisions</li></ul></details>
+          </details>
+        </div>
+      </details>
+      <p class="course-chain"><strong>Course-wide chain:</strong> Understand people → define a meaningful problem → generate options → choose a target and value proposition → prototype the riskiest assumption → collect evidence → evaluate the opportunity → pitch it clearly → build a team where different people can contribute and learn.</p>
+    </section>
     </div>
 
     <section class="panel quiz" id="quiz" aria-live="polite">

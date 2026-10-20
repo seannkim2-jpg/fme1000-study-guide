@@ -46,6 +46,74 @@ Definitions are the starting point. A strong answer also identifies evidence in 
 | Entrepreneurship | 12 | Market Research |
 | Organizational Behavior | 13 | Inclusion and Identity |
 
+## Topic tree: what connects to what
+
+For each branch, know the definition, recognize it in a case, and recommend a specific action.
+
+### Joint foundation
+
+- **Session 1: Entrepreneurial Thought and Action**
+  - **Prediction logic:** Plan around expected return when the future is reasonably knowable.
+  - **Creation logic:** Under uncertainty, start with available means, limit affordable loss, act, learn, and adjust.
+  - **Connection:** This logic powers research, prototypes, and opportunity tests.
+- **Session 9: Rocket Pitch**
+  - **Core chain:** Customer → problem → solution → benefit → difference → reason to believe → next step.
+  - **Delivery:** Divide ideas clearly, rehearse handoffs, and use feedback to revise the argument.
+
+### Entrepreneurship
+
+- **Session 3: Problem Solving and Idea Generation**
+  - Idea versus opportunity; customer problem and workaround.
+  - “How might we?” framing; generate many ideas and defer judgment before evaluating.
+  - Use AI to expand options; use people and evidence to judge them.
+- **Session 5: Empathy and Design Thinking**
+  - Empathy and observation; neutral interviews about specific past behavior.
+  - Needs, frustrations, actions, workarounds, and contradictions.
+  - Empathize → define → ideate → prototype → test → iterate.
+- **Session 7: Value Proposition and Target Market**
+  - Customer, consumer, payer, and decision-maker.
+  - Segmentation, first target market, and evidence-based persona.
+  - Resonate, differentiate, substantiate; create, deliver, and capture value.
+- **Session 8: Prototyping**
+  - Riskiest assumption; smallest credible learning test.
+  - Observable customer behavior, feedback, iteration, and MVP.
+- **Session 11: Opportunity Evaluation**
+  - Desirability: do customers care enough to act?
+  - Feasibility: can the team and partners deliver reliably?
+  - Viability: can price, demand, costs, and margins sustain the model?
+  - Alternatives, resources, risks, and financial, social, and environmental impact.
+- **Session 12: Market Research**
+  - Primary versus secondary; qualitative versus quantitative.
+  - Methods, sampling, unbiased questions, and disconfirming evidence.
+  - Product, price, place, promotion, and revenue drivers.
+
+### Organizational Behavior
+
+- **Session 2: Culture and Norms**
+  - Shared values, assumptions, and repeated behavior.
+  - Formal rules versus informal norms; visible artifacts versus invisible beliefs.
+  - Team charters and consistent reinforcement.
+- **Session 4: Emotional Intelligence**
+  - Self-awareness → self-management → social awareness → relationship management.
+  - Respond instead of react; trust = authenticity + logic + empathy.
+- **Session 6: Positive Teaming and Psychological Safety**
+  - Performance + learning and adaptability + member well-being and growth.
+  - Safety for questions, dissent, uncertainty, and error reporting without lower standards.
+  - Constructive conflict, productive failure, process gains and losses.
+  - Team design, launch or relaunch, and process management.
+- **Session 10: Diversity of Thought and Practice — DiSC**
+  - **D:** results and speed. **I:** energy and persuasion.
+  - **S:** patience and support. **C:** evidence and quality.
+  - Flex communication and avoid stereotypes.
+- **Session 13: Inclusion and Identity**
+  - Personal and social identity; visible and invisible differences.
+  - Diversity asks who is present; inclusion asks who has influence; belonging asks who feels accepted.
+  - Bias, assumptions, faultlines, airtime, meaningful roles, and transparent decisions.
+
+### The course-wide chain
+
+> Understand people → define a meaningful problem → generate options → choose a target and value proposition → prototype the riskiest assumption → collect evidence → evaluate the opportunity → pitch it clearly → build a team where different people can contribute and learn.
+
 ## 2. Joint sessions
 
 ### Session 1: Kickoff and Entrepreneurial Thought and Action
