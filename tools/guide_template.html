@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FME 1000 Study Guide</title>
+  <meta name="description" content="Session-by-session FME 1000 midterm study guide with flashcards, the Knittr cross-reference, and a final self-test.">
+  <style>
+    /* Layout: sticky session rail on the left, one reading column on the right; flashcards close the page. */
+    :root {
+      color-scheme: light;
+      --ink: #16251f;
+      --ink-soft: #3d4f46;
+      --muted: #65736d;
+      --bg1: #f8f4e9;
+      --bg2: #edf4ed;
+      --glow: rgba(200, 220, 114, .38);
+      --card: #fffdf8;
+      --surface: #ffffff;
+      --glass: rgba(255, 255, 255, .62);
+      --green: #0b6b4f;
+      --green-hover: #064b39;
+      --green-ink: #064b39;
+      --green-dark: #064b39;
+      --on-green: #ffffff;
+      --lime: #c8dc72;
+      --gold-bg: #f2ead7;
+      --gold-ink: #795719;
+      --ob-bg: #e9e6f3;
+      --ob-ink: #4a3f7a;
+      --tint: #eef3eb;
+      --track: #e9ebe3;
+      --line: #dcded5;
+      --shadow: 0 18px 50px rgba(25, 54, 43, .10);
+      --serif: Georgia, "Iowan Old Style", "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        color-scheme: dark;
+        --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
+        --bg1: #0c1512; --bg2: #0f1c17; --glow: rgba(120, 160, 60, .12);
+        --card: #14201b; --surface: #19271f; --glass: rgba(255, 255, 255, .04);
+        --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
+        --gold-bg: #3a3120; --gold-ink: #e9c57a; --ob-bg: #2a2640; --ob-ink: #c7bdf2;
+        --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
+        --shadow: 0 18px 50px rgba(0, 0, 0, .35);
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
+      --bg1: #0c1512; --bg2: #0f1c17; --glow: rgba(120, 160, 60, .12);
+      --card: #14201b; --surface: #19271f; --glass: rgba(255, 255, 255, .04);
+      --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
+      --gold-bg: #3a3120; --gold-ink: #e9c57a; --ob-bg: #2a2640; --ob-ink: #c7bdf2;
+      --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
+      --shadow: 0 18px 50px rgba(0, 0, 0, .35);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+    body {
+      margin: 0;
+      background: radial-gradient(circle at 12% 0%, var(--glow), transparent 26rem), linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%) fixed;
+      background-color: var(--bg1);
+      color: var(--ink);
+      font: 16px/1.65 var(--sans);
+    }
+    a { color: var(--green); }
+    :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 6px; }
+    button, input, select { font: inherit; color: inherit; }
+
+    /* Top bar */
+    body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--card); }
+    .topbar {
+      position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+      background: color-mix(in srgb, var(--card) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+      max-width: 1180px; margin: 0 auto; padding-block: 10px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+    .brand { display: flex; align-items: center; gap: 10px; color: var(--ink); text-decoration: none; }
+    .mark { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; background: var(--green); color: var(--on-green); font-weight: 900; font-size: 13px; letter-spacing: -.04em; }
+    .brand strong { display: block; font-size: 14px; letter-spacing: .04em; line-height: 1.2; }
+    .brand .sub { display: block; color: var(--muted); font-size: 12px; }
+    .nav { display: flex; gap: 4px; flex-wrap: wrap; }
+    .nav a { padding: 7px 12px; border-radius: 999px; color: var(--ink-soft); font-size: 14px; font-weight: 700; text-decoration: none; }
+    .nav a:hover { background: var(--tint); color: var(--green-ink); }
+    .nav a[aria-current="page"] { background: var(--green); color: var(--on-green); }
+
+    /* Page grid */
+    .layout {
+      display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 40px;
+      max-width: 1180px; margin: 0 auto; padding-block: 36px 80px;
+      padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+    }
+    .rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 76px); align-self: start; max-height: calc(100vh - 100px); overflow-y: auto; padding-right: 4px; }
+    .rail h2 { margin: 0 0 8px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .meter { margin-bottom: 20px; padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--glass); }
+    .meter-top { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; }
+    .meter-top b { font-variant-numeric: tabular-nums; color: var(--green-ink); }
+    .bar { height: 6px; margin-top: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+    .bar div { height: 100%; width: 0; background: var(--green); border-radius: inherit; transition: width .3s ease; }
+    .toc { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 2px; }
+    .toc a { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: baseline; padding: 6px 8px; border-radius: 9px; color: var(--ink-soft); font-size: 13.5px; line-height: 1.35; text-decoration: none; }
+    .toc a:hover { background: var(--tint); }
+    .toc a.active { background: var(--tint); color: var(--green-ink); font-weight: 700; }
+    .toc-num { font: 600 13px var(--serif); color: var(--muted); font-variant-numeric: tabular-nums; }
+    .toc a.done .toc-num { color: var(--green); }
+    .toc a.done .toc-num::after { content: " ✓"; font-size: 11px; }
+    .toc a[hidden] { display: none; }
+    .toc-extra a { display: block; grid-template-columns: none; }
+
+    /* Hero */
+    .intro h1 { margin: 0; font: 500 clamp(36px, 5.5vw, 58px)/1.02 var(--serif); letter-spacing: -.035em; text-wrap: balance; }
+    .eyebrow { margin: 0 0 12px; color: var(--green); font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .intro p { max-width: 64ch; color: var(--ink-soft); font-size: 17px; }
+    .content .exam-facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; list-style: none; }
+    .exam-facts li { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--glass); font-size: 13px; font-weight: 700; color: var(--ink-soft); }
+
+    /* Controls */
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 28px 0 8px; }
+    .chip { padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); font-size: 13px; font-weight: 700; cursor: pointer; }
+    .chip[aria-pressed="true"] { background: var(--green); border-color: var(--green); color: var(--on-green); }
+    .search { flex: 1 1 200px; min-width: 0; padding: 8px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+    .search:focus { outline: none; border-color: var(--green); }
+    .empty { display: none; padding: 20px; color: var(--muted); }
+    .empty.show { display: block; }
+
+    /* Content */
+    .part { margin-top: 48px; }
+    .part > h2 { margin: 0 0 14px; font: 500 clamp(28px, 3.6vw, 38px)/1.1 var(--serif); letter-spacing: -.02em; text-wrap: balance; }
+    .content p, .content li { max-width: 68ch; }
+    .content h4 { margin: 26px 0 8px; color: var(--green-ink); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .content ul, .content ol { padding-left: 1.3em; }
+    .content li { margin: 4px 0; }
+    .content li::marker { color: var(--green); }
+    .content strong { color: var(--ink); }
+    .content p, .content li, .content td { color: var(--ink-soft); }
+
+    .session {
+      margin-top: 22px; padding: clamp(20px, 3.5vw, 34px);
+      border: 1px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: var(--shadow);
+    }
+    .session-head { display: grid; grid-template-columns: 1fr auto; gap: 6px 16px; align-items: start; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+    .session-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; grid-column: 1 / -1; }
+    .num { font: 600 14px var(--serif); color: var(--muted); }
+    .area { padding: 3px 9px; border-radius: 999px; font-size: 11px; font-weight: 800; letter-spacing: .04em; }
+    .area-ent { background: var(--tint); color: var(--green-ink); }
+    .area-ob { background: var(--ob-bg); color: var(--ob-ink); }
+    .area-joint { background: var(--gold-bg); color: var(--gold-ink); }
+    .session h3 { margin: 0; font: 500 clamp(24px, 3vw, 30px)/1.18 var(--serif); letter-spacing: -.015em; text-wrap: balance; }
+    .studied { display: flex; align-items: center; gap: 7px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--muted); cursor: pointer; white-space: nowrap; }
+    .studied input { width: 16px; height: 16px; accent-color: var(--green); margin: 0; }
+    .studied:has(input:checked) { border-color: var(--green); color: var(--green-ink); background: var(--tint); }
+    .session[hidden], .part[hidden] { display: none; }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.45; }
+    th, td { padding: 10px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+    th { background: var(--tint); color: var(--green-ink); font-size: 12px; font-weight: 800; letter-spacing: .04em; }
+    tr:last-child td { border-bottom: 0; }
+
+    blockquote.template {
+      position: relative; margin: 16px 0; padding: 16px 18px 16px 20px;
+      border: 1px dashed var(--green); border-radius: 14px; background: var(--tint);
+    }
+    blockquote.template p { margin: 0; padding-right: 64px; color: var(--ink); font-family: var(--serif); font-size: 16.5px; }
+    blockquote.template strong { color: var(--green-ink); }
+    .copy { position: absolute; top: 10px; right: 10px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-size: 12px; font-weight: 700; cursor: pointer; }
+
+    .check { margin-top: 22px; padding: 16px 18px; border-radius: 14px; background: var(--gold-bg); }
+    .check-label { margin: 0 0 4px; color: var(--gold-ink); font-size: 12px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .check ul { margin: 0; }
+    .check li { color: var(--ink); }
+
+    /* Flashcards */
+    .deck-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 12px 0 18px; }
+    .deck-controls select { flex: 0 1 320px; min-width: 0; max-width: 100%; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); }
+    .btn { padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); font-weight: 700; cursor: pointer; }
+    .btn:hover { border-color: var(--green); color: var(--green-ink); }
+    .btn.primary { background: var(--green); border-color: var(--green); color: var(--on-green); }
+    .btn.primary:hover { background: var(--green-hover); color: var(--on-green); }
+    .deck-count { color: var(--muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+    .flash {
+      display: grid; place-items: center; width: 100%; min-height: 240px; padding: 34px 28px;
+      border: 1px solid var(--line); border-radius: 22px; background: var(--card); box-shadow: var(--shadow);
+      text-align: center; cursor: pointer;
+    }
+    .flash .side-label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+    .flash .term { font: 500 clamp(24px, 3.4vw, 34px)/1.2 var(--serif); text-wrap: balance; }
+    .flash .def { max-width: 60ch; font-size: 17px; line-height: 1.6; color: var(--ink-soft); }
+    .flash.flipped { background: var(--tint); border-color: var(--green); }
+    .deck-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .deck-nav .group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hint { color: var(--muted); font-size: 13px; }
+
+    .toast { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); padding: 10px 14px; border-radius: 10px; background: var(--green-dark); color: #ffffff; font-size: 14px; opacity: 0; transform: translateY(6px); pointer-events: none; transition: .2s ease; }
+    .toast.show { opacity: 1; transform: none; }
+
+    footer { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 24px; }
+      .rail { position: static; max-height: none; overflow: visible; margin-bottom: 8px; }
+      .rail details { border: 1px solid var(--line); border-radius: 14px; background: var(--glass); padding: 10px 14px; }
+      .toc { margin-top: 10px; }
+    }
+    @media (min-width: 901px) {
+      .rail summary { display: none; }
+    }
+    .rail summary { cursor: pointer; font-weight: 800; font-size: 14px; }
+    @media (max-width: 560px) {
+      .nav { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; }
+      .nav a { white-space: nowrap; }
+      .session-head { grid-template-columns: 1fr; }
+      .studied { justify-self: start; }
+      blockquote.template p { padding-right: 0; padding-top: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html"><span class="mark">FME</span><span><strong>FME 1000</strong><span class="sub">Midterm study kit</span></span></a>
+      <nav class="nav" aria-label="Site">
+        <a href="./index.html">Practice</a>
+        <a href="./guide.html" aria-current="page">Study guide</a>
+        <a href="./guide.html#flashcards">Flashcards</a>
+        <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">PDF ↗</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="rail" aria-label="Sessions">
+      <div class="meter">
+        <div class="meter-top"><span>Sessions studied</span><b id="studied-count">0 / {{SESSION_COUNT}}</b></div>
+        <div class="bar"><div id="studied-bar"></div></div>
+      </div>
+      <details id="toc-details" open>
+        <summary>Jump to a session</summary>
+        <h2>Sessions</h2>
+        <ol class="toc" id="toc">{{TOC_SESSIONS}}</ol>
+        <h2>Review</h2>
+        <ul class="toc toc-extra">{{TOC_EXTRAS}}<li><a href="#flashcards">Flashcards</a></li></ul>
+      </details>
+    </aside>
+
+    <main class="content" id="top">
+      <section class="intro">
+        <p class="eyebrow">Fall 2026 · Sections 6 and 9</p>
+        <h1>FME 1000 Midterm Study Guide</h1>
+        {{INTRO}}
+        <ul class="exam-facts">
+          <li>90 minutes</li>
+          <li>Short essays</li>
+          <li>~Half Knittr case (Entrepreneurship)</li>
+          <li>~Half OB mini-cases</li>
+          <li>13 sessions</li>
+        </ul>
+      </section>
+
+      <div class="controls" role="group" aria-label="Filter sessions">
+        <button class="chip" type="button" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" type="button" data-filter="ent" aria-pressed="false">Entrepreneurship</button>
+        <button class="chip" type="button" data-filter="ob" aria-pressed="false">Org Behavior</button>
+        <button class="chip" type="button" data-filter="joint" aria-pressed="false">Joint</button>
+        <button class="chip" type="button" data-filter="todo" aria-pressed="false">Not studied yet</button>
+        <input class="search" id="search" type="search" placeholder="Search the guide, e.g. persona, DiSC, viability" aria-label="Search the guide">
+      </div>
+      <p class="empty" id="empty">No sessions match. Clear the search or pick another filter.</p>
+
+      {{SECTIONS}}
+
+      <section class="part" id="flashcards">
+        <h2>Flashcards</h2>
+        <p>{{CARD_COUNT}} key terms from all 13 sessions. Click the card or press Space to flip. Use the arrow keys to move, and mark the cards you already know so they drop out of the deck.</p>
+        <div class="deck-controls">
+          <label for="deck-session" class="hint">Session</label>
+          <select id="deck-session"><option value="all">All sessions</option></select>
+          <button class="btn" type="button" id="deck-shuffle">Shuffle</button>
+          <button class="btn" type="button" id="deck-reset">Reset known cards</button>
+          <span class="deck-count" id="deck-count"></span>
+        </div>
+        <button class="flash" type="button" id="flash" aria-live="polite"></button>
+        <div class="deck-nav">
+          <div class="group">
+            <button class="btn" type="button" id="deck-prev">← Previous</button>
+            <button class="btn" type="button" id="deck-next">Next →</button>
+          </div>
+          <button class="btn primary" type="button" id="deck-known">I know this one</button>
+        </div>
+      </section>
+
+      <footer>
+        Generated from <code>FME1000_Midterm_Master_Study_Guide.md</code>. Your progress is saved only in this browser.
+        <a href="./index.html">Go to practice tests →</a>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const CARDS = {{CARDS_JSON}};
+    const $ = (id) => document.getElementById(id);
+    const store = {
+      get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
+      set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} }
+    };
+
+    function toast(message) {
+      $('toast').textContent = message;
+      $('toast').classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => $('toast').classList.remove('show'), 1600);
+    }
+
+    // Studied tracking
+    const sessions = [...document.querySelectorAll('.session')];
+    let studied = new Set(store.get('fme-studied', []));
+    function renderStudied() {
+      document.querySelectorAll('[data-studied]').forEach(box => { box.checked = studied.has(box.dataset.studied); });
+      document.querySelectorAll('[data-toc]').forEach(link => link.classList.toggle('done', studied.has(link.dataset.toc)));
+      $('studied-count').textContent = `${studied.size} / ${sessions.length}`;
+      $('studied-bar').style.width = `${studied.size / sessions.length * 100}%`;
+    }
+    document.addEventListener('change', (event) => {
+      const box = event.target.closest('[data-studied]');
+      if (!box) return;
+      box.checked ? studied.add(box.dataset.studied) : studied.delete(box.dataset.studied);
+      store.set('fme-studied', [...studied]);
+      renderStudied();
+      if (box.checked) toast(`Session ${box.dataset.studied} marked studied`);
+      if (filter === 'todo') applyFilter();
+    });
+
+    // Filter and search
+    let filter = 'all';
+    function applyFilter() {
+      const query = $('search').value.trim().toLowerCase();
+      let shown = 0;
+      sessions.forEach(section => {
+        const areaOk = filter === 'all' || section.dataset.area === filter || (filter === 'todo' && !studied.has(section.dataset.session));
+        const textOk = !query || section.textContent.toLowerCase().includes(query);
+        section.hidden = !(areaOk && textOk);
+        if (!section.hidden) shown++;
+        const link = document.querySelector(`[data-toc="${section.dataset.session}"]`);
+        if (link) link.parentElement.hidden = section.hidden;
+      });
+      document.querySelectorAll('.part-sessions').forEach(part => {
+        part.hidden = !part.querySelector('.session:not([hidden])');
+      });
+      const narrowed = filter !== 'all' || query;
+      document.querySelectorAll('.part:not(.part-sessions)').forEach(part => {
+        part.hidden = narrowed && part.id !== 'flashcards' && !(query && part.textContent.toLowerCase().includes(query));
+      });
+      $('empty').classList.toggle('show', shown === 0);
+    }
+    document.querySelectorAll('[data-filter]').forEach(chip => chip.addEventListener('click', () => {
+      filter = chip.dataset.filter;
+      document.querySelectorAll('[data-filter]').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+      applyFilter();
+    }));
+    $('search').addEventListener('input', applyFilter);
+
+    // Active section in the rail
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          document.querySelectorAll('[data-toc]').forEach(link => link.classList.toggle('active', link.dataset.toc === entry.target.dataset.session));
+        });
+      }, { rootMargin: '-30% 0px -60% 0px' });
+      sessions.forEach(section => observer.observe(section));
+    }
+
+    // Copy buttons on answer templates
+    document.querySelectorAll('blockquote.template').forEach(quote => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy';
+      button.textContent = 'Copy';
+      button.addEventListener('click', async () => {
+        const text = quote.querySelector('p').textContent;
+        try { await navigator.clipboard.writeText(text); toast('Template copied'); }
+        catch {
+          const range = document.createRange();
+          range.selectNodeContents(quote.querySelector('p'));
+          getSelection().removeAllRanges();
+          getSelection().addRange(range);
+          toast('Text selected. Press Ctrl+C or ⌘C to copy');
+        }
+      });
+      quote.appendChild(button);
+    });
+
+    // Collapse the session list by default on small screens
+    if (matchMedia('(max-width: 900px)').matches) $('toc-details').open = false;
+    document.querySelectorAll('.toc a').forEach(link => link.addEventListener('click', () => {
+      if (matchMedia('(max-width: 900px)').matches) $('toc-details').open = false;
+    }));
+
+    // Flashcards
+    const sessionNames = Object.fromEntries([...document.querySelectorAll('[data-toc]')].map(link => [link.dataset.toc, link.querySelector('.toc-name').textContent]));
+    const sessionIds = [...new Set(CARDS.map(card => card.s))].sort((a, b) => a - b);
+    sessionIds.forEach(id => {
+      const option = document.createElement('option');
+      option.value = id;
+      option.textContent = id === 0 ? 'Exam method (C-E-A-R)' : `Session ${id}: ${sessionNames[id] || ''}`;
+      $('deck-session').appendChild(option);
+    });
+    let known = new Set(store.get('fme-known-cards', []));
+    let deck = [];
+    let position = 0;
+    let flipped = false;
+
+    function buildDeck(shuffle) {
+      const pick = $('deck-session').value;
+      deck = CARDS.map((card, index) => ({ ...card, index }))
+        .filter(card => (pick === 'all' || String(card.s) === pick) && !known.has(card.index));
+      if (shuffle) {
+        for (let i = deck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+      }
+      position = 0;
+      flipped = false;
+      renderCard();
+    }
+
+    function renderCard() {
+      const flash = $('flash');
+      const total = CARDS.filter(card => $('deck-session').value === 'all' || String(card.s) === $('deck-session').value).length;
+      $('deck-count').textContent = deck.length ? `Card ${position + 1} of ${deck.length} · ${total - deck.length} known` : `${total} of ${total} known`;
+      if (!deck.length) {
+        flash.className = 'flash';
+        flash.innerHTML = '<span><span class="side-label">Deck complete</span><span class="term">You marked every card in this set as known.</span></span>';
+        return;
+      }
+      const card = deck[position];
+      const label = card.s === 0 ? 'Exam method' : `Session ${card.s}`;
+      flash.className = flipped ? 'flash flipped' : 'flash';
+      flash.innerHTML = flipped
+        ? `<span><span class="side-label">${label} · Definition</span><span class="def"></span></span>`
+        : `<span><span class="side-label">${label} · Term</span><span class="term"></span></span>`;
+      flash.querySelector(flipped ? '.def' : '.term').textContent = flipped ? card.d : card.t;
+    }
+
+    function move(step) {
+      if (!deck.length) return;
+      position = (position + step + deck.length) % deck.length;
+      flipped = false;
+      renderCard();
+    }
+
+    $('flash').addEventListener('click', () => { if (deck.length) { flipped = !flipped; renderCard(); } });
+    $('deck-next').addEventListener('click', () => move(1));
+    $('deck-prev').addEventListener('click', () => move(-1));
+    $('deck-shuffle').addEventListener('click', () => { buildDeck(true); toast('Deck shuffled'); });
+    $('deck-session').addEventListener('change', () => buildDeck(false));
+    $('deck-reset').addEventListener('click', () => { known = new Set(); store.set('fme-known-cards', []); buildDeck(false); toast('Known cards reset'); });
+    $('deck-known').addEventListener('click', () => {
+      if (!deck.length) return;
+      known.add(deck[position].index);
+      store.set('fme-known-cards', [...known]);
+      deck.splice(position, 1);
+      if (position >= deck.length) position = 0;
+      flipped = false;
+      renderCard();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.target.closest('input, select, textarea')) return;
+      const deckInView = $('flashcards').getBoundingClientRect().top < innerHeight * .6;
+      if (!deckInView) return;
+      if (event.key === 'ArrowRight') move(1);
+      else if (event.key === 'ArrowLeft') move(-1);
+      else if (event.key === ' ' && document.activeElement !== $('flash') && deck.length) { event.preventDefault(); flipped = !flipped; renderCard(); }
+    });
+
+    renderStudied();
+    buildDeck(false);
+  </script>
+</body>
+</html>

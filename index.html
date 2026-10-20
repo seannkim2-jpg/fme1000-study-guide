@@ -3,21 +3,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FME 1000 Practice Test</title>
+  <title>FME 1000 Midterm Lab</title>
+  <meta name="description" content="FME 1000 midterm practice: concept checks, written C-E-A-R case coaching, and a timed 90-minute mock exam.">
   <style>
     :root {
       color-scheme: light;
       --ink: #16251f;
+      --ink-soft: #3d4f46;
       --muted: #65736d;
-      --paper: #f7f4ec;
+      --bg1: #f8f4e9;
+      --bg2: #edf4ed;
+      --glow: rgba(200, 220, 114, .42);
       --card: #fffdf8;
+      --panel: var(--panel);
+      --panel-border: var(--panel-border);
+      --surface: #ffffff;
+      --surface-alt: var(--surface-alt);
+      --glass: rgba(255, 255, 255, .6);
       --green: #0b6b4f;
+      --green-hover: #064b39;
+      --green-ink: #064b39;
       --green-dark: #064b39;
+      --on-green: #ffffff;
       --lime: #c8dc72;
+      --on-lime: #064b39;
       --gold: #e3ae4b;
+      --gold-bg: var(--gold-bg);
+      --gold-ink: var(--gold-ink);
       --red: #bd4b3f;
+      --right-bg: var(--right-bg);
+      --wrong-bg: var(--wrong-bg);
+      --tint: var(--tint);
+      --track: #e9ebe3;
       --line: #dcded5;
       --shadow: 0 24px 70px rgba(25, 54, 43, .13);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
+      --bg1: #0c1512; --bg2: #0f1c17; --glow: rgba(120, 160, 60, .12);
+      --card: #14201b; --panel: rgba(20, 32, 27, .96); --panel-border: rgba(255, 255, 255, .06);
+      --surface: #19271f; --surface-alt: #16231d; --glass: rgba(255, 255, 255, .04);
+      --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
+      --gold-bg: #3a3120; --gold-ink: #e9c57a; --red: #e07a6d;
+      --right-bg: #17362a; --wrong-bg: #3a1f1b; --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
+      }
+    }
+    :root[data-theme="dark"] {
+      color-scheme: dark;
+      --ink: #e6eee9; --ink-soft: #c3d1c9; --muted: #93a59b;
+      --bg1: #0c1512; --bg2: #0f1c17; --glow: rgba(120, 160, 60, .12);
+      --card: #14201b; --panel: rgba(20, 32, 27, .96); --panel-border: rgba(255, 255, 255, .06);
+      --surface: #19271f; --surface-alt: #16231d; --glass: rgba(255, 255, 255, .04);
+      --green: #4fbf92; --green-hover: #6fd0a8; --green-ink: #8fdcb8; --green-dark: #0b3a2d; --on-green: #06231a;
+      --gold-bg: #3a3120; --gold-ink: #e9c57a; --red: #e07a6d;
+      --right-bg: #17362a; --wrong-bg: #3a1f1b; --tint: #1a2e26; --track: #26352e; --line: #2b3b34;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .35);
     }
 
     * { box-sizing: border-box; }
@@ -26,8 +69,9 @@
       margin: 0;
       min-height: 100vh;
       background:
-        radial-gradient(circle at 15% 5%, rgba(200, 220, 114, .42), transparent 27rem),
-        linear-gradient(135deg, #f8f4e9 0%, #edf4ed 100%);
+        radial-gradient(circle at 15% 5%, var(--glow), transparent 27rem),
+        linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 100%);
+      background-color: var(--bg1);
       color: var(--ink);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -43,6 +87,7 @@
 
     header {
       display: flex;
+      flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
@@ -57,7 +102,7 @@
       height: 42px;
       border-radius: 12px;
       background: var(--green);
-      color: white;
+      color: var(--on-green);
       font-weight: 900;
       letter-spacing: -.05em;
       box-shadow: 0 10px 25px rgba(11, 107, 79, .2);
@@ -65,20 +110,28 @@
     .brand strong { display: block; font-size: 15px; letter-spacing: .04em; }
     .brand span { color: var(--muted); font-size: 13px; }
 
+    .site-nav { display: flex; flex-wrap: wrap; gap: 4px; }
+    .site-nav a { padding: 8px 12px; border-radius: 999px; color: var(--ink-soft); font-size: 14px; font-weight: 700; text-decoration: none; }
+    .site-nav a:hover { background: var(--tint); color: var(--green-ink); }
+    .site-nav a[aria-current="page"] { background: var(--green); color: var(--on-green); }
+    .link-button { display: inline-flex; align-items: center; text-decoration: none; }
+    :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }
+
     .pill {
       padding: 8px 12px;
       border: 1px solid rgba(11, 107, 79, .18);
       border-radius: 999px;
-      background: rgba(255, 255, 255, .62);
-      color: var(--green-dark);
+      background: var(--glass);
+      color: var(--green-ink);
       font-size: 13px;
       font-weight: 700;
     }
 
     .panel {
       overflow: hidden;
-      background: rgba(255, 253, 248, .94);
-      border: 1px solid rgba(255, 255, 255, .9);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
       border-radius: 28px;
       box-shadow: var(--shadow);
     }
@@ -110,7 +163,7 @@
     .lede {
       max-width: 590px;
       margin: 28px 0 32px;
-      color: #51615a;
+      color: var(--ink-soft);
       font-size: 18px;
       line-height: 1.65;
     }
@@ -122,8 +175,8 @@
       border-radius: 12px;
       font-weight: 800;
     }
-    .primary { border: 0; background: var(--green); color: white; box-shadow: 0 10px 24px rgba(11,107,79,.2); }
-    .primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .primary { border: 0; background: var(--green); color: var(--on-green); box-shadow: 0 10px 24px rgba(11,107,79,.2); }
+    .primary:hover { background: var(--green-hover); transform: translateY(-1px); }
     .primary:disabled { cursor: not-allowed; opacity: .42; transform: none; }
     .secondary { border: 1px solid var(--line); background: transparent; color: var(--ink); }
     .secondary:hover { border-color: var(--green); color: var(--green); }
@@ -158,13 +211,13 @@
     .meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
     .meta strong { font-size: 14px; }
     .meta span { color: var(--muted); font-size: 13px; }
-    .progress { height: 8px; margin-top: 16px; overflow: hidden; border-radius: 999px; background: #e7e9e1; }
+    .progress { height: 8px; margin-top: 16px; overflow: hidden; border-radius: 999px; background: var(--track); }
     .progress div { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--green), #55a06f); transition: width .35s ease; }
 
     .question-wrap { padding: clamp(30px, 5vw, 60px); }
     .question-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-    .tag { padding: 6px 10px; border-radius: 999px; background: #e8f0e8; color: var(--green-dark); font-size: 12px; font-weight: 800; }
-    .tag.session { background: #f2ead7; color: #795719; }
+    .tag { padding: 6px 10px; border-radius: 999px; background: var(--tint); color: var(--green-ink); font-size: 12px; font-weight: 800; }
+    .tag.session { background: var(--gold-bg); color: var(--gold-ink); }
     .question { max-width: 790px; margin: 0 0 30px; font: 500 clamp(25px, 3.5vw, 38px)/1.22 Georgia, serif; }
     .choices { display: grid; gap: 12px; }
     .choice {
@@ -176,16 +229,16 @@
       padding: 16px 18px;
       border: 1px solid var(--line);
       border-radius: 15px;
-      background: white;
+      background: var(--surface);
       color: var(--ink);
       text-align: left;
       transition: border-color .18s ease, transform .18s ease, background .18s ease;
     }
     .choice:hover:not(:disabled) { border-color: var(--green); transform: translateX(3px); }
-    .choice .letter { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: #f0f1eb; font-weight: 900; }
-    .choice.selected { border-color: var(--green); background: #eef6ef; }
-    .choice.correct { border-color: #3f8a5f; background: #e6f3e9; }
-    .choice.wrong { border-color: var(--red); background: #faeae7; }
+    .choice .letter { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: var(--track); font-weight: 900; }
+    .choice.selected { border-color: var(--green); background: var(--tint); }
+    .choice.correct { border-color: var(--green); background: var(--right-bg); }
+    .choice.wrong { border-color: var(--red); background: var(--wrong-bg); }
     .choice:disabled { cursor: default; }
 
     .explanation {
@@ -194,12 +247,12 @@
       padding: 18px 20px;
       border-left: 4px solid var(--green);
       border-radius: 4px 12px 12px 4px;
-      background: #eef3eb;
-      color: #34463e;
+      background: var(--tint);
+      color: var(--ink-soft);
       line-height: 1.55;
     }
     .explanation.show { display: block; }
-    .explanation strong { color: var(--green-dark); }
+    .explanation strong { color: var(--green-ink); }
     .quiz-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 28px; }
 
     .results { display: none; padding: clamp(36px, 6vw, 70px); }
@@ -211,7 +264,7 @@
       height: 150px;
       margin-bottom: 28px;
       border-radius: 50%;
-      background: conic-gradient(var(--green) var(--score), #e4e6df 0);
+      background: conic-gradient(var(--green) var(--score), var(--track) 0);
       position: relative;
     }
     .score-ring::after { content: ""; position: absolute; inset: 11px; border-radius: 50%; background: var(--card); }
@@ -221,11 +274,11 @@
     .results h2 { margin: 0; font: 500 clamp(36px, 5vw, 58px)/1 Georgia, serif; }
     .results > p { max-width: 650px; color: var(--muted); font-size: 17px; line-height: 1.6; }
     .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
-    .stat { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .stat { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
     .stat span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
     .stat strong { display: block; margin-top: 5px; font-size: 25px; }
     .review { display: grid; gap: 12px; margin: 28px 0; }
-    .review-item { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .review-item { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
     .review-item small { color: var(--red); font-weight: 800; }
     .review-item h3 { margin: 7px 0 9px; font-size: 16px; }
     .review-item p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
@@ -266,7 +319,7 @@
       padding: 26px;
       border: 1px solid rgba(11, 107, 79, .13);
       border-radius: 22px;
-      background: rgba(255, 253, 248, .9);
+      background: var(--panel);
       box-shadow: 0 14px 42px rgba(25, 54, 43, .08);
     }
     .mode-number { color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
@@ -276,7 +329,7 @@
     .mode-card.featured { background: var(--green-dark); color: white; }
     .mode-card.featured .mode-number { color: var(--lime); }
     .mode-card.featured p { color: rgba(255,255,255,.7); }
-    .mode-card.featured .primary { background: var(--lime); color: var(--green-dark); box-shadow: none; }
+    .mode-card.featured .primary { background: var(--lime); color: var(--on-lime); box-shadow: none; }
     .mode-card.featured .primary:hover { background: #d5e687; }
     .stats-strip {
       display: flex;
@@ -286,7 +339,7 @@
       padding: 18px 24px;
       border: 1px solid rgba(11, 107, 79, .12);
       border-radius: 18px;
-      background: rgba(255,255,255,.58);
+      background: var(--glass);
       color: var(--muted);
       font-size: 13px;
     }
@@ -308,11 +361,11 @@
     .page-kicker { margin: 0; color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
     .workspace { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); min-height: 620px; }
     .case-pane, .answer-pane { padding: clamp(26px, 4vw, 46px); }
-    .case-pane { border-right: 1px solid var(--line); background: #fbf9f2; }
+    .case-pane { border-right: 1px solid var(--line); background: var(--surface-alt); }
     .case-title { margin: 18px 0 14px; font: 500 clamp(25px, 3vw, 34px)/1.22 Georgia, serif; }
-    .case-copy { color: #415148; line-height: 1.72; }
-    .tip-box { margin-top: 26px; padding: 17px; border-radius: 14px; background: #eaf2e8; color: #385045; font-size: 13px; line-height: 1.55; }
-    .tip-box strong { color: var(--green-dark); }
+    .case-copy { color: var(--ink-soft); line-height: 1.72; }
+    .tip-box { margin-top: 26px; padding: 17px; border-radius: 14px; background: var(--tint); color: var(--ink-soft); font-size: 13px; line-height: 1.55; }
+    .tip-box strong { color: var(--green-ink); }
     .answer-pane label { display: block; margin-bottom: 10px; font-weight: 850; }
     textarea {
       width: 100%;
@@ -322,7 +375,7 @@
       border: 1px solid var(--line);
       border-radius: 15px;
       outline: none;
-      background: white;
+      background: var(--surface);
       color: var(--ink);
       font: 15px/1.65 Inter, ui-sans-serif, system-ui, sans-serif;
     }
@@ -333,14 +386,14 @@
     .coach.show { display: block; }
     .coach h3 { margin: 0 0 14px; font: 500 24px Georgia, serif; }
     .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 18px; }
-    .check-item { padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: white; font-size: 13px; line-height: 1.4; }
+    .check-item { padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: var(--surface); font-size: 13px; line-height: 1.4; }
     .check-item b { color: var(--green); }
-    .model-answer { padding: 18px; border-radius: 14px; background: #eef3eb; color: #34463e; line-height: 1.68; }
-    .model-answer strong { color: var(--green-dark); }
+    .model-answer { padding: 18px; border-radius: 14px; background: var(--tint); color: var(--ink-soft); line-height: 1.68; }
+    .model-answer strong { color: var(--green-ink); }
     .self-rate { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
     .self-rate > span { margin-right: 4px; color: var(--muted); font-size: 13px; font-weight: 750; }
-    .rate-button { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink); font-weight: 850; }
-    .rate-button:hover, .rate-button.active { border-color: var(--green); background: var(--green); color: white; }
+    .rate-button { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); font-weight: 850; }
+    .rate-button:hover, .rate-button.active { border-color: var(--green); background: var(--green); color: var(--on-green); }
 
     .mock-body { padding: clamp(26px, 5vw, 54px); }
     .mock-intro { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 28px; }
@@ -350,7 +403,7 @@
     .timer span { display: block; color: var(--lime); font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
     .timer strong { display: block; margin-top: 3px; font: 500 25px Georgia, serif; }
     .mock-list { display: grid; gap: 18px; }
-    .mock-card { padding: 24px; border: 1px solid var(--line); border-radius: 17px; background: white; }
+    .mock-card { padding: 24px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface); }
     .mock-card h3 { margin: 13px 0 16px; font: 500 22px/1.35 Georgia, serif; }
     .mock-card textarea { min-height: 220px; }
     .mock-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 24px; }
@@ -358,9 +411,9 @@
     .mock-review { display: none; margin-top: 30px; padding-top: 28px; border-top: 1px solid var(--line); }
     .mock-review.show { display: block; }
     .mock-review h2 { font: 500 32px Georgia, serif; }
-    .review-answer { margin-top: 14px; padding: 20px; border-left: 4px solid var(--green); border-radius: 5px 13px 13px 5px; background: #eef3eb; line-height: 1.65; }
+    .review-answer { margin-top: 14px; padding: 20px; border-left: 4px solid var(--green); border-radius: 5px 13px 13px 5px; background: var(--tint); line-height: 1.65; }
     .review-answer h3 { margin: 0 0 8px; font-size: 15px; }
-    .review-answer p { margin: 0; color: #405047; }
+    .review-answer p { margin: 0; color: var(--ink-soft); }
 
     .toast {
       position: fixed;
@@ -400,7 +453,12 @@
         <div class="mark">FME</div>
         <div><strong>FME 1000</strong><span>Midterm practice</span></div>
       </div>
-      <div class="pill" id="header-status">13 sessions · 3 practice modes</div>
+      <nav class="site-nav" aria-label="Site">
+        <a href="./index.html" aria-current="page">Practice</a>
+        <a href="./guide.html">Study guide</a>
+        <a href="./guide.html#flashcards">Flashcards</a>
+        <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">PDF ↗</a>
+      </nav>
     </header>
 
     <div class="home-screen" id="home-screen">
@@ -412,6 +470,7 @@
         <div class="actions">
           <button class="primary" id="written-start">Practice a written case</button>
           <button class="secondary" id="quick-start">Quick concept check</button>
+          <a class="secondary link-button" href="./guide.html">Read the study guide</a>
         </div>
       </div>
       <aside class="hero-side">
@@ -423,7 +482,7 @@
             <div class="topic"><span>Joint material</span><b>2 sessions</b></div>
           </div>
         </div>
-        <p class="side-note">The real midterm uses short essays. Written practice is the main mode; multiple choice is here for fast recall.</p>
+        <p class="side-note">60 concept questions, 14 written cases, and 61 flashcards cover every session. The real midterm uses short essays. Written practice is the main mode; multiple choice is here for fast recall.</p>
       </aside>
     </section>
 
@@ -452,7 +511,7 @@
       <span><strong id="stat-questions">0</strong> concept questions answered</span>
       <span><strong id="stat-accuracy">—</strong> accuracy</span>
       <span><strong id="stat-cases">0</strong> written cases completed</span>
-      <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">Open the updated master study guide ↗</a>
+      <a href="./guide.html">Open the session-by-session study guide →</a>
     </div>
     </div>
 
@@ -544,7 +603,7 @@
     <form method="dialog" class="modal-body">
       <p class="eyebrow">Set up your test</p>
       <h2>Choose what to practice</h2>
-      <p>Select one or more course areas. The full test uses all 20 questions; the quick version randomly selects 10.</p>
+      <p>Select one or more course areas. The full test uses every question in the areas you pick (60 across all sessions). The quick version picks 10 at random.</p>
       <div class="settings">
         <div class="setting"><div><label for="ent">Entrepreneurship</label><br><span>Sessions 3, 5, 7, 8, 11, 12</span></div><input id="ent" type="checkbox" value="ENT" checked></div>
         <div class="setting"><div><label for="ob">Organizational Behavior</label><br><span>Sessions 2, 4, 6, 10, 13</span></div><input id="ob" type="checkbox" value="OB" checked></div>
@@ -578,7 +637,47 @@
       { category: 'ENT', session: 11, q: 'Which evidence would most strengthen an opportunity evaluation?', choices: ['The founders say they love the idea', 'Several target customers repeatedly use and pay for an early solution', 'The product has many possible features', 'The team created an attractive logo'], answer: 1, why: 'Observed customer behavior and willingness to pay are stronger evidence than internal enthusiasm or surface-level branding.' },
       { category: 'ENT', session: 12, q: 'Which research method is best for exploring why students avoid a campus service?', choices: ['A focus group with open-ended follow-up questions', 'A financial statement', 'A DiSC assessment', 'A trademark search'], answer: 0, why: 'Qualitative methods such as focus groups help uncover motivations, language, and experiences behind behavior.' },
       { category: 'ENT', session: 12, q: 'What is wrong with asking, “Don’t you agree our app would make networking easier?”', choices: ['It is too quantitative', 'It is a leading question that encourages agreement', 'It does not mention the price', 'It asks about past behavior'], answer: 1, why: 'The wording signals the desired answer, which can bias the research and make the evidence less reliable.' },
-      { category: 'OB', session: 13, q: 'A team asks each member for input, but repeatedly ignores ideas from its newest member. What is missing?', choices: ['Diversity alone', 'Inclusion', 'Market viability', 'Creation logic'], answer: 1, why: 'Diversity concerns who is present; inclusion concerns whether people are respected, heard, and able to influence the work.' }
+      { category: 'OB', session: 13, q: 'A team asks each member for input, but repeatedly ignores ideas from its newest member. What is missing?', choices: ['Diversity alone', 'Inclusion', 'Market viability', 'Creation logic'], answer: 1, why: 'Diversity concerns who is present; inclusion concerns whether people are respected, heard, and able to influence the work.' },
+      { category: 'Joint', session: 1, q: 'Which pair correctly contrasts prediction logic with creation (effectual) logic?', choices: ['Prediction limits acceptable loss; creation maximizes expected return', 'Prediction plans before acting; creation acts in small steps and learns', 'Prediction starts with what is at hand; creation starts with a fixed goal', 'Prediction treats failure as information; creation avoids failure'], answer: 1, why: 'Prediction logic plans first and focuses on expected return. Creation logic starts with available means, limits acceptable loss, and adapts as it learns.' },
+      { category: 'Joint', session: 1, q: 'In the CreAction sequence, what comes right after “take a small action you can afford to lose”?', choices: ['Raise outside funding', 'Observe the good, bad, and unexpected results', 'Write the full business plan', 'Hire a specialist'], answer: 1, why: 'The sequence is: start with who you are, what you know, whom you know; act small; observe results; bring in help; adjust the next action.' },
+      { category: 'Joint', session: 1, q: 'Which statement about CreAction is accurate?', choices: ['It means acting randomly without planning', 'It matches the size of the commitment to the quality of the evidence', 'It requires funding before the first step', 'It works only when the future is predictable'], answer: 1, why: 'CreAction is not random or anti-planning. It scales commitment to the evidence available.' },
+      { category: 'OB', session: 2, q: 'The charter says “respond to messages within 24 hours,” but the team actually rewards the member who replies at midnight. Which is more likely to guide behavior?', choices: ['The written rule', 'The informal norm the group reinforces', 'The charter title', 'Nothing; behavior is random'], answer: 1, why: 'When rules and norms conflict, people usually follow the behavior the group actually rewards.' },
+      { category: 'OB', session: 2, q: 'Which item belongs to the invisible part of culture?', choices: ['Meeting schedule', 'Dress code', 'Assumptions about who may challenge the leader', 'Workspace layout'], answer: 2, why: 'Visible culture covers schedules, dress, language, rituals, and spaces. Invisible culture covers assumptions about status, conflict, trust, risk, and influence.' },
+      { category: 'OB', session: 2, q: 'What makes a team charter useful rather than decorative?', choices: ['It states high ideals in general language', 'It turns aspirations into specific behavior, roles, decision methods, and a way to revise', 'It is signed by every member', 'It is written by the instructor'], answer: 1, why: 'A useful charter clarifies purpose, roles, decisions, meetings, communication, conflict, accountability, and how the team will revise its own process.' },
+      { category: 'ENT', session: 3, q: 'Which of these is part of the attractive-durable-timely-value-creating test for an opportunity?', choices: ['Durable: the need and advantage can last', 'Loud: the founder talks about it often', 'Large: the category spends a lot', 'Familiar: friends have heard of it'], answer: 0, why: 'A promising opportunity is attractive, durable, timely, and value-creating. Category spending alone does not prove a specific segment has the pain.' },
+      { category: 'ENT', session: 3, q: 'Which brainstorming step comes only after many options exist?', choices: ['Silent individual ideation', 'A “How might we?” question', 'Evaluating desirability, feasibility, and viability', 'A creative warm-up'], answer: 2, why: 'Evaluation is deferred until many ideas have been generated, clustered, and combined.' },
+      { category: 'ENT', session: 3, q: 'What is the appropriate role of AI in idea generation?', choices: ['Proving the idea is desirable', 'Generating variations and perspectives while humans verify and judge', 'Replacing customer interviews', 'Deciding which idea to launch'], answer: 1, why: 'AI can widen the option set, but it cannot establish that an idea is true, desirable, or practical. People supply context and test with customers.' },
+      { category: 'OB', session: 4, q: 'Which is the best description of “responding rather than reacting”?', choices: ['Suppressing every emotion', 'Creating a pause between the trigger and the action', 'Acting immediately to show honesty', 'Avoiding the conflict entirely'], answer: 1, why: 'The emotion may be valid, but the pause lets you check facts and choose a useful response.' },
+      { category: 'OB', session: 4, q: 'A caring, sincere leader recommends spending a large sum with no supporting evidence. Which part of the trust model is weakest?', choices: ['Authenticity', 'Logic', 'Empathy', 'None; the leader is sincere'], answer: 1, why: 'Trust = authenticity + logic + empathy. Sincerity and care do not make up for weak reasoning.' },
+      { category: 'OB', session: 4, q: 'Which emotional-intelligence ability involves noticing other people’s emotions and perspectives?', choices: ['Self-awareness', 'Self-management', 'Social awareness', 'Relationship management'], answer: 2, why: 'Social awareness is noticing others’ emotions, perspectives, and needs. Relationship management uses that understanding to communicate and resolve conflict.' },
+      { category: 'ENT', session: 5, q: 'How does empathy differ from sympathy in design thinking?', choices: ['Empathy means feeling sorry for someone', 'Empathy means understanding someone’s circumstances and needs well enough to see the problem from their view', 'They are the same', 'Empathy means fixing the problem immediately'], answer: 1, why: 'Empathy is understanding another person’s perspective. It is different from sympathy and from rushing to fix things.' },
+      { category: 'ENT', session: 5, q: 'What is the correct order of the design-thinking process?', choices: ['Prototype, empathize, define, ideate, test', 'Empathize, define, ideate, prototype, test and iterate', 'Ideate, prototype, define, empathize, test', 'Define, test, empathize, ideate, prototype'], answer: 1, why: 'Design thinking runs empathize, define, ideate, prototype, then test and iterate.' },
+      { category: 'ENT', session: 5, q: 'Which is the best interviewee choice for a discovery interview?', choices: ['A close friend who will be supportive', 'A family member who knows your idea', 'A person from the target group who has recently faced the problem', 'Anyone who agrees to talk'], answer: 2, why: 'Interview people outside close friends and family, ideally from the target segment, and ask about real past behavior.' },
+      { category: 'OB', session: 6, q: 'Which are the three outcomes of team effectiveness?', choices: ['Performance, learning and adaptability, member well-being and growth', 'Grade, speed, and cost', 'Profit, size, and reputation', 'Harmony, agreement, and loyalty'], answer: 0, why: 'A team that earns a high grade but burns out its members and learns nothing is not fully effective.' },
+      { category: 'OB', session: 6, q: 'Which of these is a mistake rather than a failure?', choices: ['A carefully designed experiment that disproves a hypothesis', 'Repeating a known error that the team already documented', 'A pilot launched under real uncertainty', 'A new method that tests worse than the old one'], answer: 1, why: 'A mistake ignores known information, violates an established process, or repeats a known error. A failure comes from a thoughtful test of genuine uncertainty.' },
+      { category: 'OB', session: 6, q: 'Which is the best response when a member reports bad news?', choices: ['Ask who is at fault', 'Respond with curiosity before evaluation and thank them for raising it', 'Move on quickly', 'Reassign the member'], answer: 1, why: 'Responding with curiosity and thanks protects psychological safety, so future bad news still surfaces.' },
+      { category: 'OB', session: 6, q: 'Which of these is task conflict?', choices: ['Two members argue about whether the evidence supports the pricing choice', 'One member mocks another’s background', 'A subgroup refuses to speak to another', 'A member is excluded from the chat'], answer: 0, why: 'Task conflict debates evidence, assumptions, and choices. Relationship or status conflict attacks people.' },
+      { category: 'ENT', session: 7, q: 'Which best defines a customer persona?', choices: ['A fictional ideal customer grounded in patterns from real research', 'The founder’s favorite user', 'A celebrity endorser', 'A demographic table'], answer: 0, why: 'A persona should come from interviews, observation, and behavior and should explain pains, goals, constraints, and buying criteria.' },
+      { category: 'ENT', session: 7, q: 'Which are the three jobs of a strong value proposition?', choices: ['Resonate, differentiate, substantiate', 'Inform, entertain, persuade', 'Plan, build, launch', 'Price, place, promote'], answer: 0, why: 'It must address an important need, offer a meaningful advantage, and give a reason to believe the promise.' },
+      { category: 'ENT', session: 7, q: 'Which phrase converts a feature into a benefit?', choices: ['“It was built with…”', '“Which means that…”', '“Compared to nothing…”', '“As seen on…”'], answer: 1, why: 'Add “which means that…” after a feature until the statement reaches a result the customer values.' },
+      { category: 'ENT', session: 8, q: 'What should a team do first when planning a prototype?', choices: ['Pick a design tool', 'Name the riskiest assumption', 'Fix the launch date', 'Build all features'], answer: 1, why: 'The sequence: name the riskiest assumption, decide the observable result, build the smallest test, watch customers, and record evidence.' },
+      { category: 'ENT', session: 8, q: 'What does “minimum” mean in minimum viable product?', choices: ['Sloppy and incomplete', 'The smallest usable version that is still credible enough to test the assumption', 'The cheapest possible version regardless of quality', 'A version with no users'], answer: 1, why: 'Minimum does not mean careless. The MVP must still be credible enough to test what the team wants to learn.' },
+      { category: 'ENT', session: 8, q: 'Kayden manually builds a recommendation and supply list for a few knitters and delivers it himself. What kind of test is this?', choices: ['A concierge test', 'A focus group', 'A market-size estimate', 'A persona'], answer: 0, why: 'In a concierge test, the founder performs the future service by hand to learn whether customers value it.' },
+      { category: 'Joint', session: 9, q: 'Which is the three-part value-proposition test used in the Rocket Pitch?', choices: ['Overt benefit, dramatic difference, real reason to believe', 'Price, place, promotion', 'Feasible, viable, desirable', 'Empathize, define, ideate'], answer: 0, why: 'The pitch should show why the customer should care, why this beats current alternatives, and why the promise is credible.' },
+      { category: 'Joint', session: 9, q: 'How should a team divide the Rocket Pitch?', choices: ['By equal sentence counts', 'By idea, with clear handoffs so it sounds like one argument', 'Each person pitches a separate product', 'One person speaks while others stay quiet'], answer: 1, why: 'Dividing by idea and rehearsing handoffs keeps the argument coherent.' },
+      { category: 'Joint', session: 9, q: 'Which is the best way to end a Rocket Pitch?', choices: ['A list of all features', 'The next action, test, or request', 'An apology for what is missing', 'A joke'], answer: 1, why: 'A good pitch order ends with the next action, test, or request.' },
+      { category: 'OB', session: 10, q: 'Which DiSC style is best matched with “bring evidence, structure, and thinking time”?', choices: ['D', 'I', 'S', 'C'], answer: 3, why: 'Conscientious/Analytical teammates value accuracy and structure and may need evidence and time to think.' },
+      { category: 'OB', session: 10, q: 'What does “flexing” a style mean?', choices: ['Changing your personality permanently', 'Adapting communication to help the team work', 'Ignoring the profile', 'Choosing the best style'], answer: 1, why: 'Flexing is adapting communication, for example a D pausing to invite input or an I documenting commitments.' },
+      { category: 'OB', session: 10, q: 'What is the right way to use a DiSC profile with a teammate?', choices: ['As a prompt for conversation, since the individual is the best judge of fit', 'To predict everything about them', 'To decide who is more capable', 'To assign permanent roles'], answer: 0, why: 'Profiles describe tendencies and should not become stereotypes or measures of ability or worth.' },
+      { category: 'ENT', session: 11, q: 'A product is desirable and viable but the team lacks the skills or supplier to deliver it. Which lens fails?', choices: ['Desirability', 'Feasibility', 'Viability', 'None'], answer: 1, why: 'Feasibility asks whether this team can create and deliver the offer given skills, technology, suppliers, time, and operations.' },
+      { category: 'ENT', session: 11, q: 'Why can growth make an unviable offer worse?', choices: ['More customers always lower costs', 'Each additional sale increases the loss when unit economics are negative', 'Growth changes the persona', 'Growth removes competition'], answer: 1, why: 'If every order loses money, scaling multiplies the loss. Test price and cost before growing.' },
+      { category: 'ENT', session: 11, q: 'Which of these should be compared when estimating competition for Knittr?', choices: ['Only direct app competitors', 'Direct competitors, indirect alternatives, and the customer’s current workaround, including doing nothing', 'Only large retailers', 'Only companies with AI'], answer: 1, why: 'Alternatives include yarn stores, pattern sites, social media, Ravelry, Etsy, friends’ advice, and doing nothing.' },
+      { category: 'ENT', session: 12, q: 'When should a team start with qualitative research?', choices: ['When it already knows the exact market size', 'When it does not yet understand the problem well enough to form useful hypotheses', 'When it needs a statistically exact answer', 'Never'], answer: 1, why: 'Qualitative work explores how and why. Quantitative work later measures how many, how often, or how much.' },
+      { category: 'ENT', session: 12, q: 'Which is primary quantitative research?', choices: ['A published market report', 'A survey the team designs and runs for its own decision', 'An archived company account', 'A focus group'], answer: 1, why: 'Primary data is collected for this decision; quantitative data measures counts, frequency, or amount.' },
+      { category: 'ENT', session: 12, q: 'What do the 4Ps stand for?', choices: ['Product, price, place, promotion', 'People, process, plan, profit', 'Problem, prototype, pitch, persona', 'Pain, passion, purpose, payoff'], answer: 0, why: 'Product is the offer, price is what the customer pays, place is the channel, and promotion is how the target customer becomes aware.' },
+      { category: 'OB', session: 13, q: 'Which pair correctly matches the terms with the questions they ask?', choices: ['Diversity: who is present? Inclusion: whose voice influences the work? Belonging: who feels accepted?', 'Diversity: who has influence? Inclusion: who is present? Belonging: who is paid?', 'Diversity and inclusion mean the same thing', 'Belonging: who wins arguments?'], answer: 0, why: 'A team can be diverse without being inclusive, and inclusive without every member feeling they belong.' },
+      { category: 'OB', session: 13, q: 'What is a faultline?', choices: ['A stable division of a team into subgroups, such as veterans and newcomers', 'A single disagreement', 'A project deadline', 'A personal flaw'], answer: 0, why: 'Faultlines keep information inside subgroups. Shared goals, cross-subgroup tasks, and transparent decisions can reduce them.' },
+      { category: 'OB', session: 13, q: 'Which action best reflects inclusive leadership in a meeting?', choices: ['Let the most senior member speak first', 'Ask for views before senior members anchor the discussion and explain how input affected the decision', 'Require members to explain their identity group’s view', 'Avoid discussing disagreements'], answer: 1, why: 'Inclusive leaders distribute airtime, collect input early, use clear criteria, and avoid forcing people to disclose identities or represent a group.' },
     ];
 
     const writtenCases = [
@@ -724,11 +823,16 @@
       $('test-modal').showModal();
     }
 
+    function shuffleChoices(item) {
+      const order = shuffle(item.choices.map((_, index) => index));
+      return { ...item, choices: order.map(index => item.choices[index]), answer: order.indexOf(item.answer) };
+    }
+
     function beginTest() {
       const categories = ['ent', 'ob', 'joint'].filter(id => $(id).checked).map(id => $(id).value);
       if (!categories.length) return;
       const pool = questions.filter(item => categories.includes(item.category));
-      state.items = shuffle(pool).slice(0, quickMode ? Math.min(10, pool.length) : pool.length);
+      state.items = shuffle(pool).slice(0, quickMode ? Math.min(10, pool.length) : pool.length).map(shuffleChoices);
       state.index = 0;
       state.selected = null;
       state.checked = false;
