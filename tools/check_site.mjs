@@ -283,6 +283,69 @@ await page.goto('/index.html');
 check('index mobile: no sideways scroll', await page.eval(`document.documentElement.scrollWidth <= innerWidth + 1`), await page.eval('document.documentElement.scrollWidth'));
 await page.shot('index-mobile');
 
+// ---------- knittr-guide.html ----------
+await page.size(1440, 900);
+page.errors = [];
+await page.goto('/knittr-guide.html');
+await page.eval('localStorage.clear()'); await page.goto('/knittr-guide.html');
+check('knittr: loads without script errors', !page.errors.length, page.errors.join(' | '));
+await page.shot('knittr-desktop');
+const shape = await page.eval(`[...document.querySelectorAll('.session')].map(s => ({ n: s.dataset.session, area: s.dataset.area, topics: s.querySelectorAll('.topic').length, map: s.querySelectorAll('.topic-map li').length, knittr: [...s.querySelectorAll('[data-view="apply"]')].some(v => v.textContent.includes('Knittr') || v.textContent.includes('Kayden')) }))`);
+check('knittr: 13 sessions, each with a topic map matching its topics', shape.length === 13 && shape.every(s => s.topics > 0 && s.map === s.topics), JSON.stringify(shape.map(s => [s.n, s.topics, s.map])));
+check('knittr: every entrepreneurship and joint session applies Knittr', shape.filter(s => s.area !== 'ob').every(s => s.knittr), shape.filter(s => s.area !== 'ob' && !s.knittr).map(s => s.n).join(','));
+check('knittr: every topic has Learn, Application, and Practice', await page.eval(`[...document.querySelectorAll('.topic')].every(t => ['learn', 'apply', 'practice'].every(v => t.querySelector('[data-view="' + v + '"]')))`));
+const firstTopics = await page.eval(`[...document.querySelectorAll('.session')].map(s => s.querySelector('.topic').id)`);
+for (const id of firstTopics) {
+  await step(`knittr: rail topic #${id}`, async () => {
+    await page.click(`.rail a[href="#session-${id.match(/^s(\d+)/)[1]}"]`); await page.settle();
+    await page.click(`.rail a[href="#${id}"]`); await page.settle();
+    const where = await page.eval(landed(id));
+    check(`knittr: rail topic link #${id} lands`, where === 'ok', where);
+  });
+}
+await step('knittr: view switch', async () => {
+  await page.click('#session-7 [data-set-view="practice"]');
+  const shown = await page.eval(`[...document.querySelectorAll('#session-7 .view')].filter(v => v.offsetHeight).map(v => v.dataset.view)`);
+  check('knittr: Practice view shows only exam moves', shown.length > 0 && shown.every(v => v === 'practice'), shown.join(','));
+  await sleep(500); await page.shot('knittr-practice-view');
+  await page.click('#session-7 [data-set-view="all"]');
+});
+await step('knittr: topic studied tracking', async () => {
+  const boxes = await page.eval(`document.querySelectorAll('#session-1 [data-studied]').length`);
+  for (let i = 0; i < boxes; i++) await page.click('#session-1 [data-studied]', i);
+  check('knittr: meter counts topics', (await page.eval(`document.getElementById('studied-count').textContent`)).startsWith(`${boxes} /`));
+  check('knittr: session marked done in the rail when all topics are checked', await page.eval(`document.querySelector('[data-toc="1"]').classList.contains('done')`));
+  await page.goto('/knittr-guide.html');
+  check('knittr: topic progress survives a reload', await page.eval(`document.querySelectorAll('#session-1 [data-studied]:checked').length`) === boxes);
+  check('knittr: progress is stored apart from guide.html', await page.eval(`localStorage.getItem('fme-studied') === null && JSON.parse(localStorage.getItem('fme-knittr-studied')).length`) === boxes);
+  await page.click('[data-filter="todo"]');
+  check('knittr: Not studied hides the finished session', await page.eval(`document.getElementById('session-1').hidden`));
+  await page.click('[data-filter="all"]');
+});
+await step('knittr: search', async () => {
+  await page.eval(`(() => { const s = document.getElementById('search'); s.value = 'Beatrice'; s.dispatchEvent(new Event('input')); })()`);
+  const r = await page.eval(`(() => { const t = [...document.querySelectorAll('.topic')].filter(t => !t.hidden && !t.closest('[hidden]')); return { n: t.length, ok: t.every(x => x.textContent.includes('Beatrice')) }; })()`);
+  check('knittr: search "Beatrice" narrows to matching Knittr topics', r.n > 0 && r.ok, JSON.stringify(r));
+  await page.eval(`(() => { const s = document.getElementById('search'); s.value = ''; s.dispatchEvent(new Event('input')); })()`);
+});
+await step('knittr: hub link while filtered', async () => {
+  await page.click('[data-filter="ent"]');
+  await page.click('#session-7 .hub-link'); await page.settle();
+  const where = await page.eval(landed('knittr-case-hub'));
+  check('knittr: Knittr case hub link lands even with a filter on', where === 'ok', where);
+});
+check('knittr: no script errors during the run', !page.errors.length, page.errors.join(' | '));
+await page.size(390, 844, true);
+await page.goto('/knittr-guide.html');
+check('knittr mobile: no sideways scroll', await page.eval(`document.documentElement.scrollWidth <= innerWidth + 1`), await page.eval('document.documentElement.scrollWidth'));
+await page.shot('knittr-mobile');
+await step('knittr mobile: outline link', async () => {
+  await page.click('#toc-details summary');
+  await page.click(`.rail a[href="#session-11"]`); await page.settle();
+  check('knittr mobile: outline link closes the outline and lands', (await page.eval(landed('session-11'))) === 'ok' && !(await page.eval(`document.getElementById('toc-details').open`)));
+  await sleep(500); await page.shot('knittr-mobile-session');
+});
+
 const failed = results.filter(r => !r.ok);
 console.log(`\n${results.length - failed.length}/${results.length} checks passed${SHOTS ? `; screenshots in ${SHOTS}` : ''}`);
 const exited = new Promise(r => chrome.once('exit', r));

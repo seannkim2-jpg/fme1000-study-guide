@@ -1,0 +1,578 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FME 1000 Deep Study Guide · Knittr</title>
+  <meta name="description" content="FME 1000 midterm guide organized by session and topic, with every entrepreneurship concept applied to the Knittr case.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="./site.css">
+  <style>
+    /* Layout: the rail is the page outline (Start here → Joint → Entrepreneurship → OB → Review), the column is for reading. */
+    .skip { position: absolute; left: -999px; top: 10px; z-index: 50; padding: 8px 14px; border-radius: 10px; background: var(--ink); color: var(--bg); }
+    .skip:focus { left: 16px; }
+
+    .layout {
+      display: grid; grid-template-columns: 248px minmax(0, 1fr); gap: 56px;
+      max-width: 1200px; margin: 0 auto; padding-block: 40px 96px;
+      padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px));
+    }
+    .content { max-width: 780px; }
+
+    /* Rail */
+    .rail { position: sticky; top: calc(var(--topbar) + 20px); align-self: start; }
+    .meter { margin-bottom: 14px; padding: 12px 14px; border: 1px solid var(--line-soft); border-radius: 14px; background: var(--glass); }
+    .meter-top { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+    .meter-top b { font-variant-numeric: tabular-nums; color: var(--green-ink); }
+    .bar { height: 5px; margin-top: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+    .bar div { height: 100%; background: var(--green); border-radius: inherit; transform: scaleX(0); transform-origin: 0 50%; transition: transform .5s var(--ease); }
+    .toc-nav {
+      max-height: calc(100dvh - var(--topbar) - 130px); overflow-y: auto; overscroll-behavior: contain; padding: 4px 4px 28px 0;
+      scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+      mask-image: linear-gradient(transparent, #000 10px, #000 calc(100% - 32px), transparent);
+    }
+    .toc-group { --accent: var(--muted); }
+    .toc-group[data-area="joint"] { --accent: var(--joint); }
+    .toc-group[data-area="ent"] { --accent: var(--ent); }
+    .toc-group[data-area="ob"] { --accent: var(--ob); }
+    .toc-label { display: flex; align-items: center; gap: 8px; margin: 16px 0 4px; padding: 4px 10px; color: var(--muted); font-size: 12px; font-weight: 700; text-decoration: none; }
+    .toc-group:first-child .toc-label { margin-top: 0; }
+    a.toc-label:hover { color: var(--ink); }
+    .toc-label .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+    .toc-count { margin-left: auto; color: var(--muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .toc { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; }
+    .toc a {
+      position: relative; display: grid; grid-template-columns: 22px 1fr; gap: 6px; align-items: baseline;
+      padding: 5px 10px; border-radius: 9px; color: var(--ink-soft); font-size: 13.5px; line-height: 1.35; text-decoration: none;
+      transition: background-color .2s var(--ease), color .2s var(--ease);
+    }
+    .toc-group:not([data-area]) .toc a { display: block; }
+    .toc a:hover { background: var(--tint); color: var(--ink); }
+    .toc a::before { content: ""; position: absolute; left: 0; top: 7px; bottom: 7px; width: 2.5px; border-radius: 2px; background: var(--accent); opacity: 0; transform: scaleY(.3); transition: opacity .25s var(--ease), transform .25s var(--ease); }
+    .toc-group:not([data-area]) .toc a::before { background: var(--green); }
+    .toc a.active { background: var(--tint); color: var(--green-ink); font-weight: 650; }
+    .toc a.active::before { opacity: 1; transform: none; }
+    .toc-num { color: var(--muted); font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .toc a.done .toc-num { color: var(--green); }
+    .toc a.done .toc-num::after { content: "✓"; margin-left: 1px; font-size: 10px; }
+    .toc li[hidden] { display: none; }
+    .rail summary { display: none; }
+    /* Topics show under the session you are reading, so the rail stays short. */
+    .toc-topics { display: none; list-style: none; margin: 2px 0 6px 28px; padding: 0 0 0 8px; border-left: 1px solid var(--line-soft); }
+    .toc li:has(> a.active) > .toc-topics, .toc li:has(.toc-topics a.active) > .toc-topics { display: grid; }
+    .toc .toc-topics a { display: block; padding: 3px 8px; font-size: 12.5px; color: var(--muted); }
+    .toc .toc-topics a.done { color: var(--green-ink); }
+    .toc .toc-topics a.done::after { content: " ✓"; font-size: 10px; }
+
+    /* Intro */
+    .intro > * { animation: rise .7s var(--ease) both; }
+    .intro > :nth-child(2) { animation-delay: .06s; }
+    .intro > :nth-child(3) { animation-delay: .12s; }
+    .intro > :nth-child(n+4) { animation-delay: .18s; }
+    .eyebrow { margin: 0 0 12px; color: var(--green-ink); font-size: 14px; font-weight: 600; }
+    .intro h1 { margin: 0; font: 500 clamp(36px, 4.8vw, 54px)/1.04 var(--serif); letter-spacing: -.025em; }
+    .intro p { max-width: 62ch; color: var(--ink-soft); font-size: 17px; }
+    .intro .facts { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 18px 0 0; padding: 0; color: var(--muted); font-size: 14px; font-weight: 600; }
+    .intro .facts span + span::before { content: "·"; margin: 0 10px; color: var(--line); }
+
+    /* Controls */
+    .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 32px 0 8px; }
+    .segmented { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-sm); }
+    .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 0; border-radius: 9px; background: transparent; color: var(--ink-soft); font-size: 13.5px; font-weight: 600; transition: background-color .2s var(--ease), color .2s var(--ease); }
+    .chip:hover { background: var(--tint); color: var(--ink); }
+    .chip[aria-pressed="true"] { background: var(--green); color: var(--on-green); }
+    .chip .count { font-size: 12px; opacity: .65; font-variant-numeric: tabular-nums; }
+    .search-wrap { position: relative; flex: 1 1 220px; min-width: 0; }
+    .search-wrap svg { position: absolute; left: 13px; top: 50%; width: 16px; height: 16px; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+    .search { width: 100%; min-height: 44px; padding: 0 14px 0 38px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); box-shadow: var(--shadow-sm); transition: border-color .2s var(--ease), box-shadow .2s var(--ease); }
+    .search:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px color-mix(in srgb, var(--green) 16%, transparent); }
+    .empty { display: none; margin: 24px 0; padding: 20px; border: 1px dashed var(--line); border-radius: 14px; color: var(--muted); text-align: center; }
+    .empty.show { display: block; animation: rise .3s var(--ease); }
+
+    /* Content */
+    .part { --accent: var(--green); margin-top: 72px; }
+    .part[data-area="joint"] { --accent: var(--joint); }
+    .part[data-area="ent"] { --accent: var(--ent); }
+    .part[data-area="ob"] { --accent: var(--ob); }
+    .part > h2 { display: flex; align-items: center; gap: 12px; margin: 0 0 12px; font: 500 clamp(28px, 3.2vw, 36px)/1.12 var(--serif); letter-spacing: -.02em; }
+    .part-sessions > h2::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+    .content p, .content li { max-width: 68ch; color: var(--ink-soft); }
+    .content strong { color: var(--ink); font-weight: 650; }
+    .content h4 { display: flex; align-items: center; gap: 10px; margin: 28px 0 8px; color: var(--ink); font: 650 15.5px/1.35 var(--sans); }
+    .content h4::before { content: ""; flex: none; width: 14px; height: 2px; border-radius: 2px; background: var(--accent); }
+    .content ul, .content ol { padding-left: 1.25em; }
+    .content li { margin: 5px 0; }
+    .content li::marker { color: var(--accent); }
+    .content code { padding: 1px 6px; border-radius: 6px; background: var(--track); font-size: .88em; }
+
+    .session {
+      --accent: inherit; position: relative; overflow: hidden;
+      margin-top: 22px; padding: clamp(22px, 3.2vw, 36px) clamp(22px, 3.4vw, 40px);
+      border: 1px solid var(--line-soft); border-radius: 20px; background: var(--card); box-shadow: var(--shadow);
+    }
+    .session::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--accent); }
+    .session-head { display: grid; grid-template-columns: 1fr auto; gap: 8px 16px; align-items: start; padding-bottom: 16px; margin-bottom: 4px; border-bottom: 1px solid var(--line-soft); }
+    .session-meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; grid-column: 1 / -1; }
+    .num { color: var(--muted); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .session h3 { margin: 0; font: 500 clamp(24px, 2.8vw, 30px)/1.16 var(--serif); letter-spacing: -.015em; }
+    .studied {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border: 1px solid var(--line); border-radius: 999px;
+      color: var(--muted); font-size: 13px; font-weight: 650; cursor: pointer; white-space: nowrap; user-select: none;
+      transition: background-color .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease), transform .15s var(--ease);
+    }
+    .studied:active { transform: scale(.96); }
+    .studied input { width: 16px; height: 16px; margin: 0; accent-color: var(--green); }
+    .studied:has(input:checked) { border-color: var(--green); background: var(--tint); color: var(--green-ink); }
+    .session[hidden], .part[hidden], .topic[hidden] { display: none; }
+    .topic-progress { margin-left: auto; color: var(--muted); font-size: 12.5px; font-weight: 650; font-variant-numeric: tabular-nums; }
+    .topic-progress.done { color: var(--green-ink); }
+
+    /* Session → topic → view */
+    .view-label { margin: 0 0 4px; color: var(--accent); font-size: 12px; font-weight: 750; letter-spacing: .04em; text-transform: uppercase; }
+    .overview { margin-top: 16px; }
+    .topic-map { margin: 18px 0 0; padding: 14px 18px; border-radius: 14px; background: var(--surface-alt); }
+    .topic-map ol { margin: 0; columns: 2 240px; column-gap: 28px; }
+    .topic-map li { break-inside: avoid; margin: 3px 0; }
+    .topic-map a { color: var(--ink-soft); text-decoration: none; }
+    .topic-map a:hover { color: var(--ink); text-decoration: underline; }
+    .session-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin: 20px 0 4px; }
+    .hub-link { text-decoration: none; }
+    .topic { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--line-soft); scroll-margin-top: calc(var(--topbar) + 16px); }
+    .topic-head { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+    .content .topic-head h4 { margin: 0; font: 500 21px/1.25 var(--serif); letter-spacing: -.01em; }
+    .content .topic-head h4::before { display: none; }
+    .view { margin-top: 14px; }
+    .view[data-view="apply"] { padding: 12px 16px; border-radius: 12px; background: var(--tint); }
+    .view p:last-child { margin-bottom: 0; }
+    .session[data-show="learn"] .view:not([data-view="learn"]),
+    .session[data-show="apply"] .view:not([data-view="apply"]),
+    .session[data-show="practice"] .view:not([data-view="practice"]) { display: none; }
+
+    .table-wrap { overflow-x: auto; margin: 16px 0; border: 1px solid var(--line-soft); border-radius: 14px; background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+    th, td { padding: 11px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line-soft); }
+    th { background: var(--surface-alt); color: var(--ink); font-size: 13px; font-weight: 700; }
+    tbody tr { transition: background-color .15s var(--ease); }
+    tbody tr:hover { background: var(--surface-alt); }
+    tr:last-child td { border-bottom: 0; }
+
+    blockquote.template { position: relative; margin: 16px 0; padding: 16px 18px 16px 20px; border-left: 3px solid var(--green); border-radius: 4px 14px 14px 4px; background: var(--tint); }
+    blockquote.template p { margin: 0; padding-right: 72px; color: var(--ink); font-family: var(--serif); font-size: 17px; line-height: 1.55; }
+    blockquote.template strong { color: var(--green-ink); }
+    .copy { position: absolute; top: 10px; right: 10px; min-height: 30px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font-size: 12px; font-weight: 700; transition: border-color .2s var(--ease), color .2s var(--ease), transform .15s var(--ease); }
+    .copy:hover { border-color: var(--green); color: var(--green-ink); }
+    .copy:active { transform: scale(.95); }
+
+    .check { margin-top: 26px; padding: 16px 20px; border-radius: 14px; background: var(--gold-bg); }
+    .check-label { margin: 0 0 4px; color: var(--gold-ink); font-size: 13px; font-weight: 750; }
+    .check ul { margin: 0; }
+    .check li { color: var(--ink); }
+    .check li::marker { color: var(--gold-ink); }
+
+    /* Flashcards */
+    .deck-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 16px 0 10px; }
+    .deck-controls select { flex: 0 1 320px; min-width: 0; min-height: 44px; padding: 0 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+    .deck-count { margin-left: auto; color: var(--muted); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .deck-bar { margin: 0 0 16px; }
+    .flash { display: block; width: 100%; padding: 0; border: 0; border-radius: 22px; background: none; perspective: 1400px; text-align: center; }
+    .flash.enter { animation: rise .35s var(--ease); }
+    .flash-inner { display: grid; transform-style: preserve-3d; transition: transform .6s var(--ease); }
+    .flash.flipped .flash-inner { transform: rotateY(180deg); }
+    .face {
+      grid-area: 1 / 1; display: grid; place-content: center; justify-items: center; gap: 12px; min-height: 270px; padding: 40px 32px;
+      border: 1px solid var(--line-soft); border-radius: 22px; background: var(--card); box-shadow: var(--shadow);
+      backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    }
+    .face.back { transform: rotateY(180deg); background: var(--tint); border-color: color-mix(in srgb, var(--green) 30%, transparent); }
+    .flash:hover .face { box-shadow: var(--shadow-lg); }
+    .side-label { color: var(--muted); font-size: 13px; font-weight: 650; }
+    .term { font: 500 clamp(24px, 3.2vw, 34px)/1.2 var(--serif); letter-spacing: -.015em; text-wrap: balance; }
+    .def { max-width: 58ch; color: var(--ink-soft); font-size: 17px; line-height: 1.6; text-wrap: pretty; }
+    .flip-hint { color: var(--muted); font-size: 12px; }
+    kbd { padding: 1px 6px; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 6px; background: var(--surface); font: 600 12px var(--sans); }
+    .deck-nav { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .deck-nav .group { display: flex; gap: 8px; flex-wrap: wrap; }
+    .hint { color: var(--muted); font-size: 13px; }
+
+    footer { margin-top: 64px; padding-top: 20px; border-top: 1px solid var(--line-soft); color: var(--muted); font-size: 13px; }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: minmax(0, 1fr); gap: 0; padding-top: 20px; }
+      .rail { position: static; margin-bottom: 20px; }
+      .rail details { border: 1px solid var(--line-soft); border-radius: 14px; background: var(--glass); padding: 4px 14px; }
+      .rail summary { display: flex; align-items: center; justify-content: space-between; min-height: 44px; font-weight: 700; font-size: 14px; cursor: pointer; list-style: none; }
+      .rail summary::-webkit-details-marker { display: none; }
+      .rail summary::after { content: ""; width: 8px; height: 8px; border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg) translateY(-2px); transition: transform .25s var(--ease); }
+      .rail details[open] summary::after { transform: rotate(-135deg) translateX(-2px); }
+      .toc-nav { max-height: none; mask-image: none; padding-bottom: 12px; }
+      /* Collapse instantly: an animated collapse moves the page while a tapped link is still scrolling. */
+      .rail details::details-content { transition: none; }
+    }
+    @media (max-width: 560px) {
+      .topbar .nav { overflow-x: auto; max-width: 100%; }
+      .session-head { grid-template-columns: 1fr; }
+      .studied { justify-self: start; }
+      .segmented { width: 100%; }
+      .chip { flex: 1 1 auto; justify-content: center; }
+      blockquote.template p { padding-right: 0; padding-top: 28px; }
+      .deck-count { margin-left: 0; }
+    }
+    @media print {
+      .rail, .controls, .copy, .studied, #flashcards { display: none; }
+      .layout { display: block; }
+      .session { box-shadow: none; break-inside: avoid-page; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#top">Skip to the guide</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="./index.html"><span class="mark">FME</span><span><strong>FME 1000</strong><span class="sub">Midterm study kit</span></span></a>
+      <nav class="nav" aria-label="Site">
+        <a href="./index.html">Practice</a>
+        <a href="./knittr-guide.html" aria-current="page">Deep guide</a>
+        <a href="./guide.html">Original guide</a>
+        <a href="#flashcards">Flashcards</a>
+        <a href="./FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">PDF</a>
+      </nav>
+    </div>
+    <div class="read-progress" id="read-progress"></div>
+  </header>
+
+  <div class="layout">
+    <aside class="rail" aria-label="Guide outline">
+      <div class="meter">
+        <div class="meter-top"><span>Topics studied</span><b id="studied-count">0 / {{TOPIC_COUNT}}</b></div>
+        <div class="bar"><div id="studied-bar"></div></div>
+      </div>
+      <details id="toc-details" open>
+        <summary>Guide outline</summary>
+        <nav class="toc-nav" aria-label="Sections">{{TOC}}</nav>
+      </details>
+    </aside>
+
+    <main class="content" id="top">
+      <section class="intro">
+        <p class="eyebrow">Fall 2026 · Sections 6 and 9</p>
+        <h1>FME 1000 Deep Study Guide</h1>
+        {{INTRO}}
+        <p class="facts"><span>90 minutes</span><span>Half Knittr case</span><span>Half OB mini-cases</span><span>{{SESSION_COUNT}} sessions, {{TOPIC_COUNT}} topics</span></p>
+      </section>
+
+      <div class="controls">
+        <div class="segmented" role="group" aria-label="Filter sessions">
+          <button class="chip" type="button" data-filter="all" aria-pressed="true">All<span class="count"></span></button>
+          <button class="chip" type="button" data-filter="ent" aria-pressed="false">Entrepreneurship<span class="count"></span></button>
+          <button class="chip" type="button" data-filter="ob" aria-pressed="false">Org Behavior<span class="count"></span></button>
+          <button class="chip" type="button" data-filter="joint" aria-pressed="false">Joint<span class="count"></span></button>
+          <button class="chip" type="button" data-filter="todo" aria-pressed="false">Not studied<span class="count"></span></button>
+        </div>
+        <label class="search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="search" id="search" type="search" placeholder="Search, e.g. persona, Beatrice" aria-label="Search the guide">
+        </label>
+      </div>
+      <p class="empty" id="empty">No topics match. Clear the search or pick another filter.</p>
+
+      {{SECTIONS}}
+
+      <section class="part" id="flashcards">
+        <h2>Flashcards</h2>
+        <p>{{CARD_COUNT}} key terms from all 13 sessions. Click the card or press <kbd>Space</kbd> to flip, use <kbd>←</kbd> <kbd>→</kbd> to move, and mark the cards you know so they drop out of the deck.</p>
+        <div class="deck-controls">
+          <label for="deck-session" class="hint">Session</label>
+          <select id="deck-session"><option value="all">All sessions</option></select>
+          <button class="btn" type="button" id="deck-shuffle">Shuffle</button>
+          <button class="btn" type="button" id="deck-reset">Reset known</button>
+          <span class="deck-count" id="deck-count"></span>
+        </div>
+        <div class="bar deck-bar"><div id="deck-bar"></div></div>
+        <button class="flash" type="button" id="flash" aria-live="polite"></button>
+        <div class="deck-nav">
+          <div class="group">
+            <button class="btn" type="button" id="deck-prev">← Previous</button>
+            <button class="btn" type="button" id="deck-next">Next →</button>
+          </div>
+          <button class="btn primary" type="button" id="deck-known">I know this one</button>
+        </div>
+      </section>
+
+      <footer>
+        Generated from <code>FME1000_Knittr_Deep_Study_Guide.md</code>. Your progress is saved only in this browser, separately from the original guide.
+        <a href="./index.html">Go to the practice tests</a>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const CARDS = {{CARDS_JSON}};
+    const $ = (id) => document.getElementById(id);
+    const narrow = () => matchMedia('(max-width: 900px)').matches;
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const store = {
+      get(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } },
+      set(key, value) { try { localStorage.setItem(key, JSON.stringify(value)); } catch {} }
+    };
+
+    function toast(message) {
+      $('toast').textContent = message;
+      $('toast').classList.add('show');
+      clearTimeout(toast.timer);
+      toast.timer = setTimeout(() => $('toast').classList.remove('show'), 1600);
+    }
+
+    // Studied tracking: topics are checked one by one; a session is done when all its topics are.
+    // Keys are namespaced so this page never overwrites progress in guide.html.
+    const sessions = [...document.querySelectorAll('.session')];
+    const topics = [...document.querySelectorAll('.topic')];
+    const topicIds = new Set(topics.map(t => t.id));
+    let studied = new Set(store.get('fme-knittr-studied', []).filter(id => topicIds.has(id)));
+    const sessionDone = (s) => [...s.querySelectorAll('.topic')].every(t => studied.has(t.id));
+    function renderStudied() {
+      document.querySelectorAll('[data-studied]').forEach(box => { box.checked = studied.has(box.dataset.studied); });
+      document.querySelectorAll('[data-toc-topic]').forEach(link => link.classList.toggle('done', studied.has(link.dataset.tocTopic)));
+      sessions.forEach(s => {
+        const list = s.querySelectorAll('.topic');
+        const done = [...list].filter(t => studied.has(t.id)).length;
+        const label = s.querySelector('[data-progress]');
+        label.textContent = `${done} / ${list.length} topics studied`;
+        label.classList.toggle('done', done === list.length);
+        document.querySelector(`[data-toc="${s.dataset.session}"]`)?.classList.toggle('done', done === list.length);
+      });
+      $('studied-count').textContent = `${studied.size} / ${topics.length}`;
+      $('studied-bar').style.transform = `scaleX(${studied.size / topics.length})`;
+      document.querySelectorAll('[data-filter]').forEach(chip => {
+        const f = chip.dataset.filter;
+        chip.querySelector('.count').textContent = f === 'all' ? sessions.length : f === 'todo' ? sessions.filter(s => !sessionDone(s)).length : sessions.filter(s => s.dataset.area === f).length;
+      });
+    }
+    document.addEventListener('change', (event) => {
+      const box = event.target.closest('[data-studied]');
+      if (!box) return;
+      box.checked ? studied.add(box.dataset.studied) : studied.delete(box.dataset.studied);
+      store.set('fme-knittr-studied', [...studied]);
+      renderStudied();
+      const session = box.closest('.session');
+      if (box.checked) toast(sessionDone(session) ? `Session ${session.dataset.session} complete` : 'Topic marked studied');
+      if (filter === 'todo') applyFilter();
+    });
+
+    // Learn / Application / Practice switch, per session
+    document.querySelectorAll('[data-set-view]').forEach(chip => chip.addEventListener('click', () => {
+      const session = chip.closest('.session');
+      session.dataset.show = chip.dataset.setView;
+      session.querySelectorAll('[data-set-view]').forEach(c => c.setAttribute('aria-pressed', String(c === chip)));
+    }));
+
+    // Filter and search. Search works per topic: a session stays visible if its heading or any topic matches.
+    let filter = 'all';
+    function applyFilter() {
+      const query = $('search').value.trim().toLowerCase();
+      let shown = 0;
+      sessions.forEach(section => {
+        const areaOk = filter === 'all' || section.dataset.area === filter || (filter === 'todo' && !sessionDone(section));
+        const headOk = !query || [...section.querySelectorAll('.session-head, .overview')].some(el => el.textContent.toLowerCase().includes(query));
+        let anyTopic = false;
+        section.querySelectorAll('.topic').forEach(topic => {
+          const ok = headOk || topic.textContent.toLowerCase().includes(query);
+          const todoOk = filter !== 'todo' || !studied.has(topic.id);
+          topic.hidden = !(ok && todoOk);
+          anyTopic ||= !topic.hidden;
+          const link = document.querySelector(`[data-toc-topic="${topic.id}"]`);
+          if (link) link.parentElement.hidden = topic.hidden;
+        });
+        section.hidden = !(areaOk && anyTopic);
+        if (!section.hidden) shown++;
+        const link = document.querySelector(`[data-toc="${section.dataset.session}"]`);
+        if (link) link.parentElement.hidden = section.hidden;
+      });
+      document.querySelectorAll('.part-sessions').forEach(part => {
+        part.hidden = !part.querySelector('.session:not([hidden])');
+      });
+      const narrowed = filter !== 'all' || query;
+      document.querySelectorAll('.part:not(.part-sessions)').forEach(part => {
+        part.hidden = narrowed && part.id !== 'flashcards' && !(query && part.textContent.toLowerCase().includes(query));
+      });
+      $('empty').classList.toggle('show', shown === 0);
+    }
+    function setFilter(name) {
+      filter = name;
+      document.querySelectorAll('[data-filter]').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === name)));
+      applyFilter();
+    }
+    document.querySelectorAll('[data-filter]').forEach(chip => chip.addEventListener('click', () => setFilter(chip.dataset.filter)));
+    $('search').addEventListener('input', applyFilter);
+
+    // Outline links: a filter or search can hide the target, so clear them first and the jump always lands.
+    const railLinks = new Map([...document.querySelectorAll('.rail a[href^="#"]')].map(a => [a.getAttribute('href').slice(1), a]));
+    railLinks.forEach((link, id) => link.addEventListener('click', (event) => {
+      const target = $(id);
+      if (!target) return;
+      if (target.hidden || target.closest('[hidden]')) { $('search').value = ''; setFilter('all'); }
+      if (!narrow()) return;
+      // On phones the outline sits above the content; close it first, then scroll once the layout has settled.
+      event.preventDefault();
+      $('toc-details').open = false;
+      requestAnimationFrame(() => {
+        target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+        history.replaceState(null, '', `#${id}`);
+      });
+    }));
+
+    // Topic-map and hub links inside the content get the same treatment.
+    document.querySelector('.content').addEventListener('click', (event) => {
+      const link = event.target.closest('a[href^="#"]');
+      const target = link && $(link.getAttribute('href').slice(1));
+      if (target && (target.hidden || target.closest('[hidden]'))) { $('search').value = ''; setFilter('all'); }
+    });
+
+    // Highlight where you are and keep that row visible in the rail.
+    const tocNav = document.querySelector('.toc-nav');
+    function setActive(id) {
+      const link = railLinks.get(id);
+      if (!link) return;
+      const parent = link.closest('.toc-topics')?.parentElement.querySelector(':scope > a');
+      railLinks.forEach(a => a.classList.toggle('active', a === link || a === parent));
+      if (narrow() || tocNav.scrollHeight <= tocNav.clientHeight) return;
+      const top = link.getBoundingClientRect().top - tocNav.getBoundingClientRect().top;
+      if (top < 24 || top > tocNav.clientHeight - 56) tocNav.scrollBy({ top: top - tocNav.clientHeight / 3, behavior: 'smooth' });
+    }
+    if ('IntersectionObserver' in window) {
+      const spy = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && setActive(e.target.id)), { rootMargin: '-25% 0px -65% 0px' });
+      document.querySelectorAll('.session, .topic, .part:not(.part-sessions)').forEach(el => spy.observe(el));
+      if (!reduceMotion) {
+        const reveal = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); } }), { rootMargin: '0px 0px -6% 0px' });
+        document.querySelectorAll('.session, .part > h2, .part:not(.part-sessions) > :not(h2)').forEach(el => { el.classList.add('reveal'); reveal.observe(el); });
+      }
+    }
+
+    // Reading progress under the top bar
+    let ticking = false;
+    addEventListener('scroll', () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        $('read-progress').style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
+        ticking = false;
+      });
+    }, { passive: true });
+
+    // Copy buttons on answer templates
+    document.querySelectorAll('blockquote.template').forEach(quote => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'copy';
+      button.textContent = 'Copy';
+      button.addEventListener('click', async () => {
+        const text = quote.querySelector('p').textContent;
+        try { await navigator.clipboard.writeText(text); toast('Template copied'); }
+        catch {
+          const range = document.createRange();
+          range.selectNodeContents(quote.querySelector('p'));
+          getSelection().removeAllRanges();
+          getSelection().addRange(range);
+          toast('Text selected. Press Ctrl+C or ⌘C to copy');
+        }
+      });
+      quote.appendChild(button);
+    });
+
+    // The outline starts collapsed on small screens
+    if (narrow()) $('toc-details').open = false;
+
+    // Flashcards
+    const sessionNames = Object.fromEntries([...document.querySelectorAll('[data-toc]')].map(link => [link.dataset.toc, link.querySelector('.toc-name').textContent]));
+    const sessionIds = [...new Set(CARDS.map(card => card.s))].sort((a, b) => a - b);
+    sessionIds.forEach(id => {
+      const option = document.createElement('option');
+      option.value = id;
+      option.textContent = id === 0 ? 'Exam method (C-E-A-R)' : `Session ${id}: ${sessionNames[id] || ''}`;
+      $('deck-session').appendChild(option);
+    });
+    let known = new Set(store.get('fme-knittr-known-cards', []));
+    let deck = [];
+    let position = 0;
+    let flipped = false;
+
+    function buildDeck(shuffle) {
+      const pick = $('deck-session').value;
+      deck = CARDS.map((card, index) => ({ ...card, index }))
+        .filter(card => (pick === 'all' || String(card.s) === pick) && !known.has(card.index));
+      if (shuffle) {
+        for (let i = deck.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+      }
+      position = 0;
+      renderCard(true);
+    }
+
+    function setFlipped(value) {
+      flipped = value;
+      $('flash').classList.toggle('flipped', value);
+      const [front, back] = $('flash').querySelectorAll('.face');
+      front?.setAttribute('aria-hidden', String(value));
+      back?.setAttribute('aria-hidden', String(!value));
+    }
+
+    function renderCard(enter) {
+      const flash = $('flash');
+      const pick = $('deck-session').value;
+      const total = CARDS.filter(card => pick === 'all' || String(card.s) === pick).length;
+      $('deck-count').textContent = deck.length ? `Card ${position + 1} of ${deck.length}, ${total - deck.length} known` : `${total} of ${total} known`;
+      $('deck-bar').style.transform = `scaleX(${total ? (total - deck.length) / total : 0})`;
+      flash.className = 'flash';
+      if (!deck.length) {
+        flash.innerHTML = '<span class="flash-inner"><span class="face"><span class="side-label">Deck complete</span><span class="term">You marked every card in this set as known.</span></span></span>';
+        flipped = false;
+        return;
+      }
+      const card = deck[position];
+      const label = card.s === 0 ? 'Exam method' : `Session ${card.s}`;
+      flash.innerHTML = `<span class="flash-inner"><span class="face front"><span class="side-label">${label} · term</span><span class="term"></span><span class="flip-hint">Click to flip</span></span><span class="face back"><span class="side-label">${label} · definition</span><span class="def"></span></span></span>`;
+      flash.querySelector('.term').textContent = card.t;
+      flash.querySelector('.def').textContent = card.d;
+      setFlipped(false);
+      if (enter && !reduceMotion) { void flash.offsetWidth; flash.classList.add('enter'); }
+    }
+
+    function move(step) {
+      if (!deck.length) return;
+      position = (position + step + deck.length) % deck.length;
+      renderCard(true);
+    }
+
+    $('flash').addEventListener('click', () => { if (deck.length) setFlipped(!flipped); });
+    $('deck-next').addEventListener('click', () => move(1));
+    $('deck-prev').addEventListener('click', () => move(-1));
+    $('deck-shuffle').addEventListener('click', () => { buildDeck(true); toast('Deck shuffled'); });
+    $('deck-session').addEventListener('change', () => buildDeck(false));
+    $('deck-reset').addEventListener('click', () => { known = new Set(); store.set('fme-knittr-known-cards', []); buildDeck(false); toast('Known cards reset'); });
+    $('deck-known').addEventListener('click', () => {
+      if (!deck.length) return;
+      known.add(deck[position].index);
+      store.set('fme-knittr-known-cards', [...known]);
+      deck.splice(position, 1);
+      if (position >= deck.length) position = 0;
+      renderCard(true);
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.target.closest('input, select, textarea')) return;
+      const deckInView = $('flashcards').getBoundingClientRect().top < innerHeight * .6;
+      if (!deckInView) return;
+      if (event.key === 'ArrowRight') move(1);
+      else if (event.key === 'ArrowLeft') move(-1);
+      else if (event.key === ' ' && document.activeElement !== $('flash') && deck.length) { event.preventDefault(); setFlipped(!flipped); }
+    });
+
+    renderStudied();
+    buildDeck(false);
+  </script>
+</body>
+</html>
