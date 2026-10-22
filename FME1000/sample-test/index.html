@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FME 1000 Practice Test</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #16251f;
+      --muted: #65736d;
+      --paper: #f7f4ec;
+      --card: #fffdf8;
+      --green: #0b6b4f;
+      --green-dark: #064b39;
+      --lime: #c8dc72;
+      --gold: #e3ae4b;
+      --red: #bd4b3f;
+      --line: #dcded5;
+      --shadow: 0 24px 70px rgba(25, 54, 43, .13);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 5%, rgba(200, 220, 114, .42), transparent 27rem),
+        linear-gradient(135deg, #f8f4e9 0%, #edf4ed 100%);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+
+    .shell {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: var(--green);
+      color: white;
+      font-weight: 900;
+      letter-spacing: -.05em;
+      box-shadow: 0 10px 25px rgba(11, 107, 79, .2);
+    }
+    .brand strong { display: block; font-size: 15px; letter-spacing: .04em; }
+    .brand span { color: var(--muted); font-size: 13px; }
+
+    .pill {
+      padding: 8px 12px;
+      border: 1px solid rgba(11, 107, 79, .18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .62);
+      color: var(--green-dark);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .panel {
+      overflow: hidden;
+      background: rgba(255, 253, 248, .94);
+      border: 1px solid rgba(255, 255, 255, .9);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr .75fr;
+      min-height: 600px;
+    }
+
+    .hero-copy { padding: clamp(36px, 6vw, 76px); }
+    .eyebrow {
+      margin: 0 0 16px;
+      color: var(--green);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 650px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 7vw, 76px);
+      font-weight: 500;
+      line-height: .98;
+      letter-spacing: -.045em;
+    }
+    .lede {
+      max-width: 590px;
+      margin: 28px 0 32px;
+      color: #51615a;
+      font-size: 18px;
+      line-height: 1.65;
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .primary, .secondary {
+      min-height: 48px;
+      padding: 0 20px;
+      border-radius: 12px;
+      font-weight: 800;
+    }
+    .primary { border: 0; background: var(--green); color: white; box-shadow: 0 10px 24px rgba(11,107,79,.2); }
+    .primary:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .primary:disabled { cursor: not-allowed; opacity: .42; transform: none; }
+    .secondary { border: 1px solid var(--line); background: transparent; color: var(--ink); }
+    .secondary:hover { border-color: var(--green); color: var(--green); }
+
+    .hero-side {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 38px;
+      background: var(--green-dark);
+      color: white;
+    }
+    .hero-side h2 { margin: 0 0 20px; font: 500 28px/1.2 Georgia, serif; }
+    .topic-list { display: grid; gap: 10px; }
+    .topic {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 15px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      font-size: 14px;
+    }
+    .topic b { color: var(--lime); }
+    .side-note { margin: 30px 0 0; color: rgba(255,255,255,.68); font-size: 13px; line-height: 1.5; }
+
+    .quiz { display: none; }
+    .quiz.active { display: block; }
+    .quiz-head { padding: 28px 34px 22px; border-bottom: 1px solid var(--line); }
+    .meta { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .meta strong { font-size: 14px; }
+    .meta span { color: var(--muted); font-size: 13px; }
+    .progress { height: 8px; margin-top: 16px; overflow: hidden; border-radius: 999px; background: #e7e9e1; }
+    .progress div { height: 100%; width: 0; border-radius: inherit; background: linear-gradient(90deg, var(--green), #55a06f); transition: width .35s ease; }
+
+    .question-wrap { padding: clamp(30px, 5vw, 60px); }
+    .question-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .tag { padding: 6px 10px; border-radius: 999px; background: #e8f0e8; color: var(--green-dark); font-size: 12px; font-weight: 800; }
+    .tag.session { background: #f2ead7; color: #795719; }
+    .question { max-width: 790px; margin: 0 0 30px; font: 500 clamp(25px, 3.5vw, 38px)/1.22 Georgia, serif; }
+    .choices { display: grid; gap: 12px; }
+    .choice {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: white;
+      color: var(--ink);
+      text-align: left;
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+    .choice:hover:not(:disabled) { border-color: var(--green); transform: translateX(3px); }
+    .choice .letter { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 9px; background: #f0f1eb; font-weight: 900; }
+    .choice.selected { border-color: var(--green); background: #eef6ef; }
+    .choice.correct { border-color: #3f8a5f; background: #e6f3e9; }
+    .choice.wrong { border-color: var(--red); background: #faeae7; }
+    .choice:disabled { cursor: default; }
+
+    .explanation {
+      display: none;
+      margin-top: 24px;
+      padding: 18px 20px;
+      border-left: 4px solid var(--green);
+      border-radius: 4px 12px 12px 4px;
+      background: #eef3eb;
+      color: #34463e;
+      line-height: 1.55;
+    }
+    .explanation.show { display: block; }
+    .explanation strong { color: var(--green-dark); }
+    .quiz-actions { display: flex; justify-content: space-between; gap: 14px; margin-top: 28px; }
+
+    .results { display: none; padding: clamp(36px, 6vw, 70px); }
+    .results.active { display: block; }
+    .score-ring {
+      display: grid;
+      place-items: center;
+      width: 150px;
+      height: 150px;
+      margin-bottom: 28px;
+      border-radius: 50%;
+      background: conic-gradient(var(--green) var(--score), #e4e6df 0);
+      position: relative;
+    }
+    .score-ring::after { content: ""; position: absolute; inset: 11px; border-radius: 50%; background: var(--card); }
+    .score-ring div { z-index: 1; text-align: center; }
+    .score-ring strong { display: block; font: 600 36px Georgia, serif; }
+    .score-ring span { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .results h2 { margin: 0; font: 500 clamp(36px, 5vw, 58px)/1 Georgia, serif; }
+    .results > p { max-width: 650px; color: var(--muted); font-size: 17px; line-height: 1.6; }
+    .breakdown { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
+    .stat { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .stat span { display: block; color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; }
+    .stat strong { display: block; margin-top: 5px; font-size: 25px; }
+    .review { display: grid; gap: 12px; margin: 28px 0; }
+    .review-item { padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: white; }
+    .review-item small { color: var(--red); font-weight: 800; }
+    .review-item h3 { margin: 7px 0 9px; font-size: 16px; }
+    .review-item p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    dialog {
+      width: min(560px, calc(100% - 32px));
+      padding: 0;
+      border: 0;
+      border-radius: 24px;
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: 0 28px 100px rgba(12, 35, 27, .28);
+    }
+    dialog::backdrop { background: rgba(10, 28, 22, .55); backdrop-filter: blur(5px); }
+    .modal-body { padding: 34px; }
+    .modal-body h2 { margin: 0 0 10px; font: 500 34px Georgia, serif; }
+    .modal-body p { color: var(--muted); line-height: 1.55; }
+    .settings { display: grid; gap: 12px; margin: 24px 0; }
+    .setting {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+    }
+    .setting label { font-weight: 800; }
+    .setting span { color: var(--muted); font-size: 13px; }
+    .setting input { width: 20px; height: 20px; accent-color: var(--green); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+
+    .home-screen { display: grid; gap: 20px; }
+    .mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .mode-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 255px;
+      padding: 26px;
+      border: 1px solid rgba(11, 107, 79, .13);
+      border-radius: 22px;
+      background: rgba(255, 253, 248, .9);
+      box-shadow: 0 14px 42px rgba(25, 54, 43, .08);
+    }
+    .mode-number { color: var(--green); font-size: 12px; font-weight: 900; letter-spacing: .13em; text-transform: uppercase; }
+    .mode-card h2 { margin: 16px 0 10px; font: 500 27px/1.12 Georgia, serif; }
+    .mode-card p { margin: 0 0 24px; color: var(--muted); font-size: 14px; line-height: 1.55; }
+    .mode-card .primary, .mode-card .secondary { width: 100%; margin-top: auto; }
+    .mode-card.featured { background: var(--green-dark); color: white; }
+    .mode-card.featured .mode-number { color: var(--lime); }
+    .mode-card.featured p { color: rgba(255,255,255,.7); }
+    .mode-card.featured .primary { background: var(--lime); color: var(--green-dark); box-shadow: none; }
+    .mode-card.featured .primary:hover { background: #d5e687; }
+    .stats-strip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 26px;
+      padding: 18px 24px;
+      border: 1px solid rgba(11, 107, 79, .12);
+      border-radius: 18px;
+      background: rgba(255,255,255,.58);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .stats-strip strong { color: var(--ink); font-size: 16px; }
+    .stats-strip a { margin-left: auto; color: var(--green); font-weight: 800; text-decoration: none; }
+    .stats-strip a:hover { text-decoration: underline; }
+    .topic-tree { padding: clamp(28px, 5vw, 48px); }
+    .tree-head { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; }
+    .tree-head h2 { margin: 5px 0 0; font: 500 clamp(30px, 4vw, 44px)/1.08 Georgia, serif; }
+    .tree-head p:last-child { max-width: 480px; margin: 0; color: var(--muted); line-height: 1.55; }
+    .tree-root { padding: 14px; border: 1px solid rgba(11, 107, 79, .15); border-radius: 18px; background: #f3f6ed; }
+    .tree-root > summary { color: var(--green-dark); font-size: 16px; font-weight: 900; }
+    .tree-branches { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 14px; }
+    .tree-branch { padding: 16px; border-radius: 14px; background: white; border: 1px solid var(--line); }
+    .tree-branch > summary { font-weight: 900; }
+    .tree-branch.joint > summary { color: #795719; }
+    .tree-branch.ent > summary { color: var(--green); }
+    .tree-branch.ob > summary { color: #315d85; }
+    details summary { cursor: pointer; }
+    .tree-session { margin-top: 12px; padding-top: 12px; border-top: 1px solid #e6e8df; }
+    .tree-session summary { font-size: 13px; font-weight: 850; line-height: 1.4; }
+    .tree-session ul { margin: 10px 0 2px; padding-left: 19px; color: var(--muted); font-size: 12.5px; line-height: 1.55; }
+    .tree-session li + li { margin-top: 5px; }
+    .course-chain { margin: 18px 0 0; padding: 16px 18px; border-left: 4px solid var(--green); border-radius: 5px 13px 13px 5px; background: #eef3eb; color: #34463e; font-size: 13px; line-height: 1.65; }
+
+    .practice-page { display: none; }
+    .practice-page.active { display: block; }
+    .page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 22px 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .page-title { margin: 2px 0 0; font: 500 25px Georgia, serif; }
+    .page-kicker { margin: 0; color: var(--green); font-size: 11px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .workspace { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); min-height: 620px; }
+    .case-pane, .answer-pane { padding: clamp(26px, 4vw, 46px); }
+    .case-pane { border-right: 1px solid var(--line); background: #fbf9f2; }
+    .case-title { margin: 18px 0 14px; font: 500 clamp(25px, 3vw, 34px)/1.22 Georgia, serif; }
+    .case-copy { color: #415148; line-height: 1.72; }
+    .tip-box { margin-top: 26px; padding: 17px; border-radius: 14px; background: #eaf2e8; color: #385045; font-size: 13px; line-height: 1.55; }
+    .tip-box strong { color: var(--green-dark); }
+    .answer-pane label { display: block; margin-bottom: 10px; font-weight: 850; }
+    textarea {
+      width: 100%;
+      min-height: 330px;
+      resize: vertical;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      outline: none;
+      background: white;
+      color: var(--ink);
+      font: 15px/1.65 Inter, ui-sans-serif, system-ui, sans-serif;
+    }
+    textarea:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(11,107,79,.09); }
+    .answer-meta { display: flex; justify-content: space-between; gap: 14px; margin-top: 8px; color: var(--muted); font-size: 12px; }
+    .answer-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .coach { display: none; margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+    .coach.show { display: block; }
+    .coach h3 { margin: 0 0 14px; font: 500 24px Georgia, serif; }
+    .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 18px; }
+    .check-item { padding: 12px; border: 1px solid var(--line); border-radius: 11px; background: white; font-size: 13px; line-height: 1.4; }
+    .check-item b { color: var(--green); }
+    .model-answer { padding: 18px; border-radius: 14px; background: #eef3eb; color: #34463e; line-height: 1.68; }
+    .model-answer strong { color: var(--green-dark); }
+    .self-rate { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .self-rate > span { margin-right: 4px; color: var(--muted); font-size: 13px; font-weight: 750; }
+    .rate-button { width: 38px; height: 38px; border: 1px solid var(--line); border-radius: 10px; background: white; color: var(--ink); font-weight: 850; }
+    .rate-button:hover, .rate-button.active { border-color: var(--green); background: var(--green); color: white; }
+
+    .mock-body { padding: clamp(26px, 5vw, 54px); }
+    .mock-intro { display: flex; justify-content: space-between; align-items: flex-start; gap: 24px; margin-bottom: 28px; }
+    .mock-intro h2 { margin: 0 0 10px; font: 500 clamp(28px, 4vw, 42px) Georgia, serif; }
+    .mock-intro p { max-width: 700px; margin: 0; color: var(--muted); line-height: 1.6; }
+    .timer { min-width: 122px; padding: 13px 16px; border-radius: 13px; background: var(--green-dark); color: white; text-align: center; }
+    .timer span { display: block; color: var(--lime); font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .timer strong { display: block; margin-top: 3px; font: 500 25px Georgia, serif; }
+    .mock-list { display: grid; gap: 18px; }
+    .mock-card { padding: 24px; border: 1px solid var(--line); border-radius: 17px; background: white; }
+    .mock-card h3 { margin: 13px 0 16px; font: 500 22px/1.35 Georgia, serif; }
+    .mock-card textarea { min-height: 220px; }
+    .mock-footer { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 24px; }
+    .save-status { color: var(--muted); font-size: 13px; }
+    .mock-review { display: none; margin-top: 30px; padding-top: 28px; border-top: 1px solid var(--line); }
+    .mock-review.show { display: block; }
+    .mock-review h2 { font: 500 32px Georgia, serif; }
+    .review-answer { margin-top: 14px; padding: 20px; border-left: 4px solid var(--green); border-radius: 5px 13px 13px 5px; background: #eef3eb; line-height: 1.65; }
+    .review-answer h3 { margin: 0 0 8px; font-size: 15px; }
+    .review-answer p { margin: 0; color: #405047; }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 10;
+      padding: 12px 16px;
+      border-radius: 11px;
+      background: var(--green-dark);
+      color: white;
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: .2s ease;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 760px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-side { min-height: 360px; }
+      .breakdown { grid-template-columns: 1fr; }
+      .question-wrap, .quiz-head { padding-left: 22px; padding-right: 22px; }
+      .mode-grid, .workspace { grid-template-columns: 1fr; }
+      .case-pane { border-right: 0; border-bottom: 1px solid var(--line); }
+      .checklist { grid-template-columns: 1fr; }
+      .mock-intro, .mock-footer { flex-direction: column; }
+      .timer { align-self: stretch; }
+      .stats-strip a { width: 100%; margin-left: 0; }
+      .tree-head { align-items: flex-start; flex-direction: column; }
+      .tree-branches { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header>
+      <div class="brand">
+        <div class="mark">FME</div>
+        <div><strong>FME 1000</strong><span>Midterm practice</span></div>
+      </div>
+      <div class="pill" id="header-status">13 sessions · 3 practice modes</div>
+    </header>
+
+    <div class="home-screen" id="home-screen">
+    <section class="panel hero" id="welcome">
+      <div class="hero-copy">
+        <p class="eyebrow">FME 1000 midterm lab</p>
+        <h1>Practice how the test asks you to think.</h1>
+        <p class="lede">Learn the concepts, apply them to a case, and turn your reasoning into a clear C-E-A-R answer. Everything runs locally and saves only in this browser.</p>
+        <div class="actions">
+          <button class="primary" id="written-start">Practice a written case</button>
+          <button class="secondary" id="quick-start">Quick concept check</button>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <div>
+          <h2>Built around your exam</h2>
+          <div class="topic-list">
+            <div class="topic"><span>Entrepreneurship</span><b>6 sessions</b></div>
+            <div class="topic"><span>Organizational Behavior</span><b>5 sessions</b></div>
+            <div class="topic"><span>Joint material</span><b>2 sessions</b></div>
+          </div>
+        </div>
+        <p class="side-note">The real midterm uses short essays. Written practice is the main mode; multiple choice is here for fast recall.</p>
+      </aside>
+    </section>
+
+    <section class="mode-grid" aria-label="Practice modes">
+      <article class="mode-card">
+        <span class="mode-number">01 · Recall</span>
+        <h2>Concept check</h2>
+        <p>Answer shuffled questions across all 13 sessions. Get immediate explanations and a topic breakdown.</p>
+        <button class="secondary" id="open-test">Choose concept topics</button>
+      </article>
+      <article class="mode-card featured">
+        <span class="mode-number">02 · Application</span>
+        <h2>Written case coach</h2>
+        <p>Write one C-E-A-R response, compare it with a model answer, and score the four parts yourself.</p>
+        <button class="primary" id="written-card-start">Open case coach</button>
+      </article>
+      <article class="mode-card">
+        <span class="mode-number">03 · Simulation</span>
+        <h2>90-minute mock</h2>
+        <p>Complete two entrepreneurship and two OB cases with a live timer and delayed model answers.</p>
+        <button class="secondary" id="mock-start">Start mock exam</button>
+      </article>
+    </section>
+
+    <div class="stats-strip">
+      <span><strong id="stat-questions">0</strong> concept questions answered</span>
+      <span><strong id="stat-accuracy">—</strong> accuracy</span>
+      <span><strong id="stat-cases">0</strong> written cases completed</span>
+      <a href="../FME1000_Midterm_Master_Study_Guide.pdf" target="_blank" rel="noopener">Open the updated master study guide ↗</a>
+    </div>
+
+    <section class="panel topic-tree" aria-labelledby="tree-title">
+      <div class="tree-head">
+        <div><p class="eyebrow">Course map</p><h2 id="tree-title">Topics → components to know</h2></div>
+        <p>Open a branch, then a session. For every component, be able to define it, find evidence of it in a case, and recommend a specific response.</p>
+      </div>
+      <details class="tree-root" open>
+        <summary>FME 1000 midterm · 13 sessions</summary>
+        <div class="tree-branches">
+          <details class="tree-branch joint" open>
+            <summary>Joint foundation · 2</summary>
+            <details class="tree-session"><summary>S1 · Entrepreneurial Thought and Action</summary><ul><li>Prediction logic for a knowable future</li><li>Creation logic under uncertainty</li><li>Means at hand and affordable loss</li><li>Act → learn → adjust</li></ul></details>
+            <details class="tree-session"><summary>S9 · Rocket Pitch</summary><ul><li>Customer → problem → solution</li><li>Benefit, difference, and reason to believe</li><li>Concise delivery and clear team handoffs</li><li>Apply feedback to the argument</li></ul></details>
+          </details>
+          <details class="tree-branch ent" open>
+            <summary>Entrepreneurship · 6</summary>
+            <details class="tree-session"><summary>S3 · Problem Solving and Idea Generation</summary><ul><li>Idea versus opportunity</li><li>Customer problem and current workaround</li><li>“How might we?” framing</li><li>Diverge before converging</li><li>Brainstorming rules and human judgment of AI output</li></ul></details>
+            <details class="tree-session"><summary>S5 · Empathy and Design Thinking</summary><ul><li>Empathy and observation</li><li>Neutral discovery interviews about past behavior</li><li>Needs, frustrations, actions, and workarounds</li><li>Empathize → define → ideate → prototype → test</li></ul></details>
+            <details class="tree-session"><summary>S7 · Value Proposition and Target Market</summary><ul><li>Customer, consumer, payer, and decision-maker</li><li>Segments, first target market, and evidence-based persona</li><li>Resonate, differentiate, and substantiate</li><li>Create, deliver, and capture value</li></ul></details>
+            <details class="tree-session"><summary>S8 · Prototyping</summary><ul><li>Riskiest assumption</li><li>Smallest credible learning test</li><li>Observable customer behavior</li><li>Feedback, iteration, and MVP</li></ul></details>
+            <details class="tree-session"><summary>S11 · Opportunity Evaluation</summary><ul><li>Desirability: do customers care and act?</li><li>Feasibility: can the team deliver?</li><li>Viability: can the model sustain itself?</li><li>Alternatives, resources, risks, and impact</li></ul></details>
+            <details class="tree-session"><summary>S12 · Market Research</summary><ul><li>Primary versus secondary research</li><li>Qualitative versus quantitative evidence</li><li>Methods, sampling, and unbiased questions</li><li>Patterns, interpretation, and disconfirming evidence</li><li>Product, price, place, promotion, and revenue</li></ul></details>
+          </details>
+          <details class="tree-branch ob" open>
+            <summary>Organizational Behavior · 5</summary>
+            <details class="tree-session"><summary>S2 · Culture and Norms</summary><ul><li>Shared values, assumptions, and behavior</li><li>Formal rules versus informal norms</li><li>Visible artifacts versus invisible beliefs</li><li>Team charters and consistent reinforcement</li></ul></details>
+            <details class="tree-session"><summary>S4 · Emotional Intelligence</summary><ul><li>Self-awareness and self-management</li><li>Social awareness and relationship management</li><li>Triggers: respond instead of react</li><li>Trust: authenticity + logic + empathy</li></ul></details>
+            <details class="tree-session"><summary>S6 · Positive Teaming and Psychological Safety</summary><ul><li>Performance, learning, and well-being</li><li>Safety for questions, dissent, and mistakes</li><li>Constructive conflict and productive failure</li><li>Process gains and losses</li><li>Team design, launch, and process management</li></ul></details>
+            <details class="tree-session"><summary>S10 · Diversity of Thought and DiSC</summary><ul><li>D: results and speed</li><li>I: energy and persuasion</li><li>S: patience and support</li><li>C: evidence and quality</li><li>Flex communication; do not stereotype</li></ul></details>
+            <details class="tree-session"><summary>S13 · Inclusion and Identity</summary><ul><li>Personal and social identity</li><li>Visible and invisible differences</li><li>Diversity, inclusion, and belonging</li><li>Bias, assumptions, and faultlines</li><li>Inclusive airtime, roles, and decisions</li></ul></details>
+          </details>
+        </div>
+      </details>
+      <p class="course-chain"><strong>Course-wide chain:</strong> Understand people → define a meaningful problem → generate options → choose a target and value proposition → prototype the riskiest assumption → collect evidence → evaluate the opportunity → pitch it clearly → build a team where different people can contribute and learn.</p>
+    </section>
+    </div>
+
+    <section class="panel quiz" id="quiz" aria-live="polite">
+      <div class="quiz-head">
+        <div class="meta"><strong id="progress-label">Question 1 of 20</strong><span id="score-label">0 correct</span></div>
+        <div class="progress"><div id="progress-bar"></div></div>
+      </div>
+      <div class="question-wrap">
+        <div class="question-tags"><span class="tag" id="category-tag"></span><span class="tag session" id="session-tag"></span></div>
+        <h2 class="question" id="question-text"></h2>
+        <div class="choices" id="choices"></div>
+        <div class="explanation" id="explanation"></div>
+        <div class="quiz-actions">
+          <button class="secondary" id="exit-test">Exit test</button>
+          <button class="primary" id="next-question" disabled>Check answer</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel results" id="results">
+      <div class="score-ring" id="score-ring"><div><strong id="final-score">0%</strong><span>FINAL SCORE</span></div></div>
+      <h2 id="result-title">Test complete.</h2>
+      <p id="result-copy"></p>
+      <div class="breakdown" id="breakdown"></div>
+      <div id="review-section">
+        <h3>Questions to revisit</h3>
+        <div class="review" id="review"></div>
+      </div>
+      <div class="actions">
+        <button class="primary" id="retry">Try another version</button>
+        <button class="secondary" id="home">Back to start</button>
+      </div>
+    </section>
+
+    <section class="panel practice-page" id="written-page" aria-live="polite">
+      <div class="page-head">
+        <div><p class="page-kicker">Written case coach</p><h2 class="page-title" id="written-position">Case 1</h2></div>
+        <button class="secondary" id="exit-written">Back home</button>
+      </div>
+      <div class="workspace">
+        <article class="case-pane">
+          <div class="question-tags"><span class="tag" id="written-category"></span><span class="tag session" id="written-session"></span></div>
+          <h2 class="case-title" id="written-title"></h2>
+          <p class="case-copy" id="written-prompt"></p>
+          <div class="tip-box"><strong>C-E-A-R:</strong> Name the <b>Concept</b>, cite case <b>Evidence</b>, explain your <b>Analysis</b>, then give a concrete <b>Response and result</b>.</div>
+        </article>
+        <article class="answer-pane">
+          <label for="written-answer">Your answer</label>
+          <textarea id="written-answer" placeholder="Write one focused paragraph. Use exact course language and connect every claim to the case."></textarea>
+          <div class="answer-meta"><span id="written-words">0 words</span><span id="written-save">Draft saves automatically</span></div>
+          <div class="answer-actions">
+            <button class="secondary" id="new-written">Try another case</button>
+            <button class="primary" id="reveal-written">Compare answer</button>
+          </div>
+          <div class="coach" id="written-coach">
+            <h3>Check the structure</h3>
+            <div class="checklist" id="written-checklist"></div>
+            <div class="model-answer" id="written-model"></div>
+            <div class="self-rate">
+              <span>How many C-E-A-R parts did you include?</span>
+              <button class="rate-button" data-rate="0">0</button><button class="rate-button" data-rate="1">1</button><button class="rate-button" data-rate="2">2</button><button class="rate-button" data-rate="3">3</button><button class="rate-button" data-rate="4">4</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="panel practice-page" id="mock-page">
+      <div class="page-head">
+        <div><p class="page-kicker">Exam simulation</p><h2 class="page-title">Four short essays</h2></div>
+        <button class="secondary" id="exit-mock">Save and exit</button>
+      </div>
+      <div class="mock-body">
+        <div class="mock-intro">
+          <div><h2>Build the answer from the facts.</h2><p>You have 90 minutes. Use C-E-A-R, answer every part of each prompt, and spend more space applying concepts than defining them. Model answers stay hidden until you submit.</p></div>
+          <div class="timer" aria-live="polite"><span>Time remaining</span><strong id="timer-display">90:00</strong></div>
+        </div>
+        <div class="mock-list" id="mock-list"></div>
+        <div class="mock-footer"><span class="save-status" id="mock-save">Answers save automatically in this browser.</span><button class="primary" id="submit-mock">Finish and review</button></div>
+        <div class="mock-review" id="mock-review"><h2>Review your reasoning</h2><p>Compare the logic and evidence, not the exact wording.</p><div id="mock-models"></div><div class="actions" style="margin-top:22px"><button class="primary" id="new-mock">Start a new mock</button><button class="secondary" id="mock-home">Back home</button></div></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <dialog id="test-modal">
+    <form method="dialog" class="modal-body">
+      <p class="eyebrow">Set up your test</p>
+      <h2>Choose what to practice</h2>
+      <p>Select one or more course areas. The full test uses all 20 questions; the quick version randomly selects 10.</p>
+      <div class="settings">
+        <div class="setting"><div><label for="ent">Entrepreneurship</label><br><span>Sessions 3, 5, 7, 8, 11, 12</span></div><input id="ent" type="checkbox" value="ENT" checked></div>
+        <div class="setting"><div><label for="ob">Organizational Behavior</label><br><span>Sessions 2, 4, 6, 10, 13</span></div><input id="ob" type="checkbox" value="OB" checked></div>
+        <div class="setting"><div><label for="joint">Joint sessions</label><br><span>Sessions 1 and 9</span></div><input id="joint" type="checkbox" value="Joint" checked></div>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" value="cancel">Cancel</button>
+        <button class="primary" id="begin" value="default">Begin test</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    const questions = [
+      { category: 'Joint', session: 1, q: 'A team faces an uncertain market and cannot reliably predict demand. Which action best reflects Entrepreneurial Thought and Action?', choices: ['Write a five-year forecast before doing anything', 'Take a small affordable step, learn from it, and adjust', 'Wait until all uncertainty disappears', 'Copy the market leader without testing'], answer: 1, why: 'Creation logic emphasizes acting with available means, limiting downside, learning from results, and adapting under uncertainty.' },
+      { category: 'OB', session: 2, q: 'A team has no written lateness policy, but everyone begins arriving ten minutes late. What has formed?', choices: ['A formal rule', 'An informal norm', 'A value proposition', 'A market segment'], answer: 1, why: 'A norm is an informal expectation that develops through repeated group behavior, even when it is never written down.' },
+      { category: 'ENT', session: 3, q: 'During brainstorming, which approach is most likely to produce useful ideas?', choices: ['Evaluate every idea immediately', 'Let only the team leader contribute', 'Generate many possibilities before judging them', 'Choose the safest familiar answer first'], answer: 2, why: 'Strong brainstorming separates idea generation from evaluation so criticism does not shut down variety too early.' },
+      { category: 'ENT', session: 3, q: 'Which statement describes an opportunity rather than merely an idea?', choices: ['It sounds creative to the founder', 'It addresses a real need and may be feasible and viable', 'It uses the newest technology', 'No competitor has attempted it'], answer: 1, why: 'An opportunity connects a real customer need with a solution that can realistically be delivered and sustained.' },
+      { category: 'OB', session: 4, q: 'After receiving criticism, a leader notices they are angry and pauses before responding. Which emotional-intelligence abilities are being used?', choices: ['Social awareness and persuasion', 'Self-awareness and self-management', 'Market awareness and prototyping', 'Conscientiousness and dominance'], answer: 1, why: 'Recognizing the emotion is self-awareness; regulating the response is self-management.' },
+      { category: 'ENT', session: 5, q: 'Which discovery-interview question is strongest?', choices: ['Would you buy our amazing product?', 'Do you agree this is a major problem?', 'Tell me about the last time you experienced this problem', 'Would you pay $20 for our solution?'], answer: 2, why: 'Asking for a recent story produces evidence about actual behavior instead of encouraging a hypothetical or leading answer.' },
+      { category: 'ENT', session: 5, q: 'What is the main purpose of empathy in design thinking?', choices: ['To convince customers to accept the first solution', 'To understand users’ experiences, needs, and frustrations', 'To calculate the venture’s profit', 'To divide tasks among team members'], answer: 1, why: 'Empathy helps the team understand the problem from the user’s point of view before designing a solution.' },
+      { category: 'OB', session: 6, q: 'Which behavior is the clearest sign of psychological safety?', choices: ['Nobody ever disagrees', 'Team members can admit mistakes and ask questions without humiliation', 'The leader makes every decision', 'The team avoids difficult feedback'], answer: 1, why: 'Psychological safety means people believe they can take interpersonal risks such as speaking up, questioning, or admitting an error.' },
+      { category: 'OB', session: 6, q: 'A prototype fails, but the test was carefully designed and teaches the team what customers reject. How should the team interpret it?', choices: ['As a productive failure', 'As proof the team is incompetent', 'As a reason to stop experimenting', 'As a violation of team norms'], answer: 0, why: 'A productive failure creates useful learning. It differs from a preventable mistake caused by ignoring a known process.' },
+      { category: 'ENT', session: 7, q: 'Which value proposition is the most specific?', choices: ['We make networking better for everyone', 'A modern platform powered by innovation', 'An NFC tag that lets first-year students share a profile and résumé with one tap at campus events', 'The best professional product available'], answer: 2, why: 'A useful value proposition identifies the customer, the problem or job, and the concrete benefit of the solution.' },
+      { category: 'ENT', session: 7, q: 'A company sells children’s learning kits. Parents pay, while children use them. Who is the customer?', choices: ['Only the children', 'The parents', 'The manufacturer', 'Everyone in the education market'], answer: 1, why: 'The customer makes the purchase. The child is the consumer or user, although both perspectives matter.' },
+      { category: 'ENT', session: 8, q: 'What is the best first prototype for a team testing whether students want an automated résumé-sharing service?', choices: ['A fully engineered nationwide platform', 'A simple clickable mockup tested with several students', 'A detailed financial forecast with no user interaction', 'A patent application'], answer: 1, why: 'An early prototype should test the most important assumption quickly and cheaply before the team invests heavily.' },
+      { category: 'Joint', session: 9, q: 'What should a short Rocket Pitch establish first?', choices: ['Every technical feature', 'The problem, the target customer, and why the solution matters', 'A complete five-year hiring plan', 'The founders’ full biographies'], answer: 1, why: 'A concise pitch needs a clear problem, audience, solution, and value proposition before supporting details.' },
+      { category: 'OB', session: 10, q: 'A high-D teammate wants a fast decision, while a high-C teammate wants more evidence. What is the best response?', choices: ['Treat one style as correct', 'Remove the high-C teammate from the decision', 'Set a decision deadline and agree on the evidence needed before it', 'Avoid discussing the disagreement'], answer: 2, why: 'DiSC is useful when teammates adapt. A deadline respects the D preference for action while evidence criteria respect the C preference for accuracy.' },
+      { category: 'OB', session: 10, q: 'Which statement about DiSC is accurate?', choices: ['It permanently defines a person’s ability', 'One style is best for leadership', 'It describes behavioral tendencies and communication preferences', 'People should only work with teammates who share their style'], answer: 2, why: 'DiSC is a tool for understanding and adapting behavior, not a measure of intelligence, worth, or fixed ability.' },
+      { category: 'ENT', session: 11, q: 'A solution is desirable and technically feasible, but customers will not pay enough to cover its costs. Which test has it failed?', choices: ['Empathy', 'Viability', 'Psychological safety', 'Prototyping'], answer: 1, why: 'Viability asks whether the model can sustain itself financially and operationally over time.' },
+      { category: 'ENT', session: 11, q: 'Which evidence would most strengthen an opportunity evaluation?', choices: ['The founders say they love the idea', 'Several target customers repeatedly use and pay for an early solution', 'The product has many possible features', 'The team created an attractive logo'], answer: 1, why: 'Observed customer behavior and willingness to pay are stronger evidence than internal enthusiasm or surface-level branding.' },
+      { category: 'ENT', session: 12, q: 'Which research method is best for exploring why students avoid a campus service?', choices: ['A focus group with open-ended follow-up questions', 'A financial statement', 'A DiSC assessment', 'A trademark search'], answer: 0, why: 'Qualitative methods such as focus groups help uncover motivations, language, and experiences behind behavior.' },
+      { category: 'ENT', session: 12, q: 'What is wrong with asking, “Don’t you agree our app would make networking easier?”', choices: ['It is too quantitative', 'It is a leading question that encourages agreement', 'It does not mention the price', 'It asks about past behavior'], answer: 1, why: 'The wording signals the desired answer, which can bias the research and make the evidence less reliable.' },
+      { category: 'OB', session: 13, q: 'A team asks each member for input, but repeatedly ignores ideas from its newest member. What is missing?', choices: ['Diversity alone', 'Inclusion', 'Market viability', 'Creation logic'], answer: 1, why: 'Diversity concerns who is present; inclusion concerns whether people are respected, heard, and able to influence the work.' }
+    ];
+
+    const writtenCases = [
+      {
+        category: 'Joint', session: 1, title: 'A big plan built on guesses',
+        prompt: 'Kayden wants to raise money, rent warehouse space, and build a complete Knittr platform before speaking with actual knitters. Use Entrepreneurial Thought and Action to diagnose his approach and recommend a better first step.',
+        model: 'Kayden is relying on prediction logic even though demand and the customer problem are still uncertain. His plans for investors, a warehouse, and a complete platform are evidence that he wants to commit major resources before learning whether knitters value the offer. This creates avoidable risk because a detailed plan cannot make unsupported assumptions true. He should use CreAction: start with what he has, limit his acceptable loss, and manually provide a project recommendation and supply list to several real knitters. Their behavior and feedback would give him new evidence before he makes a larger commitment.',
+        checks: ['Names prediction logic and CreAction', 'Uses the warehouse or full platform as evidence', 'Explains why uncertainty makes the large commitment risky', 'Recommends a small, affordable learning step']
+      },
+      {
+        category: 'ENT', session: 3, title: 'The first idea wins too quickly',
+        prompt: 'During a brainstorming meeting, the team leader shares her preferred solution first. She critiques each new suggestion as it is offered, and the team selects her idea after ten minutes. Diagnose the process and redesign the meeting.',
+        model: 'The team violated the brainstorming rule of deferring judgment and allowed the leader\'s first idea to anchor the discussion. Her immediate criticism is case evidence that evaluation and generation were mixed together, which reduces both the number and variety of ideas and makes quieter members less likely to contribute. The facilitator should begin with a customer-centered “How might we?” question, give everyone quiet individual ideation time, collect many ideas without criticism, and encourage people to build on unusual options. Only after the team has diverged should it evaluate ideas using customer value, desirability, feasibility, viability, and a small test.',
+        checks: ['Names deferred judgment or anchoring', 'Cites the leader speaking and criticizing first', 'Explains the effect on idea variety or participation', 'Separates idea generation from later evaluation']
+      },
+      {
+        category: 'ENT', session: 5, title: 'A discovery interview that sells',
+        prompt: 'Kayden opens an interview by explaining Knittr and asks, “Wouldn\'t an AI assistant make buying yarn easier?” The participant agrees. Evaluate this evidence and explain how Kayden should improve the interview.',
+        model: 'The agreement is weak evidence because Kayden pitched his solution first and asked a leading, hypothetical question. The wording signals the answer he wants, so the participant may be polite rather than reveal an actual need. Kayden should avoid mentioning Knittr at the beginning and ask for past behavior: “Tell me about the last time you chose a project and bought its supplies.” He should follow with neutral “how” and “why” questions, listen for frustrations and workarounds, and remain willing to learn that AI is not important. Specific stories from target customers would provide stronger evidence than predicted future interest.',
+        checks: ['Identifies a leading or hypothetical question', 'Uses the wording or early pitch as evidence', 'Explains why agreement is unreliable', 'Recommends neutral questions about past behavior']
+      },
+      {
+        category: 'ENT', session: 7, title: 'A persona made from stereotypes',
+        prompt: 'Kayden creates “Beatrice,” a 28-year-old knitter who owns cats, watches K-dramas, and wants cheaper supplies. He built the persona from TikTok posts rather than customer research. Explain what is wrong and what a useful persona would require.',
+        model: 'Beatrice is an assumption-based profile rather than a research-grounded persona. The cats and K-dramas are vivid details, but Kayden has no evidence that they affect how a customer chooses or buys craft supplies. Treating stereotypes as facts can send the product, marketing, and channels in the wrong direction. Kayden should interview and observe members of a narrow target segment, then build the persona from repeated patterns in their goals, pains, current behavior, workarounds, buying criteria, and constraints. Every included detail should help the team predict a real customer decision.',
+        checks: ['Defines a persona as grounded in research', 'Distinguishes vivid details from decision-relevant evidence', 'Explains how stereotypes could misdirect the venture', 'Names evidence Kayden should collect from a target segment']
+      },
+      {
+        category: 'ENT', session: 8, title: 'The prototype is already a product',
+        prompt: 'A student team spends eight weeks coding an app before letting one customer see it. When users dislike the main feature, the team says it is too late to change. Apply prototyping and iteration to this situation.',
+        model: 'The team treated its first build as a finished product instead of using a low-cost prototype to test a risky assumption. Eight weeks of coding before customer contact is evidence that it invested heavily before learning whether the main feature was desirable. That makes feedback expensive to use and encourages commitment to a weak solution. The team should identify its riskiest assumption, create the simplest representation that lets users respond or act, and test it early with target customers. It should treat the results as information, revise the prototype, and repeat until the evidence supports a larger investment.',
+        checks: ['Defines a prototype as a learning tool', 'Uses the eight-week build as evidence', 'Explains why late feedback is costly', 'Recommends testing one risky assumption and iterating']
+      },
+      {
+        category: 'ENT', session: 11, title: 'Desirable is not enough',
+        prompt: 'Ten target customers love a handmade delivery service and use it twice. Each delivery, however, costs the team $18 more than the customer pays, and the founders cannot handle more orders. Evaluate the opportunity through desirability, feasibility, and viability.',
+        model: 'The repeat use provides early evidence of desirability because target customers value the service enough to return. Feasibility is weak because the founders lack the capacity to deliver more orders consistently. Viability also fails because every transaction loses $18, so growth would increase the loss rather than sustain the venture. The team should map the delivery process, test whether partners or a narrower service can increase capacity, and experiment with price, order size, frequency, and cost. The idea becomes an opportunity only if the same offer is wanted, deliverable, and financially sustainable.',
+        checks: ['Evaluates all three lenses separately', 'Uses repeat use as desirability evidence', 'Connects capacity to feasibility and unit loss to viability', 'Recommends concrete operating and pricing tests']
+      },
+      {
+        category: 'ENT', session: 12, title: 'A friendly focus group',
+        prompt: 'Kayden invites his mother and sisters to discuss Knittr. He presents the product, rejects criticism, accepts praise, and reports that the market has been validated. Evaluate the research and propose a stronger focus group.',
+        model: 'This group does not validate the market because the participants are a convenience sample and may not represent the target customer. Kayden also creates moderator and confirmation bias by pitching first, rejecting criticism, and treating praise as proof. A small qualitative group can explore why people behave as they do, but it cannot establish market size. Kayden should recruit five to eight people from a defined target segment, use a neutral moderator, ask six to eight open questions that move from current behavior to the concept, invite participants to respond to one another, and search for disconfirming evidence. He can turn repeated themes into hypotheses for later quantitative testing.',
+        checks: ['Identifies sampling and moderator or confirmation bias', 'Uses specific actions from the case as evidence', 'Explains the limit of qualitative findings', 'Designs a neutral group with target participants and open questions']
+      },
+      {
+        category: 'Joint', session: 9, title: 'A pitch full of features',
+        prompt: 'A Rocket Pitch spends most of its time listing app features. The audience still does not know who the customer is, what problem exists, or why the solution is better than current alternatives. Explain how the team should revise the pitch.',
+        model: 'The pitch lacks a clear value proposition. Listing features does not show the overt benefit, target audience, or dramatic difference that gives a customer a reason to care. The audience\'s confusion is evidence that the team has not connected the product to a specific job or pain. The team should open with one defined customer and a concrete problem, present the solution as a benefit, explain why it is meaningfully different, and give a real reason to believe the promise can be delivered. Technical details should support that claim rather than replace it.',
+        checks: ['Names the value-proposition problem', 'Uses audience confusion as evidence', 'Explains the difference between features and benefits', 'Recommends customer, problem, benefit, difference, and proof']
+      },
+      {
+        category: 'OB', session: 2, title: 'The real rule starts at 6:15',
+        prompt: 'The team charter says meetings start at 6:00, but the group always waits for two influential members who arrive at 6:15. Soon, everyone begins arriving late. Use culture and norms to explain what happened and recommend a response.',
+        model: 'The written rule says 6:00, but the team\'s repeated behavior has created an informal norm that 6:15 is acceptable. Waiting for influential late members is evidence that the group rewards the behavior, so the lived culture overrides the charter. Other members adapt because they observe what actually happens rather than what the document claims. The team should begin at 6:00, record decisions for absent members, and apply the same expectation to everyone. Consistent reinforcement would turn punctuality into a real norm instead of a written wish.',
+        checks: ['Distinguishes a formal rule from an informal norm', 'Cites the team waiting for influential members', 'Explains how repeated behavior shapes culture', 'Recommends a consistent and observable response']
+      },
+      {
+        category: 'OB', session: 4, title: 'Emotion becomes an accusation',
+        prompt: 'A leader sees an incomplete draft, assumes the writer does not care, and sends an angry message to the whole team. The role and deadline had never been confirmed. Diagnose both the leadership and process problems.',
+        model: 'The leader shows weak self-awareness and self-management by acting on frustration before checking the facts. The public accusation can also damage trust and psychological safety because members may fear being embarrassed for raising problems. However, the missing role and deadline show an organized-process failure, not simply low effort by one person. The leader should pause, ask what each person understood, acknowledge the premature accusation, and clarify the owner, deliverable, standard, and deadline in writing. Future meetings should end with documented next steps.',
+        checks: ['Names self-awareness and self-management', 'Uses the public accusation as evidence', 'Separates the emotional reaction from the process failure', 'Recommends repair plus clear roles and deadlines']
+      },
+      {
+        category: 'OB', session: 6, title: 'Silence after a laugh',
+        prompt: 'Marcus laughs at Ana\'s unusual idea. Ana stays silent for the rest of the meeting, and the team quickly approves Marcus\'s original proposal. Diagnose the team problem and recommend an intervention.',
+        model: 'The team has weak psychological safety, meaning members do not believe interpersonal risk-taking is safe. Marcus\'s laugh creates a social penalty for an unusual idea, and Ana\'s silence is evidence that speaking now feels risky. The quick approval also suggests premature consensus, so the team may lose Ana\'s unique information. The facilitator should acknowledge the dismissive response, ask Ana what led to her idea, and require questions before criticism. A norm that every member contributes during divergence would make dissent safer and improve the team\'s learning and creativity.',
+        checks: ['Defines psychological safety accurately', 'Uses the laugh and silence as evidence', 'Connects the behavior to lost information or premature consensus', 'Recommends an immediate intervention and team norm']
+      },
+      {
+        category: 'OB', session: 6, title: 'A useful test gets punished',
+        prompt: 'Priya runs an approved sales experiment. The new script performs worse, so the team calls it a mistake and announces that future failure will be punished. Explain why this response is harmful.',
+        model: 'The team is confusing a productive failure with a preventable mistake. Priya tested an approved method under genuine uncertainty, so the poor result gives the team useful information about what customers reject. Punishment would reduce psychological safety and make members more likely to hide bad news or avoid experiments, weakening future learning. The team should compare the scripts, record what the test revealed, and design the next limited experiment. Accountability would be appropriate if Priya ignored known information or repeated a proven error, but the facts do not show that.',
+        checks: ['Distinguishes failure from mistake', 'Uses approval and uncertainty as evidence', 'Explains how punishment harms safety and learning', 'Recommends extracting learning and running a next test']
+      },
+      {
+        category: 'OB', session: 10, title: 'Speed meets accuracy',
+        prompt: 'Devon wants an immediate decision and Casey keeps requesting more evidence. Devon calls Casey slow; Casey calls Devon reckless. Use DiSC to diagnose the conflict and propose a decision process.',
+        model: 'The conflict reflects different DiSC preferences: Devon\'s D style values speed and results, while Casey\'s C style values evidence and accuracy. Neither style is inherently correct, and the personal labels are turning a useful task disagreement into relationship conflict. Devon should state the decision and deadline clearly and allow a defined review period. Casey should summarize the highest-risk evidence rather than request unlimited analysis. Together they can agree on the minimum evidence needed for a reversible test, preserving momentum while protecting the team from avoidable errors.',
+        checks: ['Correctly identifies D and C preferences', 'Uses the demands for speed and evidence as support', 'Explains why labeling makes conflict less useful', 'Creates a process that respects both styles']
+      },
+      {
+        category: 'OB', session: 13, title: 'Invited, but not influential',
+        prompt: 'A team includes students with different backgrounds and asks everyone for ideas. However, the same two senior members make every decision and repeatedly ignore the newest member\'s suggestions. Explain what the team has and what it is missing.',
+        model: 'The team has demographic or experiential diversity, but it lacks inclusion because being present and being asked are not the same as having influence. The repeated dismissal of the newest member is evidence that status determines whose information affects decisions. This can create a process loss by hiding unique knowledge and may weaken belonging and psychological safety. The team should use an explicit decision method, give each member airtime, ask what evidence supports each option, and document how dissent affected the decision. These actions make participation consequential rather than symbolic.',
+        checks: ['Distinguishes diversity from inclusion', 'Uses ignored suggestions and senior control as evidence', 'Explains the loss of information, belonging, or safety', 'Recommends a decision process that gives input influence']
+      }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const state = { items: [], index: 0, selected: null, checked: false, answers: [] };
+    const writtenState = { item: null, rated: false };
+    const mockState = { items: [], seconds: 5400, timerId: null, submitted: false };
+    let quickMode = false;
+
+    const defaultProgress = { answered: 0, correct: 0, cases: 0 };
+
+    function loadProgress() {
+      try { return { ...defaultProgress, ...JSON.parse(localStorage.getItem('fme-progress') || '{}') }; }
+      catch { return { ...defaultProgress }; }
+    }
+
+    function saveProgress(progress) {
+      localStorage.setItem('fme-progress', JSON.stringify(progress));
+      renderStats();
+    }
+
+    function renderStats() {
+      const progress = loadProgress();
+      $('stat-questions').textContent = progress.answered;
+      $('stat-accuracy').textContent = progress.answered ? `${Math.round(progress.correct / progress.answered * 100)}%` : '—';
+      $('stat-cases').textContent = progress.cases;
+    }
+
+    function showToast(message) {
+      $('toast').textContent = message;
+      $('toast').classList.add('show');
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => $('toast').classList.remove('show'), 1800);
+    }
+
+    function showPage(pageId) {
+      $('home-screen').style.display = pageId ? 'none' : 'grid';
+      $('quiz').classList.remove('active');
+      $('results').classList.remove('active');
+      $('written-page').classList.remove('active');
+      $('mock-page').classList.remove('active');
+      if (pageId) $(pageId).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+    function openSetup(isQuick) {
+      quickMode = isQuick;
+      $('test-modal').showModal();
+    }
+
+    function beginTest() {
+      const categories = ['ent', 'ob', 'joint'].filter(id => $(id).checked).map(id => $(id).value);
+      if (!categories.length) return;
+      const pool = questions.filter(item => categories.includes(item.category));
+      state.items = shuffle(pool).slice(0, quickMode ? Math.min(10, pool.length) : pool.length);
+      state.index = 0;
+      state.selected = null;
+      state.checked = false;
+      state.answers = [];
+      showPage(null);
+      $('home-screen').style.display = 'none';
+      $('quiz').classList.add('active');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      const item = state.items[state.index];
+      const correct = state.answers.filter(answer => answer.correct).length;
+      $('progress-label').textContent = `Question ${state.index + 1} of ${state.items.length}`;
+      $('score-label').textContent = `${correct} correct`;
+      $('progress-bar').style.width = `${(state.index / state.items.length) * 100}%`;
+      $('category-tag').textContent = item.category === 'ENT' ? 'Entrepreneurship' : item.category === 'OB' ? 'Organizational Behavior' : 'Joint';
+      $('session-tag').textContent = `Session ${item.session}`;
+      $('question-text').textContent = item.q;
+      $('explanation').className = 'explanation';
+      $('explanation').innerHTML = '';
+      $('next-question').disabled = true;
+      $('next-question').textContent = 'Check answer';
+      state.selected = null;
+      state.checked = false;
+      $('choices').innerHTML = '';
+
+      item.choices.forEach((choice, index) => {
+        const button = document.createElement('button');
+        button.className = 'choice';
+        button.innerHTML = `<span class="letter">${String.fromCharCode(65 + index)}</span><span>${choice}</span>`;
+        button.addEventListener('click', () => selectChoice(index));
+        $('choices').appendChild(button);
+      });
+    }
+
+    function selectChoice(index) {
+      if (state.checked) return;
+      state.selected = index;
+      [...$('choices').children].forEach((button, i) => button.classList.toggle('selected', i === index));
+      $('next-question').disabled = false;
+    }
+
+    function checkOrContinue() {
+      if (!state.checked) {
+        const item = state.items[state.index];
+        const correct = state.selected === item.answer;
+        state.checked = true;
+        state.answers.push({ item, selected: state.selected, correct });
+        [...$('choices').children].forEach((button, i) => {
+          button.disabled = true;
+          button.classList.remove('selected');
+          if (i === item.answer) button.classList.add('correct');
+          if (i === state.selected && !correct) button.classList.add('wrong');
+        });
+        $('explanation').innerHTML = `<strong>${correct ? 'Correct.' : 'Not quite.'}</strong> ${item.why}`;
+        $('explanation').classList.add('show');
+        $('next-question').textContent = state.index === state.items.length - 1 ? 'See results' : 'Next question';
+        $('score-label').textContent = `${state.answers.filter(answer => answer.correct).length} correct`;
+        const progress = loadProgress();
+        progress.answered += 1;
+        if (correct) progress.correct += 1;
+        saveProgress(progress);
+      } else if (state.index < state.items.length - 1) {
+        state.index++;
+        renderQuestion();
+      } else {
+        showResults();
+      }
+    }
+
+    function showResults() {
+      $('quiz').classList.remove('active');
+      $('results').classList.add('active');
+      const correct = state.answers.filter(answer => answer.correct).length;
+      const pct = Math.round((correct / state.answers.length) * 100);
+      $('score-ring').style.setProperty('--score', `${pct * 3.6}deg`);
+      $('final-score').textContent = `${pct}%`;
+      $('result-title').textContent = pct >= 90 ? 'Strong command.' : pct >= 75 ? 'You are close.' : pct >= 60 ? 'Good foundation.' : 'Time for a focused review.';
+      $('result-copy').textContent = `You answered ${correct} of ${state.answers.length} questions correctly. Review the missed concepts below, then try another shuffled version.`;
+
+      const groups = ['ENT', 'OB', 'Joint'];
+      $('breakdown').innerHTML = groups.map(group => {
+        const groupAnswers = state.answers.filter(answer => answer.item.category === group);
+        const groupCorrect = groupAnswers.filter(answer => answer.correct).length;
+        const label = group === 'ENT' ? 'Entrepreneurship' : group === 'OB' ? 'Org. Behavior' : 'Joint';
+        return `<div class="stat"><span>${label}</span><strong>${groupAnswers.length ? `${groupCorrect}/${groupAnswers.length}` : '—'}</strong></div>`;
+      }).join('');
+
+      const missed = state.answers.filter(answer => !answer.correct);
+      $('review-section').style.display = missed.length ? 'block' : 'none';
+      $('review').innerHTML = missed.map(answer => `<article class="review-item"><small>SESSION ${answer.item.session} · ${answer.item.category}</small><h3>${answer.item.q}</h3><p><b>Correct answer:</b> ${answer.item.choices[answer.item.answer]}<br>${answer.item.why}</p></article>`).join('');
+    }
+
+    function goHome() {
+      clearInterval(mockState.timerId);
+      showPage(null);
+    }
+
+    function categoryName(category) {
+      return category === 'ENT' ? 'Entrepreneurship' : category === 'OB' ? 'Organizational Behavior' : 'Joint';
+    }
+
+    function wordCount(value) {
+      const clean = value.trim();
+      return clean ? clean.split(/\s+/).length : 0;
+    }
+
+    function chooseWrittenCase() {
+      const alternatives = writtenCases.filter(item => !writtenState.item || item.title !== writtenState.item.title);
+      return alternatives[Math.floor(Math.random() * alternatives.length)];
+    }
+
+    function startWritten() {
+      clearInterval(mockState.timerId);
+      writtenState.item = chooseWrittenCase();
+      writtenState.rated = false;
+      const item = writtenState.item;
+      $('written-position').textContent = `Case ${writtenCases.indexOf(item) + 1} of ${writtenCases.length}`;
+      $('written-category').textContent = categoryName(item.category);
+      $('written-session').textContent = `Session ${item.session}`;
+      $('written-title').textContent = item.title;
+      $('written-prompt').textContent = item.prompt;
+      $('written-answer').value = localStorage.getItem(`fme-draft-${item.title}`) || '';
+      $('written-words').textContent = `${wordCount($('written-answer').value)} words`;
+      $('written-checklist').innerHTML = item.checks.map((check, index) => `<div class="check-item"><b>${'CEAR'[index]}</b> · ${check}</div>`).join('');
+      $('written-model').innerHTML = `<strong>Model answer</strong><br>${item.model}`;
+      $('written-coach').classList.remove('show');
+      [...document.querySelectorAll('.rate-button')].forEach(button => button.classList.remove('active'));
+      $('reveal-written').disabled = false;
+      showPage('written-page');
+      setTimeout(() => $('written-answer').focus(), 250);
+    }
+
+    function saveWrittenDraft() {
+      if (!writtenState.item) return;
+      const value = $('written-answer').value;
+      localStorage.setItem(`fme-draft-${writtenState.item.title}`, value);
+      $('written-words').textContent = `${wordCount(value)} words`;
+      $('written-save').textContent = 'Saved';
+      clearTimeout(saveWrittenDraft.timer);
+      saveWrittenDraft.timer = setTimeout(() => $('written-save').textContent = 'Draft saves automatically', 1200);
+    }
+
+    function revealWritten() {
+      $('written-coach').classList.add('show');
+      $('reveal-written').disabled = true;
+      $('written-coach').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function rateWritten(event) {
+      const button = event.target.closest('.rate-button');
+      if (!button) return;
+      [...document.querySelectorAll('.rate-button')].forEach(item => item.classList.toggle('active', item === button));
+      if (!writtenState.rated) {
+        const progress = loadProgress();
+        progress.cases += 1;
+        saveProgress(progress);
+        writtenState.rated = true;
+      }
+      showToast(`${button.dataset.rate}/4 C-E-A-R parts recorded`);
+    }
+
+    function pickMockCases() {
+      const ent = shuffle(writtenCases.filter(item => item.category !== 'OB')).slice(0, 2);
+      const ob = shuffle(writtenCases.filter(item => item.category === 'OB')).slice(0, 2);
+      return shuffle([...ent, ...ob]);
+    }
+
+    function formatTime(totalSeconds) {
+      const minutes = Math.floor(Math.max(0, totalSeconds) / 60);
+      const seconds = Math.max(0, totalSeconds) % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
+
+    function renderMock(answers = []) {
+      $('mock-list').innerHTML = mockState.items.map((item, index) => `
+        <article class="mock-card">
+          <div class="question-tags"><span class="tag">${categoryName(item.category)}</span><span class="tag session">Session ${item.session}</span></div>
+          <h3>${index + 1}. ${item.prompt}</h3>
+          <label for="mock-answer-${index}">Your response</label>
+          <textarea id="mock-answer-${index}" data-mock-index="${index}" placeholder="Use C-E-A-R and case evidence...">${answers[index] || ''}</textarea>
+        </article>`).join('');
+      $('timer-display').textContent = formatTime(mockState.seconds);
+      $('mock-review').classList.remove('show');
+      $('submit-mock').disabled = false;
+      $('mock-save').textContent = 'Answers save automatically in this browser.';
+      [...document.querySelectorAll('[data-mock-index]')].forEach(textarea => textarea.addEventListener('input', saveMock));
+    }
+
+    function saveMock() {
+      if (!mockState.items.length || mockState.submitted) return;
+      const answers = mockState.items.map((_, index) => $(`mock-answer-${index}`)?.value || '');
+      localStorage.setItem('fme-active-mock', JSON.stringify({
+        titles: mockState.items.map(item => item.title), answers, seconds: mockState.seconds
+      }));
+      $('mock-save').textContent = 'Saved';
+      clearTimeout(saveMock.timer);
+      saveMock.timer = setTimeout(() => $('mock-save').textContent = 'Answers save automatically in this browser.', 1200);
+    }
+
+    function runMockTimer() {
+      clearInterval(mockState.timerId);
+      mockState.timerId = setInterval(() => {
+        mockState.seconds -= 1;
+        $('timer-display').textContent = formatTime(mockState.seconds);
+        if (mockState.seconds % 15 === 0) saveMock();
+        if (mockState.seconds <= 0) finishMock(true);
+      }, 1000);
+    }
+
+    function startMock(forceNew = false) {
+      clearInterval(mockState.timerId);
+      let stored = null;
+      if (!forceNew) {
+        try { stored = JSON.parse(localStorage.getItem('fme-active-mock') || 'null'); } catch { stored = null; }
+      }
+      const restoredItems = stored?.titles?.map(title => writtenCases.find(item => item.title === title)).filter(Boolean);
+      if (restoredItems?.length === 4) {
+        mockState.items = restoredItems;
+        mockState.seconds = Number.isFinite(stored.seconds) ? stored.seconds : 5400;
+      } else {
+        mockState.items = pickMockCases();
+        mockState.seconds = 5400;
+        stored = null;
+      }
+      mockState.submitted = false;
+      renderMock(stored?.answers || []);
+      showPage('mock-page');
+      runMockTimer();
+    }
+
+    function finishMock(force = false) {
+      const answers = mockState.items.map((_, index) => $(`mock-answer-${index}`)?.value.trim() || '');
+      const blanks = answers.filter(answer => !answer).length;
+      if (!force && blanks && !window.confirm(`${blanks} response${blanks === 1 ? ' is' : 's are'} blank. Finish anyway?`)) return;
+      clearInterval(mockState.timerId);
+      mockState.submitted = true;
+      localStorage.removeItem('fme-active-mock');
+      [...document.querySelectorAll('[data-mock-index]')].forEach(textarea => textarea.disabled = true);
+      $('submit-mock').disabled = true;
+      $('timer-display').textContent = mockState.seconds <= 0 ? '00:00' : formatTime(mockState.seconds);
+      $('mock-models').innerHTML = mockState.items.map((item, index) => `<article class="review-answer"><h3>${index + 1}. ${item.title}</h3><p>${item.model}</p></article>`).join('');
+      $('mock-review').classList.add('show');
+      const completed = answers.filter(Boolean).length;
+      if (completed) {
+        const progress = loadProgress();
+        progress.cases += completed;
+        saveProgress(progress);
+      }
+      $('mock-review').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    $('open-test').addEventListener('click', () => openSetup(false));
+    $('quick-start').addEventListener('click', () => openSetup(true));
+    $('written-start').addEventListener('click', startWritten);
+    $('written-card-start').addEventListener('click', startWritten);
+    $('mock-start').addEventListener('click', () => startMock(false));
+    $('begin').addEventListener('click', (event) => {
+      const anyChecked = ['ent', 'ob', 'joint'].some(id => $(id).checked);
+      if (!anyChecked) { event.preventDefault(); return; }
+      setTimeout(beginTest, 0);
+    });
+    $('next-question').addEventListener('click', checkOrContinue);
+    $('exit-test').addEventListener('click', goHome);
+    $('home').addEventListener('click', goHome);
+    $('retry').addEventListener('click', () => openSetup(quickMode));
+    $('exit-written').addEventListener('click', goHome);
+    $('new-written').addEventListener('click', startWritten);
+    $('reveal-written').addEventListener('click', revealWritten);
+    $('written-answer').addEventListener('input', saveWrittenDraft);
+    $('written-coach').addEventListener('click', rateWritten);
+    $('exit-mock').addEventListener('click', () => { saveMock(); goHome(); });
+    $('submit-mock').addEventListener('click', () => finishMock(false));
+    $('new-mock').addEventListener('click', () => startMock(true));
+    $('mock-home').addEventListener('click', goHome);
+    window.addEventListener('beforeunload', saveMock);
+    renderStats();
+  </script>
+</body>
+</html>

@@ -2,6 +2,8 @@
 
 A standalone study site for the FME 1000 midterm. It covers all 13 sessions on the midterm subject list.
 
+The original study guides, PDFs, planning notes, and helper scripts are archived in `FME1000/`.
+
 ## Pages
 
 - `index.html` — practice lab: 60 shuffled concept questions (4–6 per session), a written C-E-A-R case coach with 14 cases and model answers, and a timed 90-minute mock exam
